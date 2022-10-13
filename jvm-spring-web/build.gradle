@@ -19,7 +19,11 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
 	// 2. Add the GrowthBook SDK
-	implementation 'com.github.growthbook:growthbook-sdk-java:main-SNAPSHOT'
+	// Option: head of main
+	// implementation 'com.github.growthbook:growthbook-sdk-java:main-SNAPSHOT'
+
+	// Option: specific release version
+	implementation 'com.github.growthbook:growthbook-sdk-java:0.0.0d'
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
