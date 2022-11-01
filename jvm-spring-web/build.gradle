@@ -20,10 +20,13 @@ dependencies {
 
 	// 2. Add the GrowthBook SDK
 	// Option: head of main
-	// implementation 'com.github.growthbook:growthbook-sdk-java:main-SNAPSHOT'
+//	 implementation 'com.github.growthbook:growthbook-sdk-java:main-SNAPSHOT'
 
 	// Option: specific release version
-	implementation 'com.github.growthbook:growthbook-sdk-java:0.0.0d'
+	implementation 'com.github.growthbook:growthbook-sdk-java:0.0.1'
+
+	// This examples project uses Gson for serialization
+	implementation 'com.google.code.gson:gson:2.10'
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
