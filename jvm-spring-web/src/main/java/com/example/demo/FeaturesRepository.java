@@ -42,7 +42,7 @@ public class FeaturesRepository {
     }
 
     private static String getResourceDirectoryPath() {
-        Path resourceDirectory = Paths.get("src", "test", "resources");
+        Path resourceDirectory = Paths.get("src", "main", "resources");
         return resourceDirectory.toFile().getAbsolutePath();
     }
 }
