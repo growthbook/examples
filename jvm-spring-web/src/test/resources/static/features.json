@@ -1,18 +1,18 @@
 {
   "banner_text": {
-    "defaultValue": "Welcome to the Java SDK!",
+    "defaultValue": "Welcome to Acme Donuts!",
     "rules": [
       {
         "condition": {
           "country": "france"
         },
-        "force": "Bienvenue au SDK Java !"
+        "force": "Bienvenue au Beignets Acme !"
       },
       {
         "condition": {
           "country": "spain"
         },
-        "force": "¡Bienvenidos y bienvenidas al SDK Java!"
+        "force": "¡Bienvenidos y bienvenidas a Donas Acme!"
       }
     ]
   },

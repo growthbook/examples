@@ -10,8 +10,14 @@ import java.util.ArrayList;
  * The JSON generated from this class is used in the GrowthBook SDK.
  */
 public class UserAttributes {
+    @SerializedName("id")
+    public String id;
+
     @SerializedName("employee")
     public Boolean isEmployee;
+
+    @SerializedName("loggedIn")
+    public Boolean isLoggedIn;
 
     @SerializedName("dietaryRestrictions")
     public ArrayList<DietaryRestriction> dietaryRestrictions;
@@ -19,9 +25,11 @@ public class UserAttributes {
     @SerializedName("country")
     public String country;
 
-    public UserAttributes(String country, Boolean isEmployee, ArrayList<DietaryRestriction> dietaryRestrictions) {
+    public UserAttributes(String id, String country, Boolean isEmployee, Boolean isLoggedIn, ArrayList<DietaryRestriction> dietaryRestrictions) {
+        this.id = id;
         this.country = country;
         this.isEmployee = isEmployee;
+        this.isLoggedIn = isLoggedIn;
         this.dietaryRestrictions = dietaryRestrictions;
     }
 

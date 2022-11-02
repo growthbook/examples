@@ -23,7 +23,7 @@ dependencies {
 //	 implementation 'com.github.growthbook:growthbook-sdk-java:main-SNAPSHOT'
 
 	// Option: specific release version
-	implementation 'com.github.growthbook:growthbook-sdk-java:0.0.1'
+	implementation 'com.github.growthbook:growthbook-sdk-java:0.0.2'
 
 	// This examples project uses Gson for serialization
 	implementation 'com.google.code.gson:gson:2.10'
