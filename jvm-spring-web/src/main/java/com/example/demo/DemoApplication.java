@@ -15,7 +15,10 @@ public class DemoApplication {
 	@Bean
 	public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
 		return args -> {
-			System.out.println("Server running on http://localhost:8080");
+			System.out.println("Welcome banner: http://localhost:8080/welcome-banner");
+			System.out.println("Meal order: http://localhost:8080/meal");
+			System.out.println("Features (public site): http://localhost:8080/acme-features/public");
+			System.out.println("Features (employee site): http://localhost:8080/acme-features/employee");
 		};
 	}
 }
