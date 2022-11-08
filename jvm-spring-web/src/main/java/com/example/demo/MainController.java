@@ -2,8 +2,8 @@ package com.example.demo;
 
 import com.example.demo.models.*;
 import growthbook.sdk.java.GrowthBook;
-import growthbook.sdk.java.models.Context;
 import growthbook.sdk.java.models.FeatureResult;
+import growthbook.sdk.java.models.GBContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,7 +39,7 @@ public class MainController {
         System.out.printf("\n\n UserAttributes = %s", user);
 
         // Build the GrowthBook context
-        Context context = Context
+        GBContext context = GBContext
             .builder()
             .featuresJson(featuresRepository.getFeaturesJson())
             .attributesJson(user.toJson())
@@ -88,7 +88,7 @@ public class MainController {
         System.out.printf("\n\n UserAttributes = %s", user);
 
         // Build the GrowthBook context
-        Context context = Context
+        GBContext context = GBContext
             .builder()
             .featuresJson(featuresRepository.getFeaturesJson())
             .attributesJson(user.toJson())
@@ -124,7 +124,7 @@ public class MainController {
         );
 
         // Build the GrowthBook context
-        Context context = Context
+        GBContext context = GBContext
             .builder()
             .featuresJson(featuresRepository.getFeaturesJson())
             .attributesJson(user.toJson())
@@ -164,7 +164,7 @@ public class MainController {
         );
 
         // Build the GrowthBook context
-        Context context = Context
+        GBContext context = GBContext
             .builder()
             .featuresJson(featuresRepository.getFeaturesJson())
             .attributesJson(user.toJson())
