@@ -1,9 +1,9 @@
 package com.example.demo;
 
 import com.example.demo.models.*;
+import growthbook.sdk.java.FeatureResult;
+import growthbook.sdk.java.GBContext;
 import growthbook.sdk.java.GrowthBook;
-import growthbook.sdk.java.models.FeatureResult;
-import growthbook.sdk.java.models.GBContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

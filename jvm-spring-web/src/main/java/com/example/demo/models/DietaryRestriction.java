@@ -1,7 +1,6 @@
 package com.example.demo.models;
 
 import com.google.gson.annotations.SerializedName;
-import growthbook.sdk.java.models.Operator;
 import org.springframework.lang.Nullable;
 
 public enum DietaryRestriction {
