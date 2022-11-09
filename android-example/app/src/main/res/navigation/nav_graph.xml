@@ -3,26 +3,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/FirstFragment">
+    app:startDestination="@id/PublicFragment">
 
     <fragment
-        android:id="@+id/FirstFragment"
-        android:name="com.growthbook.examples.acme.FirstFragment"
-        android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_first">
+        android:id="@+id/PublicFragment"
+        android:name="com.growthbook.examples.acme.PublicFragment"
+        android:label="@string/fragment_public_title"
+        tools:layout="@layout/fragment_public">
 
         <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
+            android:id="@+id/action_PublicFragment_to_EmployeeFragment"
+            app:destination="@id/EmployeeFragment" />
     </fragment>
     <fragment
-        android:id="@+id/SecondFragment"
-        android:name="com.growthbook.examples.acme.SecondFragment"
-        android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second">
+        android:id="@+id/EmployeeFragment"
+        android:name="com.growthbook.examples.acme.EmployeeFragment"
+        android:label="@string/fragment_employee_title"
+        tools:layout="@layout/fragment_employee">
 
         <action
             android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
+            app:destination="@id/PublicFragment" />
     </fragment>
 </navigation>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PublicFragment">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:text="@string/fragment_public_welcome_text"
+        android:layout_marginBottom="20dp" />
+
+    <TextView
+        android:id="@+id/welcome_banner_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Custom welcome banner goes here"
+        android:text=""
+        android:layout_marginBottom="20dp" />
+
+    <TextView
+        android:id="@+id/donut_price_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/donut_price_message"
+        android:layout_marginBottom="20dp" />
+
+    <Button
+        android:id="@+id/donut_claim_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/next" />
+</LinearLayout>
