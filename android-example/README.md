@@ -1,8 +1,9 @@
 # Android Java example: Acme Donuts
 
 - [About](#about)
-- [Public user](#public-user)
-- [Employee user](#employee-user)
+  - [Public user](#public-user)
+  - [Employee user](#employee-user)
+- [Navigating the code](#navigating-the-code)
 - [More Examples](#more-examples)
 
 ## About
@@ -19,7 +20,7 @@ The GrowthBook SDK is implemented in the following ways:
 - We are toggling UI elements (a `"Claim Free Donut"` button) depending on the evaluated price of the donut. For users where the donut price evaluates to `0.0f` they would see this button.
 
 
-## Public user
+### Public user
 
 When the regular user is chosen, the following UI changes occur:
 
@@ -31,7 +32,7 @@ When the regular user is chosen, the following UI changes occur:
 <img width="400" src="screenshot_public.png">
 
 
-## Employee user
+### Employee user
 
 1. UI mode is dark mode because the feature `dark_mode` evaluates to true
 2. Employee users are hardcoded to `"canada"` and will see the default banner text specified in the GrowthBook dashboard.
@@ -39,6 +40,15 @@ When the regular user is chosen, the following UI changes occur:
 4. Employee users will see a `"Claim Free Donut"` button
 
 <img width="400" src="screenshot_employee.png">
+
+
+## Navigating the code
+
+Key areas of interest for the GrowthBook implementation can be found in the following areas:
+
+- initialization code is [here](https://github.com/growthbook/examples/blob/main/android-example/app/src/main/java/com/growthbook/examples/acme/di/AppContainer.java)
+- where we set the user and UI theme based on user attributes is [here](https://github.com/growthbook/examples/blob/main/android-example/app/src/main/java/com/growthbook/examples/acme/MainActivity.java#L39-L72)
+- other evaluated feature code is [here](https://github.com/growthbook/examples/blob/main/android-example/app/src/main/java/com/growthbook/examples/acme/PublicFragment.java#L46-L72)
 
 
 ## More Examples
