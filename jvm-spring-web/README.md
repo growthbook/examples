@@ -17,6 +17,7 @@ Before Acme Donuts implemented dark mode, they used to configure theme variables
   - [Welcome Banner](#welcome-banner)
   - [Meal Order](#meal-order)
   - [Acme Donuts Features](#acme-donuts-features)
+  - [Features from GrowthBook API](#features-from-growthbook-api)
 
 ## Running the Example
 
@@ -132,3 +133,18 @@ This should return the following for employees:
 ```
 
 Employees get free donuts so they see a donut price of 0. The company is currently beta testing dark mode on the admin portal so it is also enabled for logged in users. Some parts of the employee portal use the legacy `fontColour` so that's still included.
+
+
+### Features from GrowthBook API
+
+The endpoint `@GetMapping("/remote") public String frenchBanner()` fetches features from a real GrowthBook endpoint. This should result in French banner text since the user's country is hardcoded to France.
+
+```sh
+curl http://localhost:8080/remote
+```
+
+This should return the following response:
+
+```
+Bienvenue au Beignets Acme !
+```

@@ -19,6 +19,7 @@ public class DemoApplication {
 			System.out.println("Meal order: http://localhost:8080/meal");
 			System.out.println("Features (public site): http://localhost:8080/acme-features/public");
 			System.out.println("Features (employee site): http://localhost:8080/acme-features/employee");
+			System.out.println("French banner (uses features from the GrowthBook API): http://localhost:8080/remote");
 		};
 	}
 }
