@@ -1,6 +1,7 @@
 package com.growthbook.examples.acme;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.growthbook.examples.acme.databinding.FragmentPublicBinding;
+import com.growthbook.examples.acme.models.UserAttributes;
 
 
 public class PublicFragment extends Fragment {
@@ -57,6 +59,12 @@ public class PublicFragment extends Fragment {
         } else {
             binding.donutClaimButton.setVisibility(View.INVISIBLE);
         }
+
+        UserAttributes user = new UserAttributes("user-abc123", "canada", true, true);
+        Log.d("PublicFragment", "User JSON: " + user.toJson());
+
+        UserAttributes userFromJson = UserAttributes.fromJson(user.toJson());
+        Log.d("PublicFragment", "User class: " + user.toString());
     }
 
     private void bindObservables() {
