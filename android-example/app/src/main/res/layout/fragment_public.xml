@@ -34,5 +34,5 @@
         android:id="@+id/donut_claim_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/next" />
+        android:text="@string/claim_donut_button" />
 </LinearLayout>

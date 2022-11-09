@@ -1,15 +1,13 @@
 <resources>
     <string name="app_name">Acme GB</string>
-    <string name="action_settings">Settings</string>
-    <!-- Strings used for fragments for navigation -->
+
     <string name="fragment_public_title">Acme Donuts (Public)</string>
     <string name="fragment_employee_title">Donut Claim Centre</string>
 
     <string name="donut_price_message">Your price for donuts is $%1$s</string>
 
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
+    <string name="claim_donut_button">Claim Your Free Donut</string>
 
     <string name="fragment_public_welcome_text">Acme Donuts app</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="fragment_employee_text">So you want to claim your free donut? You\'re in the right place!</string>
 </resources>

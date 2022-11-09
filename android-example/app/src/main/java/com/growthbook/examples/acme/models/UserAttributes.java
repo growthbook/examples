@@ -36,7 +36,6 @@ public class UserAttributes {
             Boolean isEmployee = (Boolean) object.get("employee");
             Boolean isLoggedIn = (Boolean) object.get("loggedIn");
 
-
             return new UserAttributes(
                 id,
                 country,
