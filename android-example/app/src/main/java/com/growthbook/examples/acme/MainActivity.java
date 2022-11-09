@@ -1,8 +1,10 @@
 package com.growthbook.examples.acme;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -35,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
         this.dependencies = ((AcmeDonutsApplication) getApplication()).dependencies;
 
         initUser();
+        initCustomThemeForUser();
     }
 
     /**
@@ -52,5 +55,19 @@ public class MainActivity extends AppCompatActivity {
 
         // Update the GrowthBook SDK with the user attributes
         this.dependencies.growthBook.setAttributes(user.toJson());
+    }
+
+    /**
+     * uses the GrowthBook features and user attributes to evaluate if the user should see dark mode
+     */
+    private void initCustomThemeForUser() {
+        // 50% of logged in users will receive dark mode
+        Log.d("MainActivity", "Is dark mode on? " + this.dependencies.growthBook.isOn("dark_mode"));
+
+        int darkModeInt = this.dependencies.growthBook.isOn("dark_mode") ?
+            AppCompatDelegate.MODE_NIGHT_YES :
+            AppCompatDelegate.MODE_NIGHT_NO;
+
+        AppCompatDelegate.setDefaultNightMode(darkModeInt);
     }
 }
