@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">Acme GB</string>
+    <string name="app_name">Acme</string>
 
-    <string name="fragment_public_title">Acme Donuts (Public)</string>
+    <string name="fragment_public_title">Acme Donuts</string>
     <string name="fragment_employee_title">Donut Claim Centre</string>
 
     <string name="donut_price_message">Your price for donuts is $%1$s</string>
