@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Acme</string>
+
+    <string name="fragment_public_title">Acme Donuts</string>
+    <string name="fragment_employee_title">Donut Claim Centre</string>
+
+    <string name="donut_price_message">Your price for donuts is $%1$s</string>
+
+    <string name="claim_donut_button">Claim Your Free Donut</string>
+
+    <string name="fragment_public_welcome_text">Acme Donuts app</string>
+    <string name="fragment_employee_text">So you want to claim your free donut? You\'re in the right place!</string>
+</resources>

@@ -4,6 +4,7 @@ import com.example.demo.models.*;
 import growthbook.sdk.java.FeatureResult;
 import growthbook.sdk.java.GBContext;
 import growthbook.sdk.java.GrowthBook;
+import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,11 +12,55 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.ArrayList;
 
 @RestController
 public class MainController {
     FeaturesRepository featuresRepository = new FeaturesRepository();
+
+    @GetMapping("/remote")
+    public String frenchBanner() throws URISyntaxException, IOException, InterruptedException {
+        // Fetch feature definitions from GrowthBook API
+        // We recommend adding a caching layer in production
+        URI featuresEndpoint = new URI("https://cdn.growthbook.io/api/features/java_NsrWldWd5bxQJZftGsWKl7R2yD2LtAK8C8EUYh9L8");
+        HttpRequest request = HttpRequest.newBuilder().uri(featuresEndpoint).GET().build();
+        HttpResponse<String> response = HttpClient.newBuilder()
+            .build()
+            .send(request, HttpResponse.BodyHandlers.ofString());
+        String featuresJson = new JSONObject(response.body()).get("features").toString();
+
+        // Get user attributes as a JSON string
+        JSONObject userAttributesObj = new JSONObject();
+        userAttributesObj.put("id", "user-abc123");
+        userAttributesObj.put("company", "company-abc123");
+        userAttributesObj.put("loggedIn", false);
+        userAttributesObj.put("employee", false);
+        userAttributesObj.put("country", "france");
+        userAttributesObj.put("deviceId", "device-123456");
+        userAttributesObj.put("loggedIn", true);
+        userAttributesObj.put("employee", true);
+        userAttributesObj.put("browser", "<some-browser>");
+        userAttributesObj.put("url", "<some-page-url>");
+
+        // Initialize the GrowthBook SDK with the context
+        GBContext context = GBContext
+            .builder()
+            .featuresJson(featuresJson)
+            .attributesJson(userAttributesObj.toString())
+            .build();
+        GrowthBook growthBook = new GrowthBook(context);
+
+        // Value for a feature
+        String bannerText = growthBook.getFeatureValue("banner_text", "(unknown text)");
+
+        return bannerText;
+    }
 
     @GetMapping("/welcome-banner")
     public String index(@RequestParam(value = "country", required = false) String country) {

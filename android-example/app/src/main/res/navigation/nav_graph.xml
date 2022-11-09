@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/PublicFragment">
+
+    <fragment
+        android:id="@+id/PublicFragment"
+        android:name="com.growthbook.examples.acme.PublicFragment"
+        android:label="@string/fragment_public_title"
+        tools:layout="@layout/fragment_public">
+
+        <action
+            android:id="@+id/action_PublicFragment_to_EmployeeFragment"
+            app:destination="@id/EmployeeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/EmployeeFragment"
+        android:name="com.growthbook.examples.acme.EmployeeFragment"
+        android:label="@string/fragment_employee_title"
+        tools:layout="@layout/fragment_employee">
+
+        <action
+            android:id="@+id/action_SecondFragment_to_FirstFragment"
+            app:destination="@id/PublicFragment" />
+    </fragment>
+</navigation>

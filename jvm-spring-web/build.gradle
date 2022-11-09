@@ -25,8 +25,9 @@ dependencies {
 	// Option: specific release version
 	implementation 'com.github.growthbook:growthbook-sdk-java:0.2.2'
 
-	// This examples project uses Gson for serialization
+	// This examples project includes examples for Gson and JSON deserialization
 	implementation 'com.google.code.gson:gson:2.10'
+	implementation 'org.json:json:20220924'
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
