@@ -1,46 +1,31 @@
-# javascript-vue-composition
+# Vue.js Example &rarr; Composition API
 
-This template should help get you started developing with Vue 3 in Vite.
+This is a composition API example.
 
-## Recommended IDE Setup
+- [Running the Example](#running-the-example)
+- [Features](#features)
+  - [Public page](#public-page)
+  - [Employee page](#employee-page)
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
 
-## Type Support for `.vue` Imports in TS
+## Running the Example
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+    npm install
+    npm run dev
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
+Visit the server at the URL displayed in the console.
 
-1. Disable the built-in TypeScript Extension
-    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+See further instructions in the [CONTRIBUTING](CONTRIBUTING.md) docs.
 
-## Customize configuration
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+## Features
 
-## Project Setup
 
-```sh
-npm install
-```
+### Public page
 
-### Compile and Hot-Reload for Development
+This page evaluates the donut price based on user attributes for a public user. Standard users have a default donut price displayed as specified in the GrowthBook dashboard.
 
-```sh
-npm run dev
-```
 
-### Type-Check, Compile and Minify for Production
+### Employee page
 
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+This page evaluates the donut price based on user attributes for an employee user, which should result in free donuts! Employee users have a donut price of $0.00 displayed as specified in the GrowthBook dashboard.
