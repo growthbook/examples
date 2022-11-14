@@ -2,7 +2,7 @@
 
 This is a composition API example in Vue 3.2 with TypeScript.
 
-If your app uses the options API or Vue 2, you may also want to see the [Vue 2 example](https://github.com/growthbook/examples/javascript-vue-options).
+If your app uses the options API or Vue 2, you may also want to see the [Vue 2 example](https://github.com/growthbook/examples/tree/main/javascript-vue-options).
 
 - [Running the Example](#running-the-example)
 - [Features](#features)

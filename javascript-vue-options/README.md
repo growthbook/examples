@@ -2,7 +2,7 @@
 
 This is a options API example in Vue 2.7 with JavaScript.
 
-If your app uses the composition API or Vue 3, you may also want to see the [Vue 3 example](https://github.com/growthbook/examples/javascript-vue-composition).
+If your app uses the composition API or Vue 3, you may also want to see the [Vue 3 example](https://github.com/growthbook/examples/tree/main/javascript-vue-options).
 
 - [Running the Example](#running-the-example)
 - [Features](#features)
