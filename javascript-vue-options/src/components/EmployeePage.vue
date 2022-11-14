@@ -23,7 +23,7 @@ export default {
       .initGrowthBook()
       .then((growthBook) => {
         if (!growthBook) {
-          console.error('GrowthBook failed to initialize')
+          console.warn('GrowthBook failed to initialize. Feature flags and experiments not active.')
           return
         }
 
