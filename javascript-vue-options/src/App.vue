@@ -7,8 +7,8 @@
 
     <h3>Navigate the Example</h3>
     <ul class="example-nav">
-      <li><a v-bind:class="{ 'active-link': route == 'public'}" href="#" v-on:click="goToPublic()">Public</a></li>
-      <li><a v-bind:class="{ 'active-link': route == 'employees'}" href="#" v-on:click="goToEmployees()">Employees</a></li>
+      <li><a v-bind:class="{ 'active-link': route == 'public'}" v-on:click="goToPublic()">Public</a></li>
+      <li><a v-bind:class="{ 'active-link': route == 'employees'}" v-on:click="goToEmployees()">Employees</a></li>
     </ul>
 
     <PublicPage v-if="route == 'public'" />
@@ -82,6 +82,7 @@ li {
 }
 a {
   color: #42b983;
+  cursor: pointer;
 }
 
 .active-link {
