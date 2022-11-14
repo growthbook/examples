@@ -11,9 +11,9 @@ export const GrowthBookVuePlugin = {
   install: function (Vue, { featuresEndpoint, enableDevMode = false }) {
     let growthBook = null;
 
-    Vue.initGrowthBook = function () {
+    Vue.prototype.initGrowthBook = function initGrowthBook() {
       if (growthBook) {
-        return growthBook;
+        return Promise.resolve(growthBook);
       }
 
       return getFeaturesJson(featuresEndpoint)
@@ -22,12 +22,12 @@ export const GrowthBookVuePlugin = {
             enableDevMode,
           });
 
-          growthBook.setFeatures(json);
+          growthBook.setFeatures(json.features);
 
           return growthBook;
         })
         .catch((error) => {
-          console.error("GrowthBook Vue plugin error", error);
+          console.error("GrowthBook Vue plugin initialization error", error);
           return null;
         })
     }
