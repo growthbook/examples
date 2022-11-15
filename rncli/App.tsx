@@ -138,7 +138,7 @@ const App = () => {
             {isReady && (
               <>
                 <Section title={bannerText}>
-                  Your price for donuts:{' '}
+                  Role = {role} - Your price for donuts:{' '}
                   <Text style={styles.highlight}>${donutPrice.toFixed(2)}</Text>
                 </Section>
                 <View style={styles.buttonSection}>
