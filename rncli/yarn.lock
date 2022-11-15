@@ -787,6 +787,18 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
+"@growthbook/growthbook-react@^0.10.1":
+  version "0.10.1"
+  resolved "https://registry.yarnpkg.com/@growthbook/growthbook-react/-/growthbook-react-0.10.1.tgz#d846f3d4e103b74203937bcf5e42bd2650c2b0fb"
+  integrity sha512-PALdqgkU3+i4ySRuBTGf3ZRjFvfKml2xDya1/e2dc4jgQnF/I+EtmimDM1ZJUNmqpQg5tqj+o4GW9jLP0qUeZA==
+  dependencies:
+    "@growthbook/growthbook" "^0.20.0"
+
+"@growthbook/growthbook@^0.20.0":
+  version "0.20.0"
+  resolved "https://registry.yarnpkg.com/@growthbook/growthbook/-/growthbook-0.20.0.tgz#4276487468989fa6bd020b124678211ff74791f5"
+  integrity sha512-3hqy7+UsM2z47rnwDaPGrbHA7NlZ74Kh4unAMSULyXnD9F3lJdoSd7+y9r31y+f81HK0wTauu9RFMNFZNdXiUQ==
+
 "@hapi/hoek@^9.0.0":
   version "9.3.0"
   resolved "https://registry.yarnpkg.com/@hapi/hoek/-/hoek-9.3.0.tgz#8368869dcb735be2e7f5cb7647de78e167a251fb"
