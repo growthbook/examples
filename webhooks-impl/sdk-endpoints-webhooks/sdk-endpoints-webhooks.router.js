@@ -1,13 +1,16 @@
 const express = require('express')
 const bodyParser = require('body-parser')
+const authenticateWebHooks = require('../middleware/authenticateWebHooks')
 
 const router = express.Router()
 
+// Middleware
+// 1. use the raw bodyParser
 router.use(bodyParser.raw({
   type: 'application/json'
 }))
-
-router.use(require('./unified-webhooks-authentication-middleware'))
+// 2. verify web hook signature
+router.use(authenticateWebHooks({ secret: process.env.GROWTHBOOK_SDK_WEBHOOKS_SECRET }))
 
 router.post('/', (req, res) => {
   console.log('Receiving request (unified)', JSON.stringify(JSON.parse(req.body.toString()), null, 2))
