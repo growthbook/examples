@@ -11,8 +11,8 @@ if (!process.env.GROWTHBOOK_SDK_WEBHOOKS_SECRET) throw new Error('GROWTHBOOK_SDK
 
 app.use(morgan('combined'))
 
-// :: NEW :: Event-based web hooks
-app.use('/events', require('./events/events.router'))
+// 🚧 :: NEW :: Event-based web hooks
+// app.use('/events', require('./events/events.router'))
 
 // v1 Combined Web hooks handling
 app.use('/webhooks', require('./sdk-endpoints-webhooks/sdk-endpoints-webhooks.router'))
