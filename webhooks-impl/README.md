@@ -1,7 +1,7 @@
 # webhooks examples
 
 - [SDK Endpoint web hooks](#sdk-endpoint-web-hooks)
-- [Event-based web hooks](#event-based-web-hooks)
+- [🚧 Event-based web hooks](#-event-based-web-hooks)
 - [Usage](#usage)
 
 
@@ -9,10 +9,24 @@
 
 See code in `./sdk-endpoints-webhooks`.
 
+Set up the SDK endpoint to URL of the server running on your device on your local network, for example:
 
-## Event-based web hooks
+```
+http://192.168.0.xx:1115/webhooks
+```
+
+
+## 🚧 Event-based web hooks
 
 See code in `./events`.
+
+<!-- 
+Set up the SDK endpoint to URL of the server running on your device on your local network, for example:
+
+```
+http://192.168.0.xx:1115/events/webhooks
+``` 
+-->
 
 
 ## Usage
