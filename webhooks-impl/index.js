@@ -14,7 +14,7 @@ app.use(morgan('combined'))
 // 🚧 :: NEW :: Event-based web hooks
 // app.use('/events', require('./events/events.router'))
 
-// v1 Combined Web hooks handling
+// v1 SDK Endpoint web hook handling
 app.use('/webhooks', require('./sdk-endpoints-webhooks/sdk-endpoints-webhooks.router'))
 
 app.listen(port, () => {
