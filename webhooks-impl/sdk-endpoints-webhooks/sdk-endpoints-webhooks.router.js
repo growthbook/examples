@@ -13,7 +13,7 @@ router.use(bodyParser.raw({
 router.use(authenticateWebHooks({ secret: process.env.GROWTHBOOK_SDK_WEBHOOKS_SECRET }))
 
 router.post('/', (req, res) => {
-  console.log('Receiving request (unified)', JSON.stringify(JSON.parse(req.body.toString()), null, 2))
+  console.log('Receiving SDK Endpoint webhook request', JSON.stringify(JSON.parse(req.body.toString()), null, 2))
 
   // Respond first
   res.json({ status: 'ok'})
