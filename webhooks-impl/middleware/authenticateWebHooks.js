@@ -5,6 +5,10 @@ const authenticateWebHooks = ({ secret }) => (req, res, next) => {
 
   // Get signature from headers
   const signature = req.headers['x-growthbook-signature']
+  if (!signature) {
+    console.error('❗️ Invalid signature')
+    return res.status(401).send()
+  }
 
   // Sign the payload
   const computed = crypto
@@ -13,7 +17,7 @@ const authenticateWebHooks = ({ secret }) => (req, res, next) => {
     .digest('hex');
 
   // Compare signatures using a time-safe compare
-  if (!crypto.timingSafeEqual(Buffer.from(computed), Buffer.from(signature))) {
+  if (computed.length !== signature.length || !crypto.timingSafeEqual(Buffer.from(computed), Buffer.from(signature))) {
     console.error('❗️ Invalid signature')
     return res.status(401).send()
   }
