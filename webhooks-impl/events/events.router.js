@@ -11,10 +11,10 @@ router.use(bodyParser.raw({
 }))
 // 2. verify web hook signature
 // 🚧 Not yet implemented
-// router.use(authenticateWebHooks({ secret: process.env.GROWTHBOOK_EVENTS_WEBHOOKS_SECRET }))
+router.use(authenticateWebHooks({ secret: process.env.GROWTHBOOK_EVENTS_WEBHOOKS_SECRET }))
 
 // 🚧 Not yet implemented
-/* router.post('/webhooks', (req, res) => {
+router.post('/webhooks', (req, res) => {
   console.log('Receiving request', req.body)
 
   // Respond first
@@ -22,5 +22,5 @@ router.use(bodyParser.raw({
 
   // Handle event
 })
- */
+
 module.exports = router
