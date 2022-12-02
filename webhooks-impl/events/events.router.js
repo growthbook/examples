@@ -15,8 +15,13 @@ router.use(authenticateWebHooks({ secret: process.env.GROWTHBOOK_EVENTS_WEBHOOKS
 router.post('/webhooks', (req, res) => {
   console.log('Receiving request', req.body)
 
-  // Respond first
-  res.json({ status: 'all is good'})
+  // Delay in milliseconds to simulate a longer-running request, e.g. 15000 to cause a timeout failure
+  // Your web hooks implementation should respond immediately. This delay is added for our QA'ing purposes.
+  const delayMs = 0
+  setTimeout(() => {
+    // Respond first
+    res.json({ status: 'all is good'})
+  }, delayMs)
 
   // Handle event
 })
