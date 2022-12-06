@@ -16,7 +16,7 @@ app.use(morgan('combined'))
 app.use('/webhooks', require('./sdk-endpoints-webhooks/sdk-endpoints-webhooks.router'))
 
 // 🚧 :: NEW :: Event-based web hooks •• 🚧 Not yet implemented
-// app.use('/events', require('./events/events.router'))
+app.use('/events', require('./events/events.router'))
 
 app.listen(port, () => {
   console.log(`Example webhook handling app running at http://localhost:${port}`)
