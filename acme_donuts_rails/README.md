@@ -127,8 +127,21 @@ You should see the following response:
 
 The `ApplicationController` implements authentication as well as initializing the GrowthBook SDK for the authenticated user.
 
-See the `growthbook_sdk` controller concern for implementation details.
+See the `growthbook_sdk` controller concern for implementation details. This implements cacheing of the GrowthBook features JSON. More on that below.
 
 The `UserController` has one method that returns the user attributes that are assigned to the GrowthBook SDK.
 
 The view layer uses [blueprinter](https://github.com/procore/blueprinter) to serialize models into JSON but you can use [active_model_serializers](https://github.com/rails-api/active_model_serializers), [jbuilder](https://github.com/rails/jbuilder), or any other way of creating JSON for the GrowthBook attributes.
+
+
+### Caching
+
+This example implements in-memory caching with [MemoryStore](https://guides.rubyonrails.org/caching_with_rails.html#activesupport-cache-memorystore), which is not persisted across server restarts. For a caching implementation more suitable for production, you can use another cache strategy, for example [RedisCacheStore](https://guides.rubyonrails.org/caching_with_rails.html#activesupport-cache-rediscachestore).
+
+To see that caching is working, run the following:
+
+    bundle exec rails dev:cache
+
+You should see the confirmation message that development mode is now being cached.
+
+You can see the caching implementation in the `growthbook_sdk` controller concern.
