@@ -12,9 +12,10 @@ Install the dependencies:
 
 ## Development Server
 
-Run the migrations:
+Run the migrations and seed the database with the sample users:
 
     bundle exec rails db:migrate
+    bundle exec rails db:seed
 
 This will create sample users in the database.
 
