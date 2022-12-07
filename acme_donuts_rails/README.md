@@ -4,6 +4,13 @@ Example project in Ruby on Rails implementing the [GrowthBook Ruby SDK](https://
 
 The project uses SQLite for simplicity.
 
+- [Dependencies](#dependencies)
+- [Development Server](#development-server)
+- [Usage](#usage)
+- [Features](#features)
+- [Navigating the code](#navigating-the-code)
+  - [Caching](#caching)
+
 
 ## Dependencies
 
