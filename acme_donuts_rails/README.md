@@ -4,11 +4,15 @@ Example project in Ruby on Rails implementing the [GrowthBook Ruby SDK](https://
 
 The project uses SQLite for simplicity.
 
+
 ## Dependencies
+
+The rquired Ruby version is in `.ruby-version`.
 
 Install the dependencies:
 
     bundle install
+
 
 ## Development Server
 
@@ -83,7 +87,13 @@ You should see the following response:
 You should get an error if you make any request without a token, e.g.:
 
 ```sh
-curl -v http://localhost:3333/user
+curl -sI http://localhost:3333/user | grep HTTP
+```
+
+You should see the following response:
+
+```txt
+HTTP/1.1 401 Unauthorized
 ```
 
 ## Features
