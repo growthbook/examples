@@ -14,7 +14,7 @@ The project uses SQLite for simplicity.
 
 ## Dependencies
 
-The rquired Ruby version is in `.ruby-version`.
+The required Ruby version is in `.ruby-version`.
 
 Install the dependencies:
 
