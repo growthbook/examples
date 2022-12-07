@@ -112,7 +112,8 @@ You should see the following response:
 {
   "banner_text": "¡Bienvenidos y bienvenidas a Donas Acme!",
   "use_dark_mode": true,
-  "donut_price": 0
+  "donut_price": 0,
+  "username_color": "orange"
 }
 ```
 
@@ -128,7 +129,8 @@ You should see the following response:
 {
   "banner_text": "Bienvenue au Beignets Acme !",
   "use_dark_mode": true,
-  "donut_price": 2.5
+  "donut_price": 2.5,
+  "username_color": "yellow"
 }
 ```
 
@@ -141,9 +143,17 @@ See the `growthbook_sdk` controller concern for implementation details. This imp
 
 The `UserController` has one method that returns the user attributes that are assigned to the GrowthBook SDK.
 
+The `FeatureController` is where the GrowthBook SDK is implemented:
+
+- `#eval_feature(feature_key)`
+- `#on?(feature_key)`
+- `#feature_value(feature_key, default_value)`
+- `#run(experiment)` with an inline experiment `Growthbook::InlineExperiment`
+
+See the class `GrowthbookImpressionListener` for an example impression listener, which is evaluated whenever an inline experiment is run. Whenever the `GET /features` endpoint is evaluated, an inline experiment is run and the experiment results are stored using the `Impression` model. You can see them in the console by calling `Impression.all`. This is done for the `username_color` property.
+
 The view layer uses [blueprinter](https://github.com/procore/blueprinter) to serialize models into JSON but you can use [active_model_serializers](https://github.com/rails-api/active_model_serializers), [jbuilder](https://github.com/rails/jbuilder), or any other way of creating JSON for the GrowthBook attributes.
 
-See the class `GrowthbookImpressionListener` for an example impression listener, which is evaluated whenever an inline experiment is run. Whenever the `GET /features` endpoint is evaluated, an inline experiment is run and the experiment results are stored using the `Impression` model. You can see them in the console by calling `Impression.all`.
 
 <details>
 <summary><b>Impression.all output</b></summary>
