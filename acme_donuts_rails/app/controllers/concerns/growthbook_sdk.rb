@@ -8,7 +8,7 @@ module GrowthbookSdk
 
     @growthbook ||= Growthbook::Context.new(
       features: features_json,
-      attributes: {}
+      attributes: {},
     )
   end
 
@@ -16,8 +16,7 @@ module GrowthbookSdk
     return if current_user.nil?
 
     growthbook.attributes = UserBlueprint.render_as_hash(current_user, view: :growthbook_user_attributes)
-
-    puts growthbook.attributes
+    growthbook.listener = GrowthbookImpressionListener.new
   end
 
   private

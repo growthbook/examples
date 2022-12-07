@@ -143,6 +143,60 @@ The `UserController` has one method that returns the user attributes that are as
 
 The view layer uses [blueprinter](https://github.com/procore/blueprinter) to serialize models into JSON but you can use [active_model_serializers](https://github.com/rails-api/active_model_serializers), [jbuilder](https://github.com/rails/jbuilder), or any other way of creating JSON for the GrowthBook attributes.
 
+See the class `GrowthbookImpressionListener` for an example impression listener, which is evaluated whenever an inline experiment is run. Whenever the `GET /features` endpoint is evaluated, an inline experiment is run and the experiment results are stored using the `Impression` model. You can see them in the console by calling `Impression.all`.
+
+<details>
+<summary><b>Impression.all output</b></summary>
+
+```rb
+[#<Impression:0x00007f79d8d184f0
+  id: 1,
+  experiment:
+   {"key"=>"username-color",
+    "variations"=>["red", "orange", "yellow", "green", "blue", "purple"],
+    "active"=>true,
+    "force"=>nil,
+    "weights"=>nil,
+    "coverage"=>1,
+    "condition"=>nil,
+    "namespace"=>nil,
+    "hash_attribute"=>"id"},
+  result:
+   {"hash_used"=>true,
+    "in_experiment"=>true,
+    "variation_id"=>2,
+    "value"=>"yellow",
+    "hash_attribute"=>"id",
+    "hash_value"=>"user-abc123",
+    "feature_id"=>""},
+  created_at: Wed, 07 Dec 2022 01:04:08.843090000 UTC +00:00,
+  updated_at: Wed, 07 Dec 2022 01:04:08.843090000 UTC +00:00>,
+ #<Impression:0x00007f79dbadb590
+  id: 2,
+  experiment:
+   {"key"=>"username-color",
+    "variations"=>["red", "orange", "yellow", "green", "blue", "purple"],
+    "active"=>true,
+    "force"=>nil,
+    "weights"=>nil,
+    "coverage"=>1,
+    "condition"=>nil,
+    "namespace"=>nil,
+    "hash_attribute"=>"id"},
+  result:
+   {"hash_used"=>true,
+    "in_experiment"=>true,
+    "variation_id"=>1,
+    "value"=>"orange",
+    "hash_attribute"=>"id",
+    "hash_value"=>"user-employee-123456789",
+    "feature_id"=>""},
+  created_at: Wed, 07 Dec 2022 01:04:17.700329000 UTC +00:00,
+  updated_at: Wed, 07 Dec 2022 01:04:17.700329000 UTC +00:00>]
+```
+
+</details>
+
 
 ### Caching
 
