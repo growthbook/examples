@@ -25,16 +25,16 @@
     strip-json-comments "^3.1.1"
 
 "@growthbook/growthbook-react@^0.11.0":
-  version "0.10.1"
-  resolved "https://registry.yarnpkg.com/@growthbook/growthbook-react/-/growthbook-react-0.10.1.tgz#d846f3d4e103b74203937bcf5e42bd2650c2b0fb"
-  integrity sha512-PALdqgkU3+i4ySRuBTGf3ZRjFvfKml2xDya1/e2dc4jgQnF/I+EtmimDM1ZJUNmqpQg5tqj+o4GW9jLP0qUeZA==
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/@growthbook/growthbook-react/-/growthbook-react-0.11.0.tgz#475628a164df30b409e32b9b688868f9c64d96a0"
+  integrity sha512-YvM2bIgUjYmyg1fdceZrkzmymAYfASObIiK03gvvMC7Kqz1IPprWsmgASNSTpFOG46Jgw75pO+sl0n6KxRryJw==
   dependencies:
-    "@growthbook/growthbook" "^0.20.0"
+    "@growthbook/growthbook" "^0.21.0"
 
-"@growthbook/growthbook@^0.20.0":
-  version "0.20.1"
-  resolved "https://registry.yarnpkg.com/@growthbook/growthbook/-/growthbook-0.20.1.tgz#86f54f034ab0d8121f5b5b75ad8d883974b5327b"
-  integrity sha512-frNwdN99jr6NUNWJC5YKA+cmbPaTJsGac3rYRbvihx3xLgM3IbphhNQe+791f0xr/RpRcGCp2vUsyCcM+TduMw==
+"@growthbook/growthbook@^0.21.0":
+  version "0.21.0"
+  resolved "https://registry.yarnpkg.com/@growthbook/growthbook/-/growthbook-0.21.0.tgz#fbbe00f96bb3f120c8724241c6750b4a4144c214"
+  integrity sha512-eAfiR9x/IvOUmLZeefP3zaPKy1+s6vEHCLH6BwTm5EVbzdIkHRLh9VilzD5lOXNxIqp+tlm69uzlcJY6K2JjMg==
 
 "@humanwhocodes/config-array@^0.11.8":
   version "0.11.8"

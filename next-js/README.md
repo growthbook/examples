@@ -15,7 +15,7 @@ First, create a GrowthBook account (either self-hosted or Cloud) - https://www.g
 Then, create a `.env.local` file in this repo with some environment variables:
 
 ```
-NEXT_PUBLIC_GROWTHBOOK_HOST=
+NEXT_PUBLIC_GROWTHBOOK_API_HOST=
 NEXT_PUBLIC_GROWTHBOOK_CLIENT_KEY=
 ```
 

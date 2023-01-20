@@ -10,7 +10,7 @@ export default function Home() {
         variables:
         <ul>
           <li>
-            <code>NEXT_PUBLIC_GROWTHBOOK_HOST</code>
+            <code>NEXT_PUBLIC_GROWTHBOOK_API_HOST</code>
           </li>
           <li>
             <code>NEXT_PUBLIC_GROWTHBOOK_CLIENT_KEY</code>
