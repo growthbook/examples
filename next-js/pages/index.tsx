@@ -1,11 +1,10 @@
-import Head from "next/head";
 import Link from "next/link";
 
 export default function Home() {
   return (
     <>
       <h1>GrowthBook Next.js Example</h1>
-      <p>
+      <div style={{marginBottom: 10}}>
         In order for this demo to work, you need to specify some environment
         variables:
         <ul>
@@ -19,7 +18,7 @@ export default function Home() {
             <code>NEXT_PUBLIC_GROWTHBOOK_DECRYPTION_KEY</code> (optional)
           </li>
         </ul>
-      </p>
+      </div>
       <h3>Rendering Strategies</h3>
       <ul>
         <li>
