@@ -24,6 +24,43 @@ import java.util.ArrayList;
 public class MainController {
     FeaturesRepository featuresRepository = new FeaturesRepository();
 
+    @GetMapping("/encrypted")
+    public String encryptedGreeting(
+        @RequestParam(value = "country", required = false) String country
+    ) throws URISyntaxException, IOException, InterruptedException {
+        // Fetch feature definitions from the GrowthBook API
+        // These features are configured as encrypted
+        URI featuresEndpoint = new URI("https://cdn.growthbook.io/api/features/sdk-862b5mHcP9XPugqD");
+        HttpRequest request = HttpRequest.newBuilder().uri(featuresEndpoint).GET().build();
+        HttpResponse<String> response = HttpClient.newBuilder()
+            .build()
+            .send(request, HttpResponse.BodyHandlers.ofString());
+        String encryptedFeaturesJson = new JSONObject(response.body()).get("encryptedFeatures").toString();
+
+        // You can store your encryption key as an environment variable rather than hardcoding in plain text in your codebase
+        String encryptionKey = "BhB1wORFmZLTDjbvstvS8w==";
+
+        // Get user attributes as a JSON string
+        JSONObject userAttributesObj = new JSONObject();
+        userAttributesObj.put("id", "user-abc123");
+        // You wouldn't normally provide user attributes as a query param, this is for demonstration purposes
+        userAttributesObj.put("country", country);
+
+        // Initialize the GrowthBook SDK with the context
+        GBContext context = GBContext
+            .builder()
+            .featuresJson(encryptedFeaturesJson)
+            .encryptionKey(encryptionKey)
+            .attributesJson(userAttributesObj.toString())
+            .build();
+        GrowthBook growthBook = new GrowthBook(context);
+
+        // We should never get the fallback text unless the configuration of the GrowthBook feature changes and "greeting" is no longer available
+        String greeting = growthBook.getFeatureValue("greeting", "ERROR with getting the greeting");
+
+        return greeting;
+    }
+
     @GetMapping("/remote")
     public String frenchBanner() throws URISyntaxException, IOException, InterruptedException {
         // Fetch feature definitions from GrowthBook API

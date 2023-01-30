@@ -18,6 +18,7 @@ Before Acme Donuts implemented dark mode, they used to configure theme variables
   - [Meal Order](#meal-order)
   - [Acme Donuts Features](#acme-donuts-features)
   - [Features from the GrowthBook API](#features-from-the-growthbook-api)
+  - [Encrypted features from the GrowthBook API](#encrypted-features-from-the-growthbook-api)
 
 ## Running the Example
 
@@ -30,7 +31,6 @@ You should see output that includes:
 > Server running on http://localhost:8080
 
 The console will also include the parsed features, which can also be found in the `features.json` file.
-
 
 ## API Usage
 
@@ -68,8 +68,8 @@ Response:
 
 ```json
 {
-  "mealType": "STANDARD",
-  "dessert": "Strawberry Cheesecake"
+    "mealType": "STANDARD",
+    "dessert": "Strawberry Cheesecake"
 }
 ```
 
@@ -83,14 +83,12 @@ Response:
 
 ```json
 {
-  "mealType": "GLUTEN_FREE",
-  "dessert": "French Vanilla Ice Cream"
+    "mealType": "GLUTEN_FREE",
+    "dessert": "French Vanilla Ice Cream"
 }
 ```
 
-
 The `MealOrder` class is a Gson serializable and deserializable class with properties of type `String` and `MealType`, an enum that serializes to a string.
-
 
 ### Acme Donuts Features
 
@@ -108,9 +106,9 @@ This should return the following for the general public:
 
 ```json
 {
-  "darkModeEnabled": false,
-  "donutPrice": 2.5,
-  "fontColour": null
+    "darkModeEnabled": false,
+    "donutPrice": 2.5,
+    "fontColour": null
 }
 ```
 
@@ -126,14 +124,13 @@ This should return the following for employees:
 
 ```json
 {
-  "darkModeEnabled": true,
-  "donutPrice": 0,
-  "fontColour": "DarkSlateBlue"
+    "darkModeEnabled": true,
+    "donutPrice": 0,
+    "fontColour": "DarkSlateBlue"
 }
 ```
 
 Employees get free donuts so they see a donut price of 0. The company is currently beta testing dark mode on the admin portal so it is also enabled for logged in users. Some parts of the employee portal use the legacy `fontColour` so that's still included.
-
 
 ### Features from the GrowthBook API
 
@@ -148,3 +145,19 @@ This should return the following response:
 ```
 Bienvenue au Beignets Acme !
 ```
+
+### Encrypted features from the GrowthBook API
+
+The endpoint `@GetMapping("/encrypted")` fetches encrypted features from the GrowthBook endpoint. You can learn more about [encryption for SDK Endpoints in the docs](https://docs.growthbook.io/app/api#encryption).
+
+```sh
+curl http://localhost:8080/encrypted?country=:country
+```
+
+Based on the country provided as the query parameter `country`, this endpoint will return the following responses:
+
+| Country   | Text    |
+| --------- | ------- |
+| _default_ | hello   |
+| france    | bonjour |
+| mexico    | hola    |
