@@ -24,6 +24,39 @@ import java.util.ArrayList;
 public class MainController {
     FeaturesRepository featuresRepository = new FeaturesRepository();
 
+    @GetMapping("/encrypted")
+    public String encryptedGreeting() throws URISyntaxException, IOException, InterruptedException {
+        // Fetch feature definitions from the GrowthBook API
+        // These features are configured as encrypted
+        URI featuresEndpoint = new URI("https://cdn.growthbook.io/api/features/sdk-862b5mHcP9XPugqD");
+        HttpRequest request = HttpRequest.newBuilder().uri(featuresEndpoint).GET().build();
+        HttpResponse<String> response = HttpClient.newBuilder()
+            .build()
+            .send(request, HttpResponse.BodyHandlers.ofString());
+        String encryptedFeaturesJson = new JSONObject(response.body()).get("encryptedFeatures").toString();
+
+        // You can store your encryption key as an environment variable rather than hardcoding in plain text in your codebase
+        String encryptionKey = "BhB1wORFmZLTDjbvstvS8w==";
+
+        // Get user attributes as a JSON string
+        JSONObject userAttributesObj = new JSONObject();
+        userAttributesObj.put("id", "user-abc123");
+        userAttributesObj.put("country", "france");
+
+        // Initialize the GrowthBook SDK with the context
+        GBContext context = GBContext
+            .builder()
+            .featuresJson(encryptedFeaturesJson)
+            .encryptionKey(encryptionKey)
+            .attributesJson(userAttributesObj.toString())
+            .build();
+        GrowthBook growthBook = new GrowthBook(context);
+
+        String greeting = growthBook.getFeatureValue("greeting", "ERROR with getting the greeting");
+
+        return greeting;
+    }
+
     @GetMapping("/remote")
     public String frenchBanner() throws URISyntaxException, IOException, InterruptedException {
         // Fetch feature definitions from GrowthBook API
