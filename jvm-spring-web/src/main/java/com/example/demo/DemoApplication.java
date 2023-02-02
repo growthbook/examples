@@ -16,6 +16,7 @@ public class DemoApplication {
 	public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
 		return args -> {
 			System.out.println("Decrypted greeting: http://localhost:8080/encrypted");
+			System.out.println("Dependency Injection example: http://localhost:8080/di");
 			System.out.println("Welcome banner: http://localhost:8080/welcome-banner");
 			System.out.println("Meal order: http://localhost:8080/meal");
 			System.out.println("Features (public site): http://localhost:8080/acme-features/public");

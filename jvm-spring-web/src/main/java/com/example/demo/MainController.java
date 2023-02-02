@@ -1,10 +1,13 @@
 package com.example.demo;
 
 import com.example.demo.models.*;
+import com.example.demo.services.AcmeDonutsFeatureService;
+import com.example.demo.services.BasicEncryptedFeaturesService;
 import growthbook.sdk.java.FeatureResult;
 import growthbook.sdk.java.GBContext;
 import growthbook.sdk.java.GrowthBook;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +25,17 @@ import java.util.ArrayList;
 
 @RestController
 public class MainController {
+
+    /**
+     * Each of these autowired dependencies is using the {@link growthbook.sdk.java.GBFeaturesRepository} class.
+     */
+    @Autowired
+    BasicEncryptedFeaturesService basicEncryptedFeaturesService;
+
+    @Autowired
+    AcmeDonutsFeatureService acmeDonutsFeatureService;
+
+    // If you are managing the fetching of your own features, this class is doing that.
     FeaturesRepository featuresRepository = new FeaturesRepository();
 
     @GetMapping("/encrypted")
@@ -266,5 +280,31 @@ public class MainController {
         AcmeDonutsFeatures acmeDonutsFeatures = new AcmeDonutsFeatures(darkModeFeature.isOn(), donutPrice, fontColour);
 
         return new ResponseEntity<>(acmeDonutsFeatures, HttpStatus.OK);
+    }
+
+    @GetMapping("/di")
+    public String dependencyInjection() {
+        // A real app would get user attributes from a DB
+        UserAttributes user = new UserAttributes("user-abc123", "mexico", false, false, new ArrayList<>());
+        String userAttributesJson = user.toJson();
+
+        // Project 1: Features from the Acme donut project, unencrypted
+        GBContext project1GBContext = GBContext.builder()
+            .featuresJson(acmeDonutsFeatureService.getFeaturesJson())
+            .attributesJson(userAttributesJson)
+            .build();
+        GrowthBook project1growthBook = new GrowthBook(project1GBContext);
+        Float donutPrice = project1growthBook.getFeatureValue("donut_price", 9999f);
+
+        // Project 2: Features from another basic project, encrypted
+        GBContext project2GBContext = GBContext.builder()
+            .featuresJson(basicEncryptedFeaturesService.getFeaturesJson())
+            .attributesJson(userAttributesJson)
+            .build();
+        GrowthBook project2growthBook = new GrowthBook(project2GBContext);
+        String greeting = project2growthBook.getFeatureValue("greeting", "unknown");
+
+        // Return a string with the greeting from one project and the donut price from another
+        return String.format("%s - Donut price: %s", greeting, donutPrice);
     }
 }
