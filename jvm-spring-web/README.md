@@ -19,6 +19,7 @@ Before Acme Donuts implemented dark mode, they used to configure theme variables
   - [Acme Donuts Features](#acme-donuts-features)
   - [Features from the GrowthBook API](#features-from-the-growthbook-api)
   - [Encrypted features from the GrowthBook API](#encrypted-features-from-the-growthbook-api)
+  - [Dependency Injection example with networking using multiple GrowthBook projects](#dependency-injection-example-with-networking-using-multiple-growthbook-projects)
 
 ## Running the Example
 
@@ -161,3 +162,16 @@ Based on the country provided as the query parameter `country`, this endpoint wi
 | _default_ | hello   |
 | france    | bonjour |
 | mexico    | hola    |
+
+
+### Dependency Injection example with networking using multiple GrowthBook projects
+
+The example in the `MainController` at endpoint `@GetMapping("/di") public String dependencyInjection()` has the following features:
+
+- it implements dependency injection using Spring's `@Autowire`
+- it uses 2 separate `GBFeaturesRepository` classes for separate SDK endpoints, which does the networking for you when you call its `initialize()` method. See `AcmeDonutsFeatureService.java` (the same features used in other examples) and `BasicEncryptedFeaturesService.java` (a new project that uses encryption) for details.
+
+
+```sh
+curl http://localhost:8080/di
+```
