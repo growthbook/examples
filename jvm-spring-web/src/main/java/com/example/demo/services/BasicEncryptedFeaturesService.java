@@ -11,13 +11,14 @@ public class BasicEncryptedFeaturesService extends GBFeaturesRepository {
     public BasicEncryptedFeaturesService() throws FeatureFetchException {
         super(
             "https://cdn.growthbook.io/api/features/sdk-862b5mHcP9XPugqD",
-            "BhB1wORFmZLTDjbvstvS8w=="
+            "BhB1wORFmZLTDjbvstvS8w==",
+            15
         );
 
         this.initialize();
     }
 
-    private BasicEncryptedFeaturesService(String endpoint, String encryptionKey) {
-        super(endpoint, encryptionKey);
+    private BasicEncryptedFeaturesService(String endpoint, String encryptionKey, Integer ttlSeconds) {
+        super(endpoint, encryptionKey, ttlSeconds);
     }
 }

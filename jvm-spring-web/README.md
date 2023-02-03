@@ -175,3 +175,5 @@ The example in the `MainController` at endpoint `@GetMapping("/di") public Strin
 ```sh
 curl http://localhost:8080/di
 ```
+
+You should get the output `hola - Donut price: 2.5` which are values evaluated from 2 separate projects, 1 encrypted, 1 not.
