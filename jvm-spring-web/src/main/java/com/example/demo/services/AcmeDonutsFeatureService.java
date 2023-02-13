@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class AcmeDonutsFeatureService extends GBFeaturesRepository {
     @Autowired
-    public AcmeDonutsFeatureService() throws FeatureFetchException {
+    public AcmeDonutsFeatureService() {
         super(
             "https://cdn.growthbook.io/api/features/java_NsrWldWd5bxQJZftGsWKl7R2yD2LtAK8C8EUYh9L8",
             null,
@@ -24,7 +24,25 @@ public class AcmeDonutsFeatureService extends GBFeaturesRepository {
             }
         });
 
-        this.initialize();
+        try {
+            this.initialize();
+        } catch (FeatureFetchException e) {
+            this.handleError(e);
+        }
+    }
+
+    void handleError(FeatureFetchException e) {
+        e.printStackTrace();
+
+        switch (e.getErrorCode()) {
+            case NO_RESPONSE_ERROR -> {
+                // Handle NO_RESPONSE_ERROR
+            }
+
+            case CONFIGURATION_ERROR, UNKNOWN -> {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     private AcmeDonutsFeatureService(String endpoint, String encryptionKey, Integer ttlSeconds) {
