@@ -1,6 +1,6 @@
 package com.growthbook.example
 
-import com.growthbook.example.plugins.configureRouting
+import com.growthbook.example.plugins.routing.configureRouting
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.server.testing.*
