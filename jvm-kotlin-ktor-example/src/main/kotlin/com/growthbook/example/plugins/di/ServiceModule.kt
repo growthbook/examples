@@ -12,7 +12,11 @@ val serviceModule = module {
         AcmeDonutFeaturesRepository(
             endpoint = "https://cdn.growthbook.io/api/features/java_NsrWldWd5bxQJZftGsWKl7R2yD2LtAK8C8EUYh9L8",
             ttlSeconds = 10,
-        )
+        ).apply {
+            onFeaturesRefresh {
+                println("🔵 AcmeDonutFeaturesRepository -> Features have been refreshed \n $it")
+            }
+        }
     }
 
     single<BasicEncryptedFeaturesRepository> {
@@ -20,6 +24,10 @@ val serviceModule = module {
             endpoint = "https://cdn.growthbook.io/api/features/sdk-862b5mHcP9XPugqD",
             encryptionKey = "BhB1wORFmZLTDjbvstvS8w==",
             ttlSeconds = 15
-        )
+        ).apply {
+            onFeaturesRefresh {
+                println("🔵 BasicEncryptedFeaturesService -> Features have been refreshed \n $it")
+            }
+        }
     }
 }

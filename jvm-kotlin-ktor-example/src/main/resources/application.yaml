@@ -1,6 +1,4 @@
 ktor:
-    development: true
-
     application:
         modules:
             - com.growthbook.example.ApplicationKt.module

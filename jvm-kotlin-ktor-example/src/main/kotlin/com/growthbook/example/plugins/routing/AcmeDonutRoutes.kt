@@ -29,10 +29,15 @@ fun Routing.acmeRoutes() {
 
         val growthBook = GrowthBook(context)
 
+        // Evaluated feature values
+        val darkModeEnabled = growthBook.getFeatureValue("dark_mode", false)
+        val donutPrice = growthBook.getFeatureValue("donut_price", 9999f)
+        val bannerText = growthBook.getFeatureValue("banner_text", "(unknown text)")
+
         val features = AcmeDonutsFeatures(
-            darkModeEnabled = growthBook.getFeatureValue("dark_mode", false),
-            donutPrice = growthBook.getFeatureValue("donut_price", 9999f),
-            bannerText = growthBook.getFeatureValue("banner_text", "(unknown text)")
+            darkModeEnabled = darkModeEnabled,
+            donutPrice = donutPrice,
+            bannerText = bannerText,
         )
 
         call.respond(features)
