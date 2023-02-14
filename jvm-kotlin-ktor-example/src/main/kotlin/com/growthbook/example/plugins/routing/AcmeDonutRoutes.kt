@@ -1,10 +1,9 @@
 package com.growthbook.example.plugins.routing
 
 import com.growthbook.example.models.AcmeDonutsFeatures
-import com.growthbook.example.models.User
 import com.growthbook.example.plugins.growthbook.AcmeDonutFeaturesRepository
-import growthbook.sdk.java.GBContext
-import growthbook.sdk.java.GrowthBook
+import com.growthbook.example.plugins.growthbook.MockUserData
+import growthbook.sdk.java.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -14,23 +13,43 @@ fun Routing.acmeRoutes() {
     val acmeDonutFeaturesRepository by inject<AcmeDonutFeaturesRepository>()
 
     get("/acme/features") {
-        val user = User(
-            id = "user-employee-123456789",
-            country = "france",
-            isEmployee = true,
-            isLoggedIn = true,
-        )
+        // Toggle between different users to see different results
+        val user = MockUserData.employeeUser
+//        val user = MockUserData.standardUser
 
         val context = GBContext
             .builder()
             .featuresJson(acmeDonutFeaturesRepository.featuresJson)
             .attributesJson(user.toJson())
+            .trackingCallback(object : TrackingCallback {
+                override fun <ValueType : Any?> onTrack(
+                    experiment: Experiment<ValueType>?,
+                    experimentResult: ExperimentResult<ValueType>?
+                ) {
+                    println("🔵 trackingCallback called with: \n experiment: $experiment \n result: $experimentResult")
+                }
+            })
             .build()
 
-        val growthBook = GrowthBook(context)
+        val growthBook = GrowthBook(context).apply {
+            subscribe { experimentResult ->
+                println("🔵 ExperimentRunCallback called with results: \n $experimentResult")
+            }
+        }
+
+        // Feature evaluation
+        val featureResult: FeatureResult<Boolean>? = growthBook.evalFeature("dark_mode")
+        val darkModeEnabled = featureResult?.isOn ?: false
+
+        // Run an inline experiment
+        val fontColourExperiment = Experiment.builder<String>()
+            .key("font_colour")
+            .variations(arrayListOf("red", "orange", "yellow", "green", "blue", "purple"))
+            .build()
+        val fontColourExperimentResult = growthBook.run(fontColourExperiment)
+        val fontColour = fontColourExperimentResult.value ?: "grey"
 
         // Evaluated feature values
-        val darkModeEnabled = growthBook.getFeatureValue("dark_mode", false)
         val donutPrice = growthBook.getFeatureValue("donut_price", 9999f)
         val bannerText = growthBook.getFeatureValue("banner_text", "(unknown text)")
 
@@ -38,6 +57,7 @@ fun Routing.acmeRoutes() {
             darkModeEnabled = darkModeEnabled,
             donutPrice = donutPrice,
             bannerText = bannerText,
+            fontColour = fontColour
         )
 
         call.respond(features)

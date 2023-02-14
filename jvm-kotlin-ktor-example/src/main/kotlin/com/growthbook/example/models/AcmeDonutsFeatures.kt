@@ -13,4 +13,7 @@ data class AcmeDonutsFeatures(
 
     @SerialName("banner_text")
     val bannerText: String,
+
+    @SerialName("font_colour")
+    val fontColour: String? = null,
 )
