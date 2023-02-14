@@ -1,6 +1,7 @@
 package com.growthbook.example.plugins.routing
 
 import com.growthbook.example.models.AcmeDonutsFeatures
+import com.growthbook.example.plugins.environment.appEnv
 import com.growthbook.example.plugins.growthbook.AcmeDonutFeaturesRepository
 import com.growthbook.example.plugins.growthbook.MockUserData
 import growthbook.sdk.java.*
@@ -11,6 +12,8 @@ import org.koin.ktor.ext.inject
 
 fun Routing.acmeRoutes() {
     val acmeDonutFeaturesRepository by inject<AcmeDonutFeaturesRepository>()
+
+    println("🔗 Features, inline experiment: http://0.0.0.0:${application.appEnv.port}/acme/features")
 
     get("/acme/features") {
         // Toggle between different users to see different results

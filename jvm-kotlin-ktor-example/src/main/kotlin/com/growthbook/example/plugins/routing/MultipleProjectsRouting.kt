@@ -2,6 +2,7 @@ package com.growthbook.example.plugins.routing
 
 import com.growthbook.example.models.AcmeDonutsFeatures
 import com.growthbook.example.models.MixedResponse
+import com.growthbook.example.plugins.environment.appEnv
 import com.growthbook.example.plugins.growthbook.AcmeDonutFeaturesRepository
 import com.growthbook.example.plugins.growthbook.BasicEncryptedFeaturesRepository
 import com.growthbook.example.plugins.growthbook.MockUserData
@@ -18,6 +19,8 @@ import org.koin.ktor.ext.inject
 fun Routing.multipleGBProjectsRoutes() {
     val acmeDonutFeaturesRepository by inject<AcmeDonutFeaturesRepository>()
     val basicEncryptedFeaturesRepository by inject<BasicEncryptedFeaturesRepository>()
+
+    println("🔗 Multiple projects, encrypted SDK endpoint: http://0.0.0.0:${application.appEnv.port}/encrypted")
 
     get("/encrypted") {
         // Toggle between different users to see different results
