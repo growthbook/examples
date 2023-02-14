@@ -2,6 +2,7 @@ package com.growthbook.example.plugins.di
 
 import com.growthbook.example.plugins.growthbook.AcmeDonutFeaturesRepository
 import com.growthbook.example.plugins.growthbook.BasicEncryptedFeaturesRepository
+import org.koin.dsl.koinApplication
 import org.koin.dsl.module
 
 /**
@@ -14,7 +15,7 @@ val serviceModule = module {
             ttlSeconds = 10,
         ).apply {
             onFeaturesRefresh {
-                println("🔵 AcmeDonutFeaturesRepository -> Features have been refreshed \n $it")
+                logger.info("🔵 AcmeDonutFeaturesRepository -> Features have been refreshed \n $it")
             }
         }
     }
@@ -26,7 +27,7 @@ val serviceModule = module {
             ttlSeconds = 15
         ).apply {
             onFeaturesRefresh {
-                println("🔵 BasicEncryptedFeaturesService -> Features have been refreshed \n $it")
+                logger.info("🔵 BasicEncryptedFeaturesService -> Features have been refreshed \n $it")
             }
         }
     }

@@ -20,7 +20,7 @@ fun Routing.multipleGBProjectsRoutes() {
     val acmeDonutFeaturesRepository by inject<AcmeDonutFeaturesRepository>()
     val basicEncryptedFeaturesRepository by inject<BasicEncryptedFeaturesRepository>()
 
-    println("🔗 Multiple projects, encrypted SDK endpoint: http://0.0.0.0:${application.appEnv.port}/encrypted")
+    application.log.info("🔗 Multiple projects, encrypted SDK endpoint: http://0.0.0.0:${application.appEnv.port}/encrypted")
 
     get("/encrypted") {
         // Toggle between different users to see different results

@@ -13,7 +13,7 @@ import org.koin.ktor.ext.inject
 fun Routing.acmeRoutes() {
     val acmeDonutFeaturesRepository by inject<AcmeDonutFeaturesRepository>()
 
-    println("🔗 Features, inline experiment: http://0.0.0.0:${application.appEnv.port}/acme/features")
+    application.log.info("🔗 Features, inline experiment: http://0.0.0.0:${application.appEnv.port}/acme/features")
 
     get("/acme/features") {
         // Toggle between different users to see different results
@@ -29,14 +29,14 @@ fun Routing.acmeRoutes() {
                     experiment: Experiment<ValueType>?,
                     experimentResult: ExperimentResult<ValueType>?
                 ) {
-                    println("🔵 trackingCallback called with: \n experiment: $experiment \n result: $experimentResult")
+                    application.log.info("🔵 trackingCallback called with: \n experiment: $experiment \n result: $experimentResult")
                 }
             })
             .build()
 
         val growthBook = GrowthBook(context).apply {
             subscribe { experimentResult ->
-                println("🔵 ExperimentRunCallback called with results: \n $experimentResult")
+                application.log.info("🔵 ExperimentRunCallback called with results: \n $experimentResult")
             }
         }
 
