@@ -1,0 +1,6 @@
+ktor:
+    application:
+        modules:
+            - com.growthbook.example.ApplicationKt.module
+    deployment:
+        port: "$PORT:8081"
