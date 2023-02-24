@@ -2,6 +2,8 @@
 
 Vanilla TypeScript example.
 
+A video demo of this example is available [here](https://github.com/growthbook/examples/pull/28)
+
 
 ## Features
 
