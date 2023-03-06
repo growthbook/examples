@@ -10,11 +10,14 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -231,7 +234,7 @@ public class MainController {
 
         // in the event of an unexpected error, the donut would be priced at $99
         Float donutPrice = growthBook.getFeatureValue("donut_price", 99.0f);
-        FeatureResult<Boolean> darkModeFeature = growthBook.evalFeature("dark_mode");
+        FeatureResult<Boolean> darkModeFeature = growthBook.evalFeature("dark_mode", Boolean.class);
         System.out.printf("Dark mode %s", darkModeFeature);
         String fontColour = null; // The new public facing website doesn't use this value anymore
 
@@ -271,7 +274,7 @@ public class MainController {
 
         // in the event of an unexpected error, the donut would be priced at $99
         Float donutPrice = growthBook.getFeatureValue("donut_price", 99.0f);
-        FeatureResult<Boolean> darkModeFeature = growthBook.evalFeature("dark_mode");
+        FeatureResult<Boolean> darkModeFeature = growthBook.evalFeature("dark_mode", Boolean.class);
 
         // This is an example of a deprecated feature. This feature was deleted from the GrowthBook dashboard
         // but some features in the old legacy employee portal still depend on it, so it'll fall back to the provided default value
@@ -306,5 +309,48 @@ public class MainController {
 
         // Return a string with the greeting from one project and the donut price from another
         return String.format("%s - Donut price: %s", greeting, donutPrice);
+    }
+
+    @GetMapping("/url-feature-force")
+    public String getForcedFeaturesFromUrl(HttpServletRequest request) {
+        // Defaults: http://localhost:8080/url-feature-force
+        // With overrides: http://localhost:8080/url-feature-force?gb~meal_overrides_gluten_free=%7B%22meal_type%22%3A%20%22gf%22%2C%20%22dessert%22%3A%20%22French%20Vanilla%20Ice%20Cream%22%7D&gb~dark_mode=true&gb~donut_price=3.33&gb~banner_text=Hello%2C%20everyone!%20I%20hope%20you%20are%20all%20doing%20well!
+
+        // Get current URL from Spring
+        String uriString = UriComponentsBuilder
+            .fromHttpRequest(new ServletServerHttpRequest(request))
+            .build()
+            .toUriString();
+
+        // A real app would get user attributes from a DB
+        UserAttributes user = new UserAttributes("user-abc123", "mexico", false, false, new ArrayList<>());
+        String userAttributesJson = user.toJson();
+
+        // Init the GBContext with a URL and configure allowUrlOverrides = true
+        GBContext context = GBContext.builder()
+            .featuresJson(acmeDonutsFeatureService.getFeaturesJson())
+            .attributesJson(userAttributesJson)
+            .url(uriString)
+            .allowUrlOverrides(true)
+            .build();
+
+        GrowthBook growthBook = new GrowthBook(context);
+
+        String response = "";
+
+        // Override string value
+        String bannerText = growthBook.getFeatureValue("banner_text", "???");
+        response += String.format("Banner Text: %s \n", bannerText);
+
+        // Override float value
+        Float donutPrice = growthBook.getFeatureValue("donut_price", 999f);
+        response += String.format("Donut Price: %f \n",donutPrice);
+
+        // Override Gson-deserializable class
+        MealOrder standardMealOrder = new MealOrder(MealType.STANDARD, "Pie");
+        MealOrder mealOrder = growthBook.getFeatureValue("meal_overrides_gluten_free", standardMealOrder, MealOrder.class);
+        response += String.format("Meal Order Dessert: %s \n\n", mealOrder.getDessert());
+
+        return response;
     }
 }
