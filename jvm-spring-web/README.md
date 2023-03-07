@@ -20,6 +20,7 @@ Before Acme Donuts implemented dark mode, they used to configure theme variables
   - [Features from the GrowthBook API](#features-from-the-growthbook-api)
   - [Encrypted features from the GrowthBook API](#encrypted-features-from-the-growthbook-api)
   - [Dependency Injection example with networking using multiple GrowthBook projects](#dependency-injection-example-with-networking-using-multiple-growthbook-projects)
+  - [URL Overrides](#url-overrides)
 
 ## Running the Example
 
@@ -177,3 +178,13 @@ curl http://localhost:8080/di
 ```
 
 You should get the output `hola - Donut price: 2.5` which are values evaluated from 2 separate projects, 1 encrypted, 1 not.
+
+
+### URL Overrides
+
+An example for how to override feature values via the URL can be found at the endpoint `@GetMapping("/url-feature-force") public String getForcedFeaturesFromUrl()`.
+
+When running the demo, you can see the following URL's:
+
+- With default values: `http://localhost:8080/url-feature-force`
+- With overrides: `http://localhost:8080/url-feature-force?gb~meal_overrides_gluten_free=%7B%22meal_type%22%3A%20%22gf%22%2C%20%22dessert%22%3A%20%22French%20Vanilla%20Ice%20Cream%22%7D&gb~dark_mode=true&gb~donut_price=3.33&gb~banner_text=Hello%2C%20everyone!%20I%20hope%20you%20are%20all%20doing%20well!`
