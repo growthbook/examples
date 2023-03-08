@@ -8,7 +8,9 @@ import growthbook.sdk.java.GBContext;
 import growthbook.sdk.java.GrowthBook;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,9 +23,11 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 @RestController
@@ -312,7 +316,7 @@ public class MainController {
     }
 
     @GetMapping("/url-feature-force")
-    public String getForcedFeaturesFromUrl(HttpServletRequest request) {
+    public ResponseEntity<String> getForcedFeaturesFromUrl(HttpServletRequest request) {
         // Defaults: http://localhost:8080/url-feature-force
         // With overrides: http://localhost:8080/url-feature-force?gb~meal_overrides_gluten_free=%7B%22meal_type%22%3A%20%22gf%22%2C%20%22dessert%22%3A%20%22French%20Vanilla%20Ice%20Cream%22%7D&gb~dark_mode=true&gb~donut_price=3.33&gb~banner_text=Hello%2C%20everyone!%20I%20hope%20you%20are%20all%20doing%20well!
 
@@ -326,9 +330,12 @@ public class MainController {
         UserAttributes user = new UserAttributes("user-abc123", "mexico", false, false, new ArrayList<>());
         String userAttributesJson = user.toJson();
 
+        // Features
+        String features = acmeDonutsFeatureService.getFeaturesJson();
+
         // Init the GBContext with a URL and configure allowUrlOverrides = true
         GBContext context = GBContext.builder()
-            .featuresJson(acmeDonutsFeatureService.getFeaturesJson())
+            .featuresJson(features)
             .attributesJson(userAttributesJson)
             .url(uriString)
             .allowUrlOverrides(true)
@@ -336,21 +343,26 @@ public class MainController {
 
         GrowthBook growthBook = new GrowthBook(context);
 
-        String response = "";
-
         // Override string value
         String bannerText = growthBook.getFeatureValue("banner_text", "???");
-        response += String.format("Banner Text: %s \n", bannerText);
-
         // Override float value
         Float donutPrice = growthBook.getFeatureValue("donut_price", 999f);
-        response += String.format("Donut Price: %f \n",donutPrice);
-
         // Override Gson-deserializable class
         MealOrder standardMealOrder = new MealOrder(MealType.STANDARD, "Pie");
         MealOrder mealOrder = growthBook.getFeatureValue("meal_overrides_gluten_free", standardMealOrder, MealOrder.class);
-        response += String.format("Meal Order Dessert: %s \n\n", mealOrder.getDessert());
 
-        return response;
+        String responseString = "<pre>" +
+            String.format("\n\nBanner Text: %s", bannerText) +
+            String.format("\n\nDonut Price: %f", donutPrice) +
+            String.format("\n\nMeal Order Dessert: %s", mealOrder.getDessert()) +
+            "</pre>";
+
+        // Creating the cookie to allow the Dev Tools to read features from cookies. Features JSON needs to be URL-encoded
+        String urlEncodedFeatures = URLEncoder.encode(features, StandardCharsets.UTF_8);
+        ResponseCookie featuresCookie = ResponseCookie.from("gb-features", urlEncodedFeatures).build();
+
+        return ResponseEntity.ok()
+            .header(HttpHeaders.SET_COOKIE, featuresCookie.toString())
+            .body(responseString);
     }
 }
