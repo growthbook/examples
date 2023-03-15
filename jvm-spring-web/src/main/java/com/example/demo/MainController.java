@@ -355,7 +355,9 @@ public class MainController {
             String.format("\n\nBanner Text: %s", bannerText) +
             String.format("\n\nDonut Price: %f", donutPrice) +
             String.format("\n\nMeal Order Dessert: %s", mealOrder.getDessert()) +
-            "</pre>";
+            "</pre>" +
+            "<script src='https://unpkg.com/@growthbook/growthbook/dist/bundles/index.js'></script>" +
+            "<script>window._growthbook = new growthbook.GrowthBook()</script>";
 
         // Creating the cookie to allow the Dev Tools to read features from cookies. Features JSON needs to be URL-encoded
         String urlEncodedFeatures = URLEncoder.encode(features, StandardCharsets.UTF_8);
