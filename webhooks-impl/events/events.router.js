@@ -13,7 +13,7 @@ router.use(bodyParser.raw({
 router.use(authenticateWebHooks({ secret: process.env.GROWTHBOOK_EVENTS_WEBHOOKS_SECRET }))
 
 router.post('/webhooks', (req, res) => {
-  console.log('Receiving request', req.body)
+  console.log('Receiving request', req.body.toString())
 
   // Delay in milliseconds to simulate a longer-running request, e.g. 15000 to cause a timeout failure
   // Your web hooks implementation should respond immediately. This delay is added for our QA'ing purposes.
