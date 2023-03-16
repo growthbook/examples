@@ -10,14 +10,6 @@ import (
 	"github.com/growthbook/growthbook-golang"
 )
 
-// GBFeaturesResponse
-// GrowthBook features response
-type GBFeaturesResponse struct {
-	Status      int             `json:"status"`
-	Features    json.RawMessage `json:"features"`
-	DateUpdated time.Time       `json:"dateUpdated"`
-}
-
 type MealOverrides struct {
 	MealType string `json:"meal_type"`
 	Dessert  string `json:"dessert"`
