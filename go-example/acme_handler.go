@@ -44,14 +44,30 @@ func acmeHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	features := growthbook.ParseFeatureMap(featuresResponse.Features)
 
+	// This will get called when the font_colour experiment below is evaluated
+	trackingCallback := func(experiment *growthbook.Experiment, result *growthbook.ExperimentResult) {
+		fmt.Printf("Experiment Viewed: %s - Variation index: %d - Value: %s \n", experiment.Key, result.VariationID, result.Value)
+	}
+
 	// Create a growthbook.Context instance with the features and attributes
-	context := growthbook.NewContext().WithFeatures(features).WithAttributes(userAttributes)
+	context := growthbook.NewContext().
+		WithFeatures(features).
+		WithAttributes(userAttributes).
+		WithTrackingCallback(trackingCallback)
+
 	// Create a growthbook.GrowthBook instance
 	gb := growthbook.New(context)
 
 	// Get some values
 	bannerText := gb.Feature("banner_text").GetValueWithDefault("???")
 	useDarkMode := gb.Feature("dark_mode").On
+
+	// Evaluate an inline experiment
+	experiment := growthbook.
+		NewExperiment("font_colour").
+		WithVariations("red", "orange", "yellow", "green", "blue", "purple")
+	result := gb.Run(experiment)
+	var usernameColour = result.Value.(string)
 
 	// Respond with JSON
 	w.Header().Set("Content-Type", "application/json")
@@ -60,8 +76,9 @@ func acmeHandler(w http.ResponseWriter, r *http.Request) {
 	year, month, day := featuresResponse.DateUpdated.Date()
 
 	data := map[string]any{
-		"greeting":  bannerText,
-		"dark_mode": useDarkMode,
+		"greeting":    bannerText,
+		"dark_mode":   useDarkMode,
+		"font_colour": usernameColour,
 		// This section is provided for debugging purposes
 		"debug": map[string]any{
 			"date_updated": map[string]any{
