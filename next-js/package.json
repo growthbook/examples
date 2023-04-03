@@ -19,8 +19,12 @@
     "eslint-config-next": "13.1.2",
     "eventsource": "^2.0.2",
     "next": "13.1.2",
+    "qs": "^6.11.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "typescript": "4.9.4"
+  },
+  "devDependencies": {
+    "@types/qs": "^6.9.7"
   }
 }
