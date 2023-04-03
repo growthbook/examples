@@ -1,9 +1,4 @@
-import {
-  useFeatureIsOn,
-  useFeatureValue,
-  useGrowthBook,
-} from "@growthbook/growthbook-react";
-import FeatureDisplay from "./FeatureDisplay";
+import { useGrowthBook } from "@growthbook/growthbook-react";
 
 export default function VisualExperimentsDisplay() {
   const gb = useGrowthBook();
