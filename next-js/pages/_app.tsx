@@ -1,4 +1,5 @@
 import type { AppProps } from "next/app";
+import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { GrowthBook, GrowthBookProvider } from "@growthbook/growthbook-react";
 import Head from "next/head";
@@ -13,10 +14,18 @@ const gb = new GrowthBook({
 });
 
 export default function App({ Component, pageProps }: AppProps) {
+  const router = useRouter();
+
   useEffect(() => {
     // Load features from the GrowthBook API and keep them up-to-date
     gb.loadFeatures({ autoRefresh: true });
   }, []);
+
+  // Let the GrowthBook instance know when the URL changes so the active
+  // experiments can update accordingly
+  useEffect(() => {
+    gb.setURL(router.asPath);
+  }, [router.asPath]);
 
   return (
     <>
@@ -26,7 +35,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <GrowthBookProvider growthbook={gb}>
-        <main style={{padding: 50}}>
+        <main style={{ padding: 50 }}>
           <Component {...pageProps} />
         </main>
       </GrowthBookProvider>

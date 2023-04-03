@@ -24,17 +24,19 @@
     minimatch "^3.1.2"
     strip-json-comments "^3.1.1"
 
-"@growthbook/growthbook-react@^0.11.0":
-  version "0.11.0"
-  resolved "https://registry.yarnpkg.com/@growthbook/growthbook-react/-/growthbook-react-0.11.0.tgz#475628a164df30b409e32b9b688868f9c64d96a0"
-  integrity sha512-YvM2bIgUjYmyg1fdceZrkzmymAYfASObIiK03gvvMC7Kqz1IPprWsmgASNSTpFOG46Jgw75pO+sl0n6KxRryJw==
+"@growthbook/growthbook-react@^0.14.0":
+  version "0.14.0"
+  resolved "https://registry.yarnpkg.com/@growthbook/growthbook-react/-/growthbook-react-0.14.0.tgz#01f78986a4ef460e6378b62660dadc55299dbbac"
+  integrity sha512-lwRhKejeMCZkintKHL24Nu+Ubq6yyWsfo7vJTCiDb3ibHd5GCYFCQm8pHFPMuvqDbousF7JQaoULJ7DcU0HBYQ==
   dependencies:
-    "@growthbook/growthbook" "^0.21.0"
+    "@growthbook/growthbook" "^0.24.0"
 
-"@growthbook/growthbook@^0.21.0":
-  version "0.21.0"
-  resolved "https://registry.yarnpkg.com/@growthbook/growthbook/-/growthbook-0.21.0.tgz#fbbe00f96bb3f120c8724241c6750b4a4144c214"
-  integrity sha512-eAfiR9x/IvOUmLZeefP3zaPKy1+s6vEHCLH6BwTm5EVbzdIkHRLh9VilzD5lOXNxIqp+tlm69uzlcJY6K2JjMg==
+"@growthbook/growthbook@^0.24.0":
+  version "0.24.0"
+  resolved "https://registry.yarnpkg.com/@growthbook/growthbook/-/growthbook-0.24.0.tgz#9f123a2512d59b16d99870b7461e4552b89a9cd4"
+  integrity sha512-4hZiOyhC18Nv/ZatorlLVGu1p4qbccijRCtWFPwWOubDKGSmC4dSGNCWi5J9TkXKPNlzR6UhMvCaCY+qV3AczA==
+  dependencies:
+    dom-mutator "^0.4.0"
 
 "@humanwhocodes/config-array@^0.11.8":
   version "0.11.8"
@@ -544,6 +546,11 @@ doctrine@^3.0.0:
   integrity sha512-yS+Q5i3hBf7GBkd4KG8a7eBNNWNGLTaEwwYWUijIYM7zrlYDM0BFXHjjPWlWZ1Rg7UaddZeIDmi9jF3HmqiQ2w==
   dependencies:
     esutils "^2.0.2"
+
+dom-mutator@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/dom-mutator/-/dom-mutator-0.4.0.tgz#cb0a6981ed58bdba25028cb0e5c75777b9b68c07"
+  integrity sha512-H8pcE9Tmmnxs6FTZCX4aRthcweGsVdytqpBSiVIDnTnmosXXYO+jatDWwRReMbJJsAmsnAWsc0Ht4ZYGdN8gZw==
 
 emoji-regex@^9.2.2:
   version "9.2.2"
