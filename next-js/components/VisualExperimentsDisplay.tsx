@@ -1,10 +1,26 @@
-import { isURLTargeted } from "@growthbook/growthbook";
+import { Experiment, isURLTargeted, Result } from "@growthbook/growthbook";
 import { useGrowthBook } from "@growthbook/growthbook-react";
 import qs from "qs";
 
+const activeExperimentVariations = new Map();
+
+export const onExperimentViewed = (
+  experiment: Experiment<any>,
+  result: Result<any>
+) => {
+  const experimentId = experiment.key;
+  const variationId = result.key;
+
+  console.log("Viewed Experiment", {
+    experimentId,
+    variationId,
+  });
+
+  activeExperimentVariations.set(experimentId, variationId);
+};
+
 const genPreviewLink = ({ name, i }: { name: string; i: number }) => {
-  const href = window.location.href;
-  const [root, params] = href.split("?");
+  const [root] = window.location.href.split("?");
   return `${root}?${qs.stringify({ [name]: i })}`;
 };
 
@@ -24,6 +40,14 @@ export default function VisualExperimentsDisplay() {
           <li key={i}>
             {e.name} ({e.status})
             <ul>
+              <li>
+                Active?{" "}
+                <strong>
+                  {activeExperimentVariations.has(e.key)
+                    ? `Variation ${activeExperimentVariations.get(e.key)}`
+                    : "false"}
+                </strong>
+              </li>
               <li>
                 URL Targets
                 <ul>
