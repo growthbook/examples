@@ -2,8 +2,25 @@ import type { AppProps } from "next/app";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { GrowthBook, GrowthBookProvider } from "@growthbook/growthbook-react";
+import { Experiment, isURLTargeted, Result } from "@growthbook/growthbook";
 import Head from "next/head";
-import { onExperimentViewed } from "@/components/VisualExperimentsDisplay";
+
+const onExperimentViewed = (
+  experiment: Experiment<any>,
+  result: Result<any>
+) => {
+  const experimentId = experiment.key;
+  const variationId = result.key;
+
+  console.log("Viewed Experiment", {
+    experimentId,
+    variationId,
+    isURLTargeted: isURLTargeted(
+      window.location.href,
+      experiment.urlPatterns ?? []
+    ),
+  });
+};
 
 // Create a client-side GrowthBook instance
 const gb = new GrowthBook({

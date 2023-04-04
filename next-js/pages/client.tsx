@@ -1,5 +1,4 @@
 import ComponentWithFeatures from "@/components/ComponentWithFeatures";
-import VisualExperimentsDisplay from "@/components/VisualExperimentsDisplay";
 
 export default function ClientPage() {
   return (
@@ -11,7 +10,6 @@ export default function ClientPage() {
         will get swapped in.
       </p>
       <ComponentWithFeatures />
-      <VisualExperimentsDisplay />
     </div>
   );
 }
