@@ -2,7 +2,7 @@ import type { AppProps } from "next/app";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { GrowthBook, GrowthBookProvider } from "@growthbook/growthbook-react";
-import { Experiment, isURLTargeted, Result } from "@growthbook/growthbook";
+import { Experiment, Result } from "@growthbook/growthbook";
 import Head from "next/head";
 
 const onExperimentViewed = (
@@ -15,10 +15,6 @@ const onExperimentViewed = (
   console.log("Viewed Experiment", {
     experimentId,
     variationId,
-    isURLTargeted: isURLTargeted(
-      window.location.href,
-      experiment.urlPatterns ?? []
-    ),
   });
 };
 
