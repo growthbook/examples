@@ -41,7 +41,7 @@ fun Routing.acmeRoutes() {
         }
 
         // Feature evaluation
-        val featureResult: FeatureResult<Boolean>? = growthBook.evalFeature("dark_mode")
+        val featureResult: FeatureResult<Boolean>? = growthBook.evalFeature("dark_mode", Boolean::class.java)
         val darkModeEnabled = featureResult?.isOn ?: false
 
         // Run an inline experiment
