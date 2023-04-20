@@ -25,7 +25,7 @@ func acmeHandler(w http.ResponseWriter, r *http.Request) {
 		"loggedIn":            true,
 		"employee":            true,
 		"country":             "france",
-		"dietaryRestrictions": [1]string{"gluten_free"},
+		"dietaryRestrictions": []string{"gluten_free"},
 	}
 
 	// Get JSON from GrowthBook and deserialize it into GBFeaturesResponse struct
