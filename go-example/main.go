@@ -10,7 +10,7 @@ func main() {
 
 	server.Handle("/acme", http.HandlerFunc(acmeHandler))
 
-	fmt.Println("Server running at http://localhost:8070")
+	fmt.Println("Acme endpoint: http://localhost:8070/acme")
 
 	http.ListenAndServe(":8070", server)
 }
