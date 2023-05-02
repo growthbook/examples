@@ -8,7 +8,7 @@ import growthbook.sdk.java.GrowthBook;
 // TODO: Add logging support
 
 public class Main {
-    public static void main(String[] args) throws FeatureFetchException {
+    public static void main(String[] args) {
         GBFeaturesRepository featuresRepository = GBFeaturesRepository
             .builder()
             .endpoint("https://cdn.growthbook.io/api/features/sdk-862b5mHcP9XPugqD")
@@ -16,7 +16,11 @@ public class Main {
             .encryptionKey("some-bad-key") // Bad key will show error logging
             .build();
 
-        featuresRepository.initialize();
+        try {
+            featuresRepository.initialize();
+        } catch (Exception e) {
+            // TODO: use the logger here too
+        }
 
         System.out.println(featuresRepository.getFeaturesJson());
 
