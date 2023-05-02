@@ -3,16 +3,21 @@ package com.example.demo.services;
 import growthbook.sdk.java.FeatureFetchException;
 import growthbook.sdk.java.FeatureRefreshCallback;
 import growthbook.sdk.java.GBFeaturesRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class BasicEncryptedFeaturesService extends GBFeaturesRepository {
+    private static final Logger logger = LoggerFactory.getLogger(BasicEncryptedFeaturesService.class);
+
     @Autowired
     public BasicEncryptedFeaturesService() {
         super(
             "https://cdn.growthbook.io/api/features/sdk-862b5mHcP9XPugqD",
-            "BhB1wORFmZLTDjbvstvS8w==",
+            "nopenopenope==", // Incorrect key, for testing error logging
+//            "BhB1wORFmZLTDjbvstvS8w==", // Correct key
             15
         );
 
@@ -32,15 +37,15 @@ public class BasicEncryptedFeaturesService extends GBFeaturesRepository {
     }
 
     void handleError(FeatureFetchException e) {
-        e.printStackTrace();
-
         switch (e.getErrorCode()) {
-            case NO_RESPONSE_ERROR -> {
-                // Handle NO_RESPONSE_ERROR
+            case CONFIGURATION_ERROR -> {
+                logger.error("💥 Configuration error", e);
             }
-
-            case CONFIGURATION_ERROR, UNKNOWN -> {
-                throw new RuntimeException(e);
+            case NO_RESPONSE_ERROR -> {
+                logger.error("💥 No response", e);
+            }
+            case UNKNOWN -> {
+                logger.error("💥 Unknown error", e);
             }
         }
     }
