@@ -23,7 +23,8 @@ val serviceModule = module {
     single<BasicEncryptedFeaturesRepository> {
         BasicEncryptedFeaturesRepository(
             endpoint = "https://cdn.growthbook.io/api/features/sdk-862b5mHcP9XPugqD",
-            encryptionKey = "BhB1wORFmZLTDjbvstvS8w==",
+//            encryptionKey = "BhB1wORFmZLTDjbvstvS8w==", // Good key
+            encryptionKey = "nopenopenope==", // Bad key
             ttlSeconds = 15
         ).apply {
             onFeaturesRefresh {
