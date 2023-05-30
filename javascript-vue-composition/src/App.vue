@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from "vue-router";
 import HelloWorld from "./components/HelloWorld.vue";
+import AppVersion from "./components/AppVersion.vue";
 </script>
 
 <template>
@@ -15,6 +16,10 @@ import HelloWorld from "./components/HelloWorld.vue";
 
     <div class="wrapper">
       <HelloWorld msg="GrowthBook" />
+
+      <div class="app-version-wrapper">
+        <AppVersion />
+      </div>
 
       <nav>
         <RouterLink to="/">Home</RouterLink>
@@ -72,6 +77,10 @@ nav a:first-of-type {
 
   .logo {
     margin: 0 2rem 0 0;
+  }
+
+  .app-version-wrapper {
+    margin: 1rem 0;
   }
 
   header .wrapper {
