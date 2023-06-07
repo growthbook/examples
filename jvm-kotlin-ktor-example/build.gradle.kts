@@ -47,7 +47,7 @@ dependencies {
     // GrowthBook SDK
 
     // 2. Add the GrowthBook SDK
-    implementation("com.github.growthbook:growthbook-sdk-java:0.6.0")
+    implementation("com.github.growthbook:growthbook-sdk-java:0.7.0")
 
     // Test dependencies
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
