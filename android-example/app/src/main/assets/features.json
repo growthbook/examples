@@ -60,5 +60,37 @@
         }
       }
     ]
+  },
+  "app_name": {
+    "defaultValue": "(unknown)",
+    "rules": [
+      {
+        "condition": {
+          "version": {
+            "$vgte": "1.0.0",
+            "$vlt": "2.0.0"
+          }
+        },
+        "force": "Albatross"
+      },
+      {
+        "condition": {
+          "version": {
+            "$vgte": "2.0.0",
+            "$vlt": "3.0.0"
+          }
+        },
+        "force": "Badger"
+      },
+      {
+        "condition": {
+          "version": {
+            "$vgte": "3.0.0",
+            "$vlt": "4.0.0"
+          }
+        },
+        "force": "Capybara"
+      }
+    ]
   }
 }
