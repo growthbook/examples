@@ -311,6 +311,18 @@ public class MainController {
         return String.format("%s - Donut price: %s", greeting, donutPrice);
     }
 
+    @GetMapping("/version")
+    public String appVersion() {
+        GBContext context = GBContext.builder()
+            .featuresJson(acmeDonutsFeatureService.getFeaturesJson())
+            .attributesJson("{\"version\": \"2.1.0\"}")
+            .build();
+
+        GrowthBook growthBook = new GrowthBook(context);
+
+        return growthBook.getFeatureValue("app_name", "unknown app version");
+    }
+
     @GetMapping("/url-feature-force")
     public String getForcedFeaturesFromUrl(HttpServletRequest request) {
         // Defaults: http://localhost:8080/url-feature-force
