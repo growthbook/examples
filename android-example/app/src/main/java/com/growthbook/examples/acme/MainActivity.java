@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
         UserAttributes user = this.dependencies.userRepository.getEmployeeUser();
 
         // Update the GrowthBook SDK with the user attributes
+        Log.d("MainActivity", String.format("Assigning user attributes: %s", user.toJson()));
         this.dependencies.growthBook.setAttributes(user.toJson());
     }
 

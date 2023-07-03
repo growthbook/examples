@@ -15,6 +15,7 @@ public class DemoApplication {
 	@Bean
 	public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
 		return args -> {
+			System.out.println("App version: http://localhost:8080/version");
 			System.out.println("Decrypted greeting: http://localhost:8080/encrypted");
 			System.out.println("Dependency Injection example: http://localhost:8080/di");
 			System.out.println("Welcome banner: http://localhost:8080/welcome-banner");

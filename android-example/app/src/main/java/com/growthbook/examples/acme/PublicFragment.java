@@ -13,6 +13,8 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.growthbook.examples.acme.databinding.FragmentPublicBinding;
 import com.growthbook.examples.acme.di.AppContainer;
 
+import java.util.Locale;
+
 
 public class PublicFragment extends Fragment {
 
@@ -55,7 +57,7 @@ public class PublicFragment extends Fragment {
 
         // Check GrowthBook to see what donut price the user should see
         Float donutPrice = this.dependencies.growthBook.getFeatureValue("donut_price", 99.9f);
-        binding.donutPriceTextView.setText(getString(R.string.donut_price_message, String.format("%.2f", donutPrice)));
+        binding.donutPriceTextView.setText(getString(R.string.donut_price_message, String.format(Locale.CANADA, "%.2f", donutPrice)));
         Log.d("PublicFragment", "Donut price is: " + donutPrice);
 
         // Get the welcome text from GrowthBook
@@ -69,6 +71,11 @@ public class PublicFragment extends Fragment {
         } else {
             binding.donutClaimButton.setVisibility(View.INVISIBLE);
         }
+
+        // Bind app version
+        String appVersion = this.dependencies.growthBook.getFeatureValue("app_name", "unknown app version");
+        String formattedAppVersion = String.format("App version: %s", appVersion);
+        binding.appVersion.setText(formattedAppVersion);
     }
 
     @Override

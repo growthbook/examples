@@ -14,11 +14,14 @@ public class UserAttributes {
 
     public String country;
 
-    public UserAttributes(String id, String country, Boolean isEmployee, Boolean isLoggedIn) {
+    public String appVersion;
+
+    public UserAttributes(String id, String country, Boolean isEmployee, Boolean isLoggedIn, String appVersion) {
         this.id = id;
         this.country = country;
         this.isEmployee = isEmployee;
         this.isLoggedIn = isLoggedIn;
+        this.appVersion = appVersion;
     }
 
     @NonNull
@@ -35,12 +38,14 @@ public class UserAttributes {
             String country = (String) object.get("country");
             Boolean isEmployee = (Boolean) object.get("employee");
             Boolean isLoggedIn = (Boolean) object.get("loggedIn");
+            String appVersion = (String) object.get("version");
 
             return new UserAttributes(
                 id,
                 country,
                 isEmployee,
-                isLoggedIn
+                isLoggedIn,
+                appVersion
             );
         } catch (JSONException e) {
             e.printStackTrace();
@@ -55,6 +60,8 @@ public class UserAttributes {
             object.put("id", this.id);
             object.put("employee", this.isEmployee);
             object.put("loggedIn", this.isLoggedIn);
+            object.put("loggedIn", this.isLoggedIn);
+            object.put("version", this.appVersion);
 
             return object.toString(2);
         } catch (JSONException e) {

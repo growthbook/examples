@@ -13,7 +13,27 @@ import org.koin.ktor.ext.inject
 fun Routing.acmeRoutes() {
     val acmeDonutFeaturesRepository by inject<AcmeDonutFeaturesRepository>()
 
+    application.log.info("App version: http://0.0.0.0:${application.appEnv.port}/version")
     application.log.info("🔗 Features, inline experiment: http://0.0.0.0:${application.appEnv.port}/acme/features")
+
+    get("/version") {
+        val context = GBContext
+            .builder()
+            .featuresJson(acmeDonutFeaturesRepository.featuresJson)
+            .attributesJson("""
+                {
+                  "version": "3.1.0"
+                }
+            """.trimIndent())
+            .build()
+
+        val growthBook = GrowthBook(context)
+        val appVersion = growthBook.getFeatureValue("app_name", "unknown version")
+
+        val response = mapOf("version" to appVersion)
+
+        call.respond(response)
+    }
 
     get("/acme/features") {
         // Toggle between different users to see different results
@@ -41,7 +61,7 @@ fun Routing.acmeRoutes() {
         }
 
         // Feature evaluation
-        val featureResult: FeatureResult<Boolean>? = growthBook.evalFeature("dark_mode")
+        val featureResult: FeatureResult<Boolean>? = growthBook.evalFeature("dark_mode", Boolean::class.java)
         val darkModeEnabled = featureResult?.isOn ?: false
 
         // Run an inline experiment

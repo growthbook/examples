@@ -10,12 +10,9 @@ import (
 	"github.com/growthbook/growthbook-golang"
 )
 
-// GBFeaturesResponse
-// GrowthBook features response
-type GBFeaturesResponse struct {
-	Status      int             `json:"status"`
-	Features    json.RawMessage `json:"features"`
-	DateUpdated time.Time       `json:"dateUpdated"`
+type MealOverrides struct {
+	MealType string `json:"meal_type"`
+	Dessert  string `json:"dessert"`
 }
 
 // Makes a request to GrowthBook's features endpoint, parses the response into
@@ -24,10 +21,11 @@ type GBFeaturesResponse struct {
 func acmeHandler(w http.ResponseWriter, r *http.Request) {
 	// Attributes to evaluate features against
 	userAttributes := growthbook.Attributes{
-		"id":       "user-employee-123456789",
-		"loggedIn": true,
-		"employee": true,
-		"country":  "france",
+		"id":                  "user-employee-123456789",
+		"loggedIn":            true,
+		"employee":            true,
+		"country":             "france",
+		"dietaryRestrictions": []string{"gluten_free"},
 	}
 
 	// Get JSON from GrowthBook and deserialize it into GBFeaturesResponse struct
@@ -59,8 +57,16 @@ func acmeHandler(w http.ResponseWriter, r *http.Request) {
 	gb := growthbook.New(context)
 
 	// Get some values
+	// string value
 	bannerText := gb.Feature("banner_text").GetValueWithDefault("???")
+	// checking if any value type is on
 	useDarkMode := gb.Feature("dark_mode").On
+	// JSON type
+	defaultMealType := MealOverrides{
+		MealType: "standard",
+		Dessert:  "Apple Pie",
+	}
+	mealOverrides := gb.Feature("meal_overrides_gluten_free").GetValueWithDefault(defaultMealType)
 
 	// Evaluate an inline experiment
 	experiment := growthbook.
@@ -76,9 +82,10 @@ func acmeHandler(w http.ResponseWriter, r *http.Request) {
 	year, month, day := featuresResponse.DateUpdated.Date()
 
 	data := map[string]any{
-		"greeting":    bannerText,
-		"dark_mode":   useDarkMode,
-		"font_colour": usernameColour,
+		"greeting":       bannerText,
+		"dark_mode":      useDarkMode,
+		"font_colour":    usernameColour,
+		"meal_overrides": mealOverrides,
 		// This section is provided for debugging purposes
 		"debug": map[string]any{
 			"date_updated": map[string]any{
