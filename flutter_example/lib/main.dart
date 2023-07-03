@@ -5,7 +5,7 @@ import 'models/user.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await ABTestService.instance.initialize();
+  await GrowthBookClient.instance.initialize();
   runApp(const MyApp());
 }
 
@@ -17,9 +17,11 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  void _rebuild() => setState(() {});
+
   @override
   Widget build(BuildContext context) {
-    final theme = ABTestService.instance.getFeatureValue<String>(
+    final theme = GrowthBookClient.instance.getFeatureValue<String>(
       'user-theme-pref',
       defaultValue: 'light',
     );
@@ -49,22 +51,54 @@ class _MyHomePageState extends State<MyHomePage> {
     User.third(),
   ];
 
-  /// Updates the user attributes in [ABTestService] and re-builds this widget
+  /// Updates the user attributes in [GrowthBookClient] and re-builds this widget
   /// and the parent widget to reflect the result of feature flag for each user
   /// attribute variation.
   void updateUserAttributes(User user) {
-    ABTestService.instance.updateAttributes(user.toJson());
+    GrowthBookClient.instance.updateAttributes(user.toJson());
     setState(() {});
     final state = context.findAncestorStateOfType<_MyAppState>();
-    state?.setState(() {});
+    state?._rebuild();
+  }
+
+  ButtonStyle _buttonStyleFromVariant() {
+    final buttonType = GrowthBookClient.instance.getFeatureValue<String>(
+      'button-variant',
+      defaultValue: 'standard',
+    );
+
+    switch (buttonType) {
+      defaultLabel:
+      case 'standard':
+        return const ButtonStyle();
+
+      case 'stadium-bordered':
+        return ButtonStyle(
+          shape: MaterialStateProperty.all(const StadiumBorder()),
+        );
+
+      case 'rounded-rect':
+        return ButtonStyle(
+          shape: MaterialStateProperty.all(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+        );
+
+      default:
+        continue defaultLabel;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final update = ABTestService.instance.getFeatureValue<Map<String, dynamic>>(
+    final update =
+        GrowthBookClient.instance.getFeatureValue<Map<String, dynamic>>(
       'android-app-update',
       defaultValue: {},
     );
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Check For Update'),
@@ -99,19 +133,30 @@ class _MyHomePageState extends State<MyHomePage> {
                   height: 16,
                 ),
                 ElevatedButton(
-                  onPressed: () {
-                    ABTestService.instance.initialize();
-                  },
+                  style: _buttonStyleFromVariant(),
+                  onPressed: () {},
                   child: Text(
                     'Start ${update['updateType']}',
                   ),
                 )
               ] else
                 // If user is on latest version.
+                ...[
                 const Text(
                   'You are on the latest version,\nno updates available.',
                   textAlign: TextAlign.center,
                 ),
+                const SizedBox(
+                  height: 16,
+                ),
+                ElevatedButton(
+                  style: _buttonStyleFromVariant(),
+                  onPressed: () {},
+                  child: const Text(
+                    'Okay Got it',
+                  ),
+                )
+              ]
             ],
           ),
         ),

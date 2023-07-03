@@ -80,7 +80,7 @@ packages:
       name: growthbook_sdk_flutter
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.1+0"
+    version: "2.1.0+0"
   http_parser:
     dependency: transitive
     description:

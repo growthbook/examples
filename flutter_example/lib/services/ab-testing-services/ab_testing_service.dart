@@ -1,26 +1,35 @@
 import 'dart:async';
+import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter_example/models/user.dart';
 import 'package:growthbook_sdk_flutter/growthbook_sdk_flutter.dart';
 
-import 'network_client.dart';
-
 /// A singleton service class wrapper around the [GrowthBookSDK].
-class ABTestService {
-  const ABTestService._();
-  static const ABTestService _instance = ABTestService._();
-  static ABTestService get instance => _instance;
+class GrowthBookClient {
+  const GrowthBookClient._();
+  static const GrowthBookClient _instance = GrowthBookClient._();
+  static GrowthBookClient get instance => _instance;
 
   static GrowthBookSDK? _sdkInstance;
 
   /// Initializes the [GrowthBookSDK] if not initialized.
   Future<void> initialize() async {
     _sdkInstance ??= await GBSDKBuilderApp(
-      client: const ABtestingServiceNetworkClient(),
-      apiKey: '<API_KEY>',
-      hostURL: '<HOST_URL>',
-      attributes: User.first().toJson(),
-      growthBookTrackingCallBack: (e, r) {},
+      hostURL: 'https://cdn.growthbook.io/',
+      apiKey: 'sdk-MpaolWIrCt1tjGgM',
+      attributes: {
+        if (Platform.isAndroid)
+          ...User.first().toJson()
+        else
+          ...User.second().toJson()
+      },
+      growthBookTrackingCallBack: (e, r) {
+        log("Viewed Experiment");
+        log("Experiment Id: ${e.key}");
+        log("Variation Id: ${r.variationID}");
+        log("Variation: ${r.value}");
+      },
     ).initialize();
   }
 
