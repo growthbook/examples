@@ -10,6 +10,8 @@ import (
 var gb *growthbook.GrowthBook
 
 func main() {
+	growthbook.SetLogger(&growthbook.DevLogger{})
+
 	server := http.NewServeMux()
 
 	// This will get called when the font_colour experiment below is
@@ -22,7 +24,7 @@ func main() {
 	// Create a GrowthBook context with settings to allow for retrieving
 	// features from the GrowthBook API.
 	context := growthbook.NewContext().
-		WithClientKey("java_NsrWldWd5bxQJZftGsWKl7R2yD2LtAK8C8EUYh9L8").
+		WithClientKey("sdk-JA5F3MFuaIBB4z").
 		WithTrackingCallback(trackingCallback)
 
 	// Create a GrowthBook instance.
