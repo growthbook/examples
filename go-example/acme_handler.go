@@ -13,25 +13,26 @@ type MealOverrides struct {
 
 // Handles multiple feature lookups.
 
-func acmeHandler(gb *growthbook.GrowthBook) map[string]any {
+func acmeHandler(gb *growthbook.Client, attrs growthbook.Attributes) map[string]any {
 	// String value.
-	bannerText := gb.Feature("banner_text").GetValueWithDefault("???")
+	bannerText := gb.EvalFeature("banner_text", attrs).GetValueWithDefault("???")
 
 	// Boolean feature flag.
-	useDarkMode := gb.Feature("dark_mode").On
+	useDarkMode := gb.EvalFeature("dark_mode", attrs).On
 
 	// Compound value.
 	defaultMealType := MealOverrides{
 		MealType: "standard",
 		Dessert:  "Apple Pie",
 	}
-	mealOverrides := gb.Feature("meal_overrides_gluten_free").GetValueWithDefault(defaultMealType)
+	mealOverrides := gb.EvalFeature("meal_overrides_gluten_free", attrs).
+		GetValueWithDefault(defaultMealType)
 
 	// Evaluate an inline experiment.
 	experiment := growthbook.
 		NewExperiment("font_colour").
 		WithVariations("red", "orange", "yellow", "green", "blue", "purple")
-	result := gb.Run(experiment)
+	result := gb.Run(experiment, attrs)
 	var usernameColour = result.Value.(string)
 
 	// Debugging data for the response.

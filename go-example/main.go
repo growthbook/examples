@@ -7,7 +7,7 @@ import (
 	"github.com/growthbook/growthbook-golang"
 )
 
-var gb *growthbook.GrowthBook
+var gb *growthbook.Client
 
 func main() {
 	growthbook.SetLogger(&growthbook.DevLogger{})
@@ -21,14 +21,12 @@ func main() {
 			experiment.Key, result.VariationID, result.Value)
 	}
 
-	// Create a GrowthBook context with settings to allow for retrieving
-	// features from the GrowthBook API.
-	context := growthbook.NewContext().
-		WithClientKey("sdk-JA5F3MFuaIBB4z").
-		WithTrackingCallback(trackingCallback)
-
-	// Create a GrowthBook instance.
-	gb = growthbook.New(context)
+	// Create a GrowthBook client instance with settings to allow for
+	// retrieving features from the GrowthBook API.
+	gb := growthbook.NewClient(&growthbook.Options{
+		ClientKey:        "sdk-JA5F3MFuaIBB4z",
+		TrackingCallback: trackingCallback,
+	})
 
 	// Load features from GrowthBook API with automatic updating.
 	gb.LoadFeatures(&growthbook.FeatureRepoOptions{AutoRefresh: true})
