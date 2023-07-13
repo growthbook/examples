@@ -71,7 +71,7 @@ GEM
     ffi (1.15.5)
     globalid (1.0.0)
       activesupport (>= 5.0)
-    growthbook (1.1.0)
+    growthbook (1.2.1)
     i18n (1.12.0)
       concurrent-ruby (~> 1.0)
     listen (3.7.1)
@@ -162,7 +162,7 @@ DEPENDENCIES
   blueprinter
   bootsnap (>= 1.4.4)
   byebug
-  growthbook (= 1.1.0)
+  growthbook (= 1.2.1)
   listen (~> 3.3)
   puma (~> 5.0)
   rails (~> 6.1.7)

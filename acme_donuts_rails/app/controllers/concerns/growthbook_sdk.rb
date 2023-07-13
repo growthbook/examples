@@ -1,13 +1,9 @@
-require 'uri'
-require 'net/http'
 require 'growthbook'
 
 module GrowthbookSdk
   def growthbook
-    features_json = growthbook_features_json || {}
-
     @growthbook ||= Growthbook::Context.new(
-      features: features_json,
+      features: growthbook_features_json,
       attributes: {},
     )
   end
@@ -17,6 +13,7 @@ module GrowthbookSdk
 
     growthbook.attributes = UserBlueprint.render_as_hash(current_user, view: :growthbook_user_attributes)
     growthbook.listener = GrowthbookImpressionListener.new
+    growthbook.on_feature_usage = GrowthbookFeatureUsageListener.new(user: current_user)
   end
 
   private
