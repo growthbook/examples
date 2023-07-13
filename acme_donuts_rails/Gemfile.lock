@@ -69,11 +69,9 @@ GEM
     crass (1.0.6)
     erubi (1.11.0)
     ffi (1.15.5)
-    fnv (0.2.0)
     globalid (1.0.0)
       activesupport (>= 5.0)
-    growthbook (0.3.0)
-      fnv (~> 0.2.0)
+    growthbook (1.1.0)
     i18n (1.12.0)
       concurrent-ruby (~> 1.0)
     listen (3.7.1)
@@ -164,7 +162,7 @@ DEPENDENCIES
   blueprinter
   bootsnap (>= 1.4.4)
   byebug
-  growthbook
+  growthbook (= 1.1.0)
   listen (~> 3.3)
   puma (~> 5.0)
   rails (~> 6.1.7)
