@@ -25,6 +25,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 @RestController
 public class MainController {
@@ -364,5 +365,27 @@ public class MainController {
         response += String.format("Meal Order Dessert: %s \n\n", mealOrder.getDessert());
 
         return response;
+    }
+
+    /**
+     * Example that uses a {@link org.springframework.web.servlet.HandlerInterceptor}.
+     * See {@link GrowthBookSDKInterceptor} and {@link AppConfig}
+     * @param request The request
+     * @return A hashmap response
+     */
+    @GetMapping("/interceptors")
+    public ResponseEntity<HashMap<String, Object>> usingInterceptors(HttpServletRequest request) {
+        // Get the GrowthBook instance created on the request
+        GrowthBook growthBook = (GrowthBook) request.getAttribute("growthbook");
+
+        // Evaluate features in GrowthBook
+        Float donutPrice = growthBook.getFeatureValue("donut_price", 999f);
+        String bannerText = growthBook.getFeatureValue("banner_text", "(unknown text)");
+
+        HashMap<String, Object> res = new HashMap<>();
+        res.put("donut_price", donutPrice);
+        res.put("banner_text", bannerText);
+
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 }
