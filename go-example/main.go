@@ -5,12 +5,15 @@ import (
 	"net/http"
 
 	"github.com/growthbook/growthbook-golang"
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 )
 
 var gb *growthbook.Client
 
 func main() {
-	growthbook.SetLogger(&growthbook.DevLogger{})
+	// Set up zerolog logger (see below for definition).
+	growthbook.SetLogger(&logger{})
 
 	server := http.NewServeMux()
 
@@ -29,7 +32,10 @@ func main() {
 	})
 
 	// Load features from GrowthBook API with automatic updating.
-	gb.LoadFeatures(&growthbook.FeatureRepoOptions{AutoRefresh: true})
+	err := gb.LoadFeatures(&growthbook.FeatureRepoOptions{AutoRefresh: true})
+	if err != nil {
+		panic(err)
+	}
 
 	// Set up handlers using utility wrapper.
 	server.Handle("/greeting", wrapHandler(gb, greetingHandler))
@@ -38,7 +44,43 @@ func main() {
 	server.Handle("/experiment", wrapHandler(gb, experimentHandler))
 	server.Handle("/acme", wrapHandler(gb, acmeHandler))
 
-	fmt.Println(`Endpoints:
+	fmt.Println(instructions)
+	fmt.Println()
+	fmt.Println("---- zerolog messages start here ----")
+	fmt.Println()
+
+	http.ListenAndServe(":8070", server)
+}
+
+// Wrapper to convert GrowthBook logger to zerolog.
+type logger struct{}
+
+// Write a GrowthBook log message to zerolog in a simple way.
+func (l *logger) Handle(msg *growthbook.LogMessage) {
+	var ev *zerolog.Event
+
+	// Convert log level.
+	switch msg.Level {
+	case growthbook.Error:
+		ev = log.Error()
+	case growthbook.Warn:
+		ev = log.Warn()
+	case growthbook.Info:
+		ev = log.Info()
+	}
+
+	// Add GrowthBook message label.
+	ev.Str("message", msg.Message.Label())
+
+	// Add all log detail fields, converting complex fields to JSONified
+	// strings.
+	ev.Fields(map[string]interface{}(msg.Data.FixJSONArgs()))
+
+	// Write full log message as a string.
+	ev.Msg(msg.String())
+}
+
+const instructions = `Endpoints:
    http://localhost:8070/greeting        (string value)
    http://localhost:8070/dark_mode       (boolean value)
    http://localhost:8070/meal_overrides  (compound value)
@@ -49,8 +91,4 @@ Add '?user=...' for user-specific results. For example:
 
    http://localhost:8070/meal_overrides?user=eric
 
-Known users are: eric, elke, xiaofeng, luisa`)
-	fmt.Println()
-
-	http.ListenAndServe(":8070", server)
-}
+Known users are: eric, elke, xiaofeng, luisa`

@@ -13,36 +13,47 @@ type MealOverrides struct {
 
 // Handles multiple feature lookups.
 
-func acmeHandler(gb *growthbook.Client, attrs growthbook.Attributes) map[string]any {
+func acmeHandler(gb *growthbook.Client, attrs growthbook.Attributes) (map[string]any, error) {
 	// String value.
-	bannerText := gb.EvalFeature("banner_text", attrs).GetValueWithDefault("???")
+	bannerText, err := gb.EvalFeature("banner_text", attrs)
+	if err != nil {
+		return nil, err
+	}
 
 	// Boolean feature flag.
-	useDarkMode := gb.EvalFeature("dark_mode", attrs).On
+	useDarkMode, err := gb.EvalFeature("dark_mode", attrs)
+	if err != nil {
+		return nil, err
+	}
 
 	// Compound value.
 	defaultMealType := MealOverrides{
 		MealType: "standard",
 		Dessert:  "Apple Pie",
 	}
-	mealOverrides := gb.EvalFeature("meal_overrides_gluten_free", attrs).
-		GetValueWithDefault(defaultMealType)
+	mealOverrides, err := gb.EvalFeature("meal_overrides_gluten_free", attrs)
+	if err != nil {
+		return nil, err
+	}
 
 	// Evaluate an inline experiment.
 	experiment := growthbook.
 		NewExperiment("font_colour").
 		WithVariations("red", "orange", "yellow", "green", "blue", "purple")
-	result := gb.Run(experiment, attrs)
+	result, err := gb.Run(experiment, attrs)
+	if err != nil {
+		return nil, err
+	}
 	var usernameColour = result.Value.(string)
 
 	// Debugging data for the response.
 	year, month, day := gb.LatestFeatureUpdate().Date()
 
 	return map[string]any{
-		"greeting":       bannerText,
-		"dark_mode":      useDarkMode,
+		"greeting":       bannerText.GetValueWithDefault("???"),
+		"dark_mode":      useDarkMode.On,
 		"font_colour":    usernameColour,
-		"meal_overrides": mealOverrides,
+		"meal_overrides": mealOverrides.GetValueWithDefault(defaultMealType),
 		// This section is provided for debugging purposes.
 		"debug": map[string]any{
 			"date_updated": map[string]any{
@@ -53,5 +64,5 @@ func acmeHandler(gb *growthbook.Client, attrs growthbook.Attributes) map[string]
 			},
 			"features": gb.Features(), // See all features, for debugging.
 		},
-	}
+	}, nil
 }
