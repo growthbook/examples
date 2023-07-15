@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 
@@ -19,14 +20,15 @@ func main() {
 
 	// This will get called when the font_colour experiment below is
 	// evaluated.
-	trackingCallback := func(experiment *growthbook.Experiment, result *growthbook.Result) {
+	trackingCallback := func(cxt context.Context,
+		experiment *growthbook.Experiment, result *growthbook.Result) {
 		fmt.Printf("Experiment Viewed: %s - Variation index: %d - Value: %s \n",
 			experiment.Key, result.VariationID, result.Value)
 	}
 
 	// Create a GrowthBook client instance with settings to allow for
 	// retrieving features from the GrowthBook API.
-	gb := growthbook.NewClient(&growthbook.Options{
+	gb = growthbook.NewClient(&growthbook.Options{
 		ClientKey:        "sdk-JA5F3MFuaIBB4z",
 		TrackingCallback: trackingCallback,
 	})
