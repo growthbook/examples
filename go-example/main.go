@@ -29,8 +29,8 @@ func main() {
 	// Create a GrowthBook client instance with settings to allow for
 	// retrieving features from the GrowthBook API.
 	gb = growthbook.NewClient(&growthbook.Options{
-		ClientKey:        "sdk-JA5F3MFuaIBB4z",
-		TrackingCallback: trackingCallback,
+		ClientKey:         "sdk-JA5F3MFuaIBB4z",
+		ExperimentTracker: &growthbook.ExperimentCallback{trackingCallback},
 	})
 
 	// Load features from GrowthBook API with automatic updating.
