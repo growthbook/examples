@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/growthbook/growthbook-golang"
@@ -57,7 +58,7 @@ func experimentHandler(c echo.Context) error {
 	experiment := growthbook.
 		NewExperiment("font_colour").
 		WithVariations("red", "orange", "yellow", "green", "blue", "purple")
-	result, err := cc.GB.Run(experiment, cc.Attributes)
+	result, err := cc.GB.RunContext(context.Background(), experiment, cc.Attributes, cc.User)
 	if err != nil {
 		return err
 	}

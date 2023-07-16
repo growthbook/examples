@@ -1,20 +1,11 @@
 package main
 
 import (
-	"context"
 	"fmt"
 
 	"github.com/growthbook/growthbook-golang"
 	"github.com/labstack/echo/v4"
 )
-
-// This will get called when any experiment is evaluated.
-
-func trackingCallback(ctx context.Context,
-	experiment *growthbook.Experiment, result *growthbook.Result) {
-	fmt.Printf("Experiment Viewed: %s - Variation index: %d - Value: %s \n",
-		experiment.Key, result.VariationID, result.Value)
-}
 
 func main() {
 	e := echo.New()
@@ -23,11 +14,19 @@ func main() {
 	// Echo log messages to a Logrus log.
 	initLogging(e)
 
+	// Create experiment tracker and (tiny!) tracking cache. (The small
+	// size allows us to observe cache evictions and calls to the
+	// experiment tracker: just request the experiment endpoint for a
+	// range of different users to see what happens.)
+	track := tracker{}
+	cache := newTrackingCache(3)
+
 	// Create a GrowthBook client instance with settings to allow for
 	// retrieving features from the GrowthBook API.
 	gb := growthbook.NewClient(&growthbook.Options{
-		ClientKey:         "sdk-JA5F3MFuaIBB4z",
-		ExperimentTracker: &growthbook.ExperimentCallback{trackingCallback},
+		ClientKey:               "sdk-JA5F3MFuaIBB4z",
+		ExperimentTracker:       &track,
+		ExperimentTrackingCache: cache,
 	})
 
 	// Add custom middleware to inject GrowthBook instance and user

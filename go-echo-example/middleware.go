@@ -12,6 +12,7 @@ type CustomContext struct {
 	echo.Context
 	GB         *growthbook.Client
 	Attributes growthbook.Attributes
+	User       string
 }
 
 // Custom middleware to look up user based on query parameter and pass
@@ -26,7 +27,8 @@ type CustomContext struct {
 func customMiddleware(gb *growthbook.Client) func(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
-			return next(&CustomContext{c, gb, users[c.QueryParam("user")]})
+			user := c.QueryParam("user")
+			return next(&CustomContext{c, gb, users[user], user})
 		}
 	}
 }
