@@ -21,9 +21,10 @@ dependencies {
 	// 2. Add the GrowthBook SDK
 	// Option: head of main
 //	 implementation 'com.github.growthbook:growthbook-sdk-java:main-SNAPSHOT'
+	 implementation 'com.github.growthbook:growthbook-sdk-java:sse-SNAPSHOT'
 
 	// Option: specific release version
-	implementation 'com.github.growthbook:growthbook-sdk-java:0.7.1'
+//	implementation 'com.github.growthbook:growthbook-sdk-java:0.7.1'
 
 	// This examples project includes examples for Gson and JSON deserialization
 	implementation 'com.google.code.gson:gson:2.10'

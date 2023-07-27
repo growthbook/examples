@@ -8,21 +8,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AcmeDonutsFeatureService extends GBFeaturesRepository {
+public class RealTimeSSEFeaturesService extends GBFeaturesRepository {
     @Autowired
-    public AcmeDonutsFeatureService() {
+    public RealTimeSSEFeaturesService() {
         super(
             "https://cdn.growthbook.io",
-            "java_NsrWldWd5bxQJZftGsWKl7R2yD2LtAK8C8EUYh9L8",
+            "sdk-pGmC6LrsiUoEUcpZ",
             null,
-            FeatureRefreshStrategy.STALE_WHILE_REVALIDATE,
+            FeatureRefreshStrategy.SERVER_SENT_EVENTS,
             10
         );
 
         this.onFeaturesRefresh(new FeatureRefreshCallback() {
             @Override
             public void onRefresh(String featuresJson) {
-                System.out.println("🔵 AcmeDonutsFeatureService -> Features have been refreshed");
+                System.out.println("🔵 RealTimeSSEFeaturesService -> Features have been refreshed");
                 System.out.println(featuresJson);
             }
         });
@@ -40,6 +40,11 @@ public class AcmeDonutsFeatureService extends GBFeaturesRepository {
         switch (e.getErrorCode()) {
             case NO_RESPONSE_ERROR -> {
                 // Handle NO_RESPONSE_ERROR
+            }
+
+            case SSE_CONNECTION_ERROR -> {
+                e.printStackTrace();
+                throw new RuntimeException(e);
             }
 
             case CONFIGURATION_ERROR, UNKNOWN -> {

@@ -2,6 +2,7 @@ package com.example.demo.services;
 
 import growthbook.sdk.java.FeatureFetchException;
 import growthbook.sdk.java.FeatureRefreshCallback;
+import growthbook.sdk.java.FeatureRefreshStrategy;
 import growthbook.sdk.java.GBFeaturesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,11 +11,7 @@ import org.springframework.stereotype.Service;
 public class BasicEncryptedFeaturesService extends GBFeaturesRepository {
     @Autowired
     public BasicEncryptedFeaturesService() {
-        super(
-            "https://cdn.growthbook.io/api/features/sdk-862b5mHcP9XPugqD",
-            "BhB1wORFmZLTDjbvstvS8w==",
-            15
-        );
+        super("https://cdn.growthbook.io", "sdk-862b5mHcP9XPugqD", "BhB1wORFmZLTDjbvstvS8w==", FeatureRefreshStrategy.STALE_WHILE_REVALIDATE, 15);
 
         this.onFeaturesRefresh(new FeatureRefreshCallback() {
             @Override
@@ -43,9 +40,5 @@ public class BasicEncryptedFeaturesService extends GBFeaturesRepository {
                 throw new RuntimeException(e);
             }
         }
-    }
-
-    private BasicEncryptedFeaturesService(String endpoint, String encryptionKey, Integer ttlSeconds) {
-        super(endpoint, encryptionKey, ttlSeconds);
     }
 }
