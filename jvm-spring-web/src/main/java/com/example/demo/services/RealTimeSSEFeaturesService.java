@@ -43,8 +43,7 @@ public class RealTimeSSEFeaturesService extends GBFeaturesRepository {
             }
 
             case SSE_CONNECTION_ERROR -> {
-                e.printStackTrace();
-                throw new RuntimeException(e);
+                // Handle SSE_CONNECTION_ERROR
             }
 
             case CONFIGURATION_ERROR, UNKNOWN -> {

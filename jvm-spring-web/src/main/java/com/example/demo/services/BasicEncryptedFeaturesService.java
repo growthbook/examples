@@ -36,6 +36,10 @@ public class BasicEncryptedFeaturesService extends GBFeaturesRepository {
                 // Handle NO_RESPONSE_ERROR
             }
 
+            case SSE_CONNECTION_ERROR -> {
+                // SSE is not applicable for this service but this was added here for completion.
+            }
+
             case CONFIGURATION_ERROR, UNKNOWN -> {
                 throw new RuntimeException(e);
             }
