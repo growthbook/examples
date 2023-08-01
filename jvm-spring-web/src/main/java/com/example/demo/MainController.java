@@ -407,9 +407,11 @@ public class MainController {
 
         // get values
         String appVersion = growthBook.getFeatureValue("app_name", "unknown app version");
+        String greeting = growthBook.getFeatureValue("greeting", "???");
 
         // add values to response
         res.put("app_version", appVersion);
+        res.put("greeting", greeting);
 
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
