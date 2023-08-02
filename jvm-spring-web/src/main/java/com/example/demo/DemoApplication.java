@@ -26,6 +26,7 @@ public class DemoApplication {
 			System.out.println("Features forced by URL: http://localhost:8080/url-feature-force");
 			System.out.println("Features forced by URL (with URL overrides): http://localhost:8080/url-feature-force?gb~meal_overrides_gluten_free=%7B%22meal_type%22%3A%20%22gf%22%2C%20%22dessert%22%3A%20%22French%20Vanilla%20Ice%20Cream%22%7D&gb~dark_mode=true&gb~donut_price=3.33&gb~banner_text=Hello%2C%20everyone!%20I%20hope%20you%20are%20all%20doing%20well!");
 			System.out.println("Using an interceptor: http://localhost:8080/interceptors");
+			System.out.println("Using SSE: http://localhost:8080/sse");
 		};
 	}
 }

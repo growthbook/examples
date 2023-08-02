@@ -3,6 +3,7 @@ package com.example.demo;
 import com.example.demo.models.*;
 import com.example.demo.services.AcmeDonutsFeatureService;
 import com.example.demo.services.BasicEncryptedFeaturesService;
+import com.example.demo.services.RealTimeSSEFeaturesService;
 import growthbook.sdk.java.FeatureResult;
 import growthbook.sdk.java.GBContext;
 import growthbook.sdk.java.GrowthBook;
@@ -38,6 +39,9 @@ public class MainController {
 
     @Autowired
     AcmeDonutsFeatureService acmeDonutsFeatureService;
+
+    @Autowired
+    RealTimeSSEFeaturesService realTimeSSEFeaturesService;
 
     // If you are managing the fetching of your own features, this class is doing that.
     FeaturesRepository featuresRepository = new FeaturesRepository();
@@ -385,6 +389,29 @@ public class MainController {
         HashMap<String, Object> res = new HashMap<>();
         res.put("donut_price", donutPrice);
         res.put("banner_text", bannerText);
+
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @GetMapping("/sse")
+    public ResponseEntity<HashMap<String, Object>> evalFeaturesFromSSE() {
+        // prepare response object
+        HashMap<String, Object> res = new HashMap<>();
+
+        // create GrowthBook instance with features from real-time SSE features service
+        GBContext context = GBContext.builder()
+            .featuresJson(realTimeSSEFeaturesService.getFeaturesJson())
+            .attributesJson("{\"version\": \"2.1.0\"}")
+            .build();
+        GrowthBook growthBook = new GrowthBook(context);
+
+        // get values
+        String appVersion = growthBook.getFeatureValue("app_name", "unknown app version");
+        String greeting = growthBook.getFeatureValue("greeting", "???");
+
+        // add values to response
+        res.put("app_version", appVersion);
+        res.put("greeting", greeting);
 
         return new ResponseEntity<>(res, HttpStatus.OK);
     }

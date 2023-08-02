@@ -8,15 +8,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class BasicEncryptedFeaturesService extends GBFeaturesRepository {
+public class RealTimeSSEFeaturesService extends GBFeaturesRepository {
     @Autowired
-    public BasicEncryptedFeaturesService() {
-        super("https://cdn.growthbook.io", "sdk-862b5mHcP9XPugqD", "BhB1wORFmZLTDjbvstvS8w==", FeatureRefreshStrategy.STALE_WHILE_REVALIDATE, 15);
+    public RealTimeSSEFeaturesService() {
+        super(
+            "https://cdn.growthbook.io",
+            "sdk-pGmC6LrsiUoEUcpZ",
+            null,
+            FeatureRefreshStrategy.SERVER_SENT_EVENTS,
+            null
+        );
 
         this.onFeaturesRefresh(new FeatureRefreshCallback() {
             @Override
             public void onRefresh(String featuresJson) {
-                System.out.println("🔵 BasicEncryptedFeaturesService -> Features have been refreshed");
+                System.out.println("🔵 RealTimeSSEFeaturesService -> Features have been refreshed");
                 System.out.println(featuresJson);
             }
         });
@@ -37,7 +43,7 @@ public class BasicEncryptedFeaturesService extends GBFeaturesRepository {
             }
 
             case SSE_CONNECTION_ERROR -> {
-                // SSE is not applicable for this service but this was added here for completion.
+                // Handle SSE_CONNECTION_ERROR
             }
 
             case CONFIGURATION_ERROR, UNKNOWN -> {

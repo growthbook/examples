@@ -11,7 +11,8 @@ import org.koin.dsl.module
 val serviceModule = module {
     single<AcmeDonutFeaturesRepository> {
         AcmeDonutFeaturesRepository(
-            endpoint = "https://cdn.growthbook.io/api/features/java_NsrWldWd5bxQJZftGsWKl7R2yD2LtAK8C8EUYh9L8",
+            apiHost = "https://cdn.growthbook.io",
+            clientKey = "sdk-pGmC6LrsiUoEUcpZ",
             ttlSeconds = 10,
         ).apply {
             onFeaturesRefresh {
@@ -22,7 +23,8 @@ val serviceModule = module {
 
     single<BasicEncryptedFeaturesRepository> {
         BasicEncryptedFeaturesRepository(
-            endpoint = "https://cdn.growthbook.io/api/features/sdk-862b5mHcP9XPugqD",
+            apiHost = "https://cdn.growthbook.io",
+            clientKey = "sdk-862b5mHcP9XPugqD",
             encryptionKey = "BhB1wORFmZLTDjbvstvS8w==",
             ttlSeconds = 15
         ).apply {
