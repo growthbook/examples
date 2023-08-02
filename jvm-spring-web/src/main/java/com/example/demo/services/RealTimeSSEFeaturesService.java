@@ -16,7 +16,7 @@ public class RealTimeSSEFeaturesService extends GBFeaturesRepository {
             "sdk-pGmC6LrsiUoEUcpZ",
             null,
             FeatureRefreshStrategy.SERVER_SENT_EVENTS,
-            10
+            null
         );
 
         this.onFeaturesRefresh(new FeatureRefreshCallback() {
