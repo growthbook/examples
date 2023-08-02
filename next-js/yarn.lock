@@ -24,19 +24,19 @@
     minimatch "^3.1.2"
     strip-json-comments "^3.1.1"
 
-"@growthbook/growthbook-react@^0.14.0":
-  version "0.14.0"
-  resolved "https://registry.yarnpkg.com/@growthbook/growthbook-react/-/growthbook-react-0.14.0.tgz#01f78986a4ef460e6378b62660dadc55299dbbac"
-  integrity sha512-lwRhKejeMCZkintKHL24Nu+Ubq6yyWsfo7vJTCiDb3ibHd5GCYFCQm8pHFPMuvqDbousF7JQaoULJ7DcU0HBYQ==
+"@growthbook/growthbook-react@^0.17.0":
+  version "0.17.0"
+  resolved "https://registry.yarnpkg.com/@growthbook/growthbook-react/-/growthbook-react-0.17.0.tgz#e70b9cb252f24377cd33768bdd617ee847bc7660"
+  integrity sha512-od+bSg3RD9AXfi/TWFDSzRaB6RuJLkUX5eFOZz8u8wL8yDbgd5RF9cwu4lQIF9/tyG1WLu4qipV+SM2v5s4BcQ==
   dependencies:
-    "@growthbook/growthbook" "^0.24.0"
+    "@growthbook/growthbook" "^0.27.0"
 
-"@growthbook/growthbook@^0.24.0":
-  version "0.24.0"
-  resolved "https://registry.yarnpkg.com/@growthbook/growthbook/-/growthbook-0.24.0.tgz#9f123a2512d59b16d99870b7461e4552b89a9cd4"
-  integrity sha512-4hZiOyhC18Nv/ZatorlLVGu1p4qbccijRCtWFPwWOubDKGSmC4dSGNCWi5J9TkXKPNlzR6UhMvCaCY+qV3AczA==
+"@growthbook/growthbook@^0.27.0":
+  version "0.27.0"
+  resolved "https://registry.yarnpkg.com/@growthbook/growthbook/-/growthbook-0.27.0.tgz#5dff4029de202d56ee270e3bf794dad2eda0c624"
+  integrity sha512-gt/DWXfgyudY3gXAUjzKm9kMjVfCzfRc8d0nQQiXCP523ow23jThrmBzkRKCN+zxYVxUKcHjP9yjU9EKJqP4Fw==
   dependencies:
-    dom-mutator "^0.4.0"
+    dom-mutator "^0.5.0"
 
 "@humanwhocodes/config-array@^0.11.8":
   version "0.11.8"
@@ -547,10 +547,10 @@ doctrine@^3.0.0:
   dependencies:
     esutils "^2.0.2"
 
-dom-mutator@^0.4.0:
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/dom-mutator/-/dom-mutator-0.4.0.tgz#cb0a6981ed58bdba25028cb0e5c75777b9b68c07"
-  integrity sha512-H8pcE9Tmmnxs6FTZCX4aRthcweGsVdytqpBSiVIDnTnmosXXYO+jatDWwRReMbJJsAmsnAWsc0Ht4ZYGdN8gZw==
+dom-mutator@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/dom-mutator/-/dom-mutator-0.5.0.tgz#cd59f0afcc012e7f018717a9c79ce6a225c46782"
+  integrity sha512-bbeX8HWE8JGzraFgbVBX4ws2g3heZFuTtrleQBuN7huy+7n2n7etSuVnot3/1z3jdY2MiwuvoS4Ep1UT2rrGBw==
 
 emoji-regex@^9.2.2:
   version "9.2.2"

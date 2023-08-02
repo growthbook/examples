@@ -8,7 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@growthbook/growthbook": "^0.19.1",
+    "@growthbook/growthbook": "^0.27.0",
     "core-js": "^3.8.3",
     "vue": "^2.7.14"
   },
