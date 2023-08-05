@@ -5,14 +5,17 @@ import (
 
 	"github.com/growthbook/growthbook-golang"
 	"github.com/labstack/echo/v4"
+	slogecho "github.com/samber/slog-echo"
+	"golang.org/x/exp/slog"
 )
 
 func main() {
 	e := echo.New()
 
 	// Initialize logging: this shows how to route both GrowthBook and
-	// Echo log messages to a Logrus log.
-	initLogging(e)
+	// Echo log messages to slog.
+	e.Use(slogecho.New(slog.Default()))
+	growthbook.SetLogger(slog.Default())
 
 	// Create experiment tracker and (tiny!) tracking cache. (The small
 	// size allows us to observe cache evictions and calls to the
