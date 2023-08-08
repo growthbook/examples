@@ -32,7 +32,7 @@ This will create sample users in the database.
 
 Run the development server:
 
-    bundle exec rails serve -p 3333
+    bundle exec rails server -p 3333
 
 This will run the dev server at: http://127.0.0.1:3333
 

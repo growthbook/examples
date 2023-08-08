@@ -2,6 +2,7 @@ package com.example.demo.services;
 
 import growthbook.sdk.java.FeatureFetchException;
 import growthbook.sdk.java.FeatureRefreshCallback;
+import growthbook.sdk.java.FeatureRefreshStrategy;
 import growthbook.sdk.java.GBFeaturesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,8 +12,10 @@ public class AcmeDonutsFeatureService extends GBFeaturesRepository {
     @Autowired
     public AcmeDonutsFeatureService() {
         super(
-            "https://cdn.growthbook.io/api/features/java_NsrWldWd5bxQJZftGsWKl7R2yD2LtAK8C8EUYh9L8",
+            "https://cdn.growthbook.io",
+            "java_NsrWldWd5bxQJZftGsWKl7R2yD2LtAK8C8EUYh9L8",
             null,
+            FeatureRefreshStrategy.STALE_WHILE_REVALIDATE,
             10
         );
 
@@ -39,13 +42,13 @@ public class AcmeDonutsFeatureService extends GBFeaturesRepository {
                 // Handle NO_RESPONSE_ERROR
             }
 
+            case SSE_CONNECTION_ERROR -> {
+                // SSE is not applicable for this service but this was added here for completion.
+            }
+
             case CONFIGURATION_ERROR, UNKNOWN -> {
                 throw new RuntimeException(e);
             }
         }
-    }
-
-    private AcmeDonutsFeatureService(String endpoint, String encryptionKey, Integer ttlSeconds) {
-        super(endpoint, encryptionKey, ttlSeconds);
     }
 }

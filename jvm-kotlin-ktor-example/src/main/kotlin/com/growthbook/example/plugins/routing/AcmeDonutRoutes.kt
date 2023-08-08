@@ -44,6 +44,11 @@ fun Routing.acmeRoutes() {
             .builder()
             .featuresJson(acmeDonutFeaturesRepository.featuresJson)
             .attributesJson(user.toJson())
+            .featureUsageCallback(object : FeatureUsageCallback {
+                override fun <ValueType : Any?> onFeatureUsage(featureKey: String?, result: FeatureResult<ValueType>?) {
+                    application.log.info("🔵feature usage callback called. key = $featureKey , result = $result")
+                }
+            })
             .trackingCallback(object : TrackingCallback {
                 override fun <ValueType : Any?> onTrack(
                     experiment: Experiment<ValueType>?,

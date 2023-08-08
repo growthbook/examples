@@ -42,4 +42,39 @@ public class UserAttributes {
     public String toString() {
         return toJson();
     }
+
+    public static UserAttributes mockEmployeeUser() {
+        return new UserAttributes(
+            "user-employee-123456789",
+            "canada",
+            true,
+            true,
+            new ArrayList<>()
+        );
+    }
+
+    public static UserAttributes mockRegularUser() {
+        return new UserAttributes(
+            "user-abc123",
+            "canada",
+            false,
+            false,
+            new ArrayList<>()
+        );
+    }
+
+    /**
+     * to change the value of the feature banner_text
+     * @param country  Supported countries are "france" (French) and "spain" (Spanish)
+     * @return
+     */
+    public static UserAttributes mockUserFromCountry(String country) {
+        return new UserAttributes(
+            "user-abc123",
+            country,
+            false,
+            false,
+            new ArrayList<>()
+        );
+    }
 }
