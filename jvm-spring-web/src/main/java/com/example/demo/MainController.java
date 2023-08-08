@@ -3,6 +3,7 @@ package com.example.demo;
 import com.example.demo.models.*;
 import com.example.demo.services.AcmeDonutsFeatureService;
 import com.example.demo.services.BasicEncryptedFeaturesService;
+import com.example.demo.services.RealTimeSSEFeaturesService;
 import growthbook.sdk.java.FeatureResult;
 import growthbook.sdk.java.GBContext;
 import growthbook.sdk.java.GrowthBook;
@@ -25,6 +26,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 @RestController
 public class MainController {
@@ -37,6 +39,9 @@ public class MainController {
 
     @Autowired
     AcmeDonutsFeatureService acmeDonutsFeatureService;
+
+    @Autowired
+    RealTimeSSEFeaturesService realTimeSSEFeaturesService;
 
     // If you are managing the fetching of your own features, this class is doing that.
     FeaturesRepository featuresRepository = new FeaturesRepository();
@@ -364,5 +369,50 @@ public class MainController {
         response += String.format("Meal Order Dessert: %s \n\n", mealOrder.getDessert());
 
         return response;
+    }
+
+    /**
+     * Example that uses a {@link org.springframework.web.servlet.HandlerInterceptor}.
+     * See {@link GrowthBookSDKInterceptor} and {@link AppConfig}
+     * @param request The request
+     * @return A hashmap response
+     */
+    @GetMapping("/interceptors")
+    public ResponseEntity<HashMap<String, Object>> usingInterceptors(HttpServletRequest request) {
+        // Get the GrowthBook instance created on the request
+        GrowthBook growthBook = (GrowthBook) request.getAttribute("growthbook");
+
+        // Evaluate features in GrowthBook
+        Float donutPrice = growthBook.getFeatureValue("donut_price", 999f);
+        String bannerText = growthBook.getFeatureValue("banner_text", "(unknown text)");
+
+        HashMap<String, Object> res = new HashMap<>();
+        res.put("donut_price", donutPrice);
+        res.put("banner_text", bannerText);
+
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @GetMapping("/sse")
+    public ResponseEntity<HashMap<String, Object>> evalFeaturesFromSSE() {
+        // prepare response object
+        HashMap<String, Object> res = new HashMap<>();
+
+        // create GrowthBook instance with features from real-time SSE features service
+        GBContext context = GBContext.builder()
+            .featuresJson(realTimeSSEFeaturesService.getFeaturesJson())
+            .attributesJson("{\"version\": \"2.1.0\"}")
+            .build();
+        GrowthBook growthBook = new GrowthBook(context);
+
+        // get values
+        String appVersion = growthBook.getFeatureValue("app_name", "unknown app version");
+        String greeting = growthBook.getFeatureValue("greeting", "???");
+
+        // add values to response
+        res.put("app_version", appVersion);
+        res.put("greeting", greeting);
+
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 }

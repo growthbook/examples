@@ -21,6 +21,7 @@ Before Acme Donuts implemented dark mode, they used to configure theme variables
   - [Encrypted features from the GrowthBook API](#encrypted-features-from-the-growthbook-api)
   - [Dependency Injection example with networking using multiple GrowthBook projects](#dependency-injection-example-with-networking-using-multiple-growthbook-projects)
   - [URL Overrides](#url-overrides)
+  - [HandlerInterceptor implementation](#handlerinterceptor-implementation)
 
 ## Running the Example
 
@@ -188,3 +189,19 @@ When running the demo, you can see the following URL's:
 
 - With default values: `http://localhost:8080/url-feature-force`
 - With overrides: `http://localhost:8080/url-feature-force?gb~meal_overrides_gluten_free=%7B%22meal_type%22%3A%20%22gf%22%2C%20%22dessert%22%3A%20%22French%20Vanilla%20Ice%20Cream%22%7D&gb~dark_mode=true&gb~donut_price=3.33&gb~banner_text=Hello%2C%20everyone!%20I%20hope%20you%20are%20all%20doing%20well!`
+
+
+### HandlerInterceptor implementation
+
+The example at the following path shows an example of using `org.springframework.web.servlet.HandlerInterceptor` to handle the request before it reaches the route handler, allowing us to fetch the features from the `GBFeaturesRepository` and instantiate a new `GrowthBook` instance for the request.
+
+```sh
+curl http://localhost:8080/interceptors
+```
+
+Areas to look at:
+
+- See the `GrowthBookSDKInterceptor.java` file. This is where we create a new `GrowthBook` instance with the features from the `GBFeaturesRepository`.
+- See the `AppConfig.java` file. This implements `WebMvcConfigurer` which has an override method that allows us to add interceptors. This also injects the singleton repository into the `GrowthBookSDKInterceptor`.
+- See the handler `usingInterceptors(HttpServletRequest request)` in `MainController.java`. This gets the GrowthBook SDK instance we set in the interceptor.
+
