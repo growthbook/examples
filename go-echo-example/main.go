@@ -21,15 +21,13 @@ func main() {
 	// size allows us to observe cache evictions and calls to the
 	// experiment tracker: just request the experiment endpoint for a
 	// range of different users to see what happens.)
-	track := tracker{}
-	cache := newTrackingCache(3)
+	track := newTrackingCache(3, &tracker{})
 
 	// Create a GrowthBook client instance with settings to allow for
 	// retrieving features from the GrowthBook API.
 	gb := growthbook.NewClient(&growthbook.Options{
-		ClientKey:               "sdk-JA5F3MFuaIBB4z",
-		ExperimentTracker:       &track,
-		ExperimentTrackingCache: cache,
+		ClientKey:         "sdk-JA5F3MFuaIBB4z",
+		ExperimentTracker: track,
 	})
 
 	// Add custom middleware to inject GrowthBook instance and user
