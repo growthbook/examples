@@ -2,15 +2,15 @@ name: flutter_example
 description: A new Flutter project.
 
 publish_to: "none"
-version: 0.1.0+1
+version: 1.0.0+2
 
 environment:
-  sdk: ">=2.17.6 <3.0.0"
+  sdk: ">=2.17.6 <4.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  growthbook_sdk_flutter: ^2.1.0+0
+  growthbook_sdk_flutter: ^3.0.0+0
 
 dev_dependencies:
   flutter_test:
