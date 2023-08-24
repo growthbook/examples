@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="GrowthBook-jvm-1.1.34">
+    <output-path>$PROJECT_DIR$/../growthbook-kotlin/GrowthBook/build/libs</output-path>
+    <root id="archive" name="GrowthBook-jvm-1.1.34.jar">
+      <element id="module-output" name="io.growthbook.sdk.Growth_Book_Demo_App.GrowthBook.jvmMain" />
+    </root>
+  </artifact>
+</component>
