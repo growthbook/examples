@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Kotlin SDK Android Example</string>
+    <string name="initialize_growthbook_sdk">Initialize your GrowthBook SDK!</string>
+    <string name="initialize">initialize</string>
+    <string name="check_if_feature_enabled">Check if feature enabled</string>
+</resources>
