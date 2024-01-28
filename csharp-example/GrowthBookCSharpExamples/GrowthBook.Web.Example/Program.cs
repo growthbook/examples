@@ -1,4 +1,7 @@
+// Enabling partial customization will use the default repository and refresh worker with the custom example cache during dependency resolution.
 //#define PARTIAL_CUSTOMIZATION
+
+// Enabling complete customization will use the custom example repository, refresh worker, and cache during dependency resolution.
 //#define COMPLETE_CUSTOMIZATION
 
 using GB = GrowthBook;
@@ -18,8 +21,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddLogging(builder => builder.AddConsole());
 
-// We're injecting an IHttpClientFactory into the examples/example refresh worker, which will allow the an example or
-// GrowthBook repository to load features from the API either on an as-needed basis when the cache expires or in
+// We're injecting an IHttpClientFactory into the examples/example refresh worker, which will allow an example or
+// GrowthBook refresh worker to load features from the API either on an as-needed basis when its cache expires or in
 // near-realtime with server sent events (if preferred and enabled), and so we're adding that into the dependency
 // injection collection here.
 
@@ -30,9 +33,9 @@ builder.Services.AddHttpClient();
 
 builder.Services
 
-    // Only the Context and GrowthBook types are required to be created in order for GrowthBook to function appropriately in
-    // any standard use case. We're using the GrowthBookExampleContextService as a placeholder for an implementation that loads
-    // your own custom data and populates the Context accordingly for injection into the GrowthBook instance.
+    // Only the Context and GrowthBook types are required to be created in order for GrowthBook to function appropriately in any
+    // standard use case. We're using the GrowthBookExampleContextService as a placeholder for an implementation that would load your
+    // own custom data and populate the Context accordingly for injection into the GrowthBook instance.
 
     .AddTransient<GrowthBookExampleContextService>()
     .AddTransient<GB.Context>(x => x.GetRequiredService<GrowthBookExampleContextService>().CurrentContext)
@@ -57,7 +60,7 @@ builder.Services
 
     // In order to test out injection of a custom cache with the default implementation of the repository and refresh worker,
     // enable the PARTIAL_CUSTOMIZATION flag. For an entirely custom replacement of all three of those, enable
-    // the COMPLETE_CUSTOMIZATION flag instead.
+    // the COMPLETE_CUSTOMIZATION flag instead. Leaving both disabled will use all of the default implementations for all three.
 
 #if PARTIAL_CUSTOMIZATION
     .AddTransient<GB.IGrowthBookFeatureCache, GrowthBookExampleFeatureCache>()
@@ -86,7 +89,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-// This is automatically mapping all of the examples to individual endpoints
+// Automatically map all of the examples to individual endpoints
 // which can be executed via the Swagger page for testing.
 
 foreach (var example in GrowthBookExample.GetAllExamples(app.Services))

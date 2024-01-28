@@ -31,12 +31,19 @@ public class InlineUsageExample : GrowthBookExample
 
     public override async Task<GrowthBookExampleResponse?> Run()
     {
+        // If you decide not to utilize the GrowthBook.LoadFeatures() call, which will use the default retrieval and
+        // caching implementation to get the features (and subscribe to near-realtime feature updates, if preferred),
+        // then you will need to load the features directly from the API yourself.
+
         var response = await GetFeaturesFromApi();
 
         if (response is null || response.Features is null)
         {
             throw new InvalidOperationException("Unable to retrieve features from the GrowthBook API");
         }
+
+        // These property values differ from the values in the InjectionUsage example because this illustrates the
+        // way that the rules (if any) that are a part of a given feature can help affect the result.
 
         var attributes = new JObject
         {
@@ -48,10 +55,16 @@ public class InlineUsageExample : GrowthBookExample
             ["version"] = "1.0.0"
         };
 
+        // The Context contains all of the information that a given GrowthBook feature evaluation will need.
+        // If manually loading the features, as in this example, it is only required to set the Attributes and
+        // Features properties on the Context.
+        
+        // We're adding in the logging override here as well purely to help make it a little more clear what
+        // operations the SDK is taking for each evaluation, but you may want to either omit this or ensure that your
+        // log levels are set to at least Warning or Error in order to avoid flooding your logs with SDK operations.
+
         var context = new Context
         {
-            ClientKey = _config[ExampleConfigurationKey.GrowthBookExampleApiKey],
-            DecryptionKey = _config[ExampleConfigurationKey.GrowthBookExampleDecryptionKey],
             Attributes = attributes,
             Features = response.Features,
             LoggerFactory = _loggerFactory

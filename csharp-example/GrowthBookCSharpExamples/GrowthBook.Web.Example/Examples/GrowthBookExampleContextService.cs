@@ -33,13 +33,17 @@ public class GrowthBookExampleContextService
 
     protected virtual GrowthBookExampleAttributes CreateAttributes()
     {
+        // These property values differ from the values in the InlineUsage example because this illustrates the
+        // way that the rules (if any) that are a part of a given feature can help affect the result.
+
         return new()
         {
-            Id = "user-employee-123456789",
-            LoggedIn = true,
-            Employee = true,
-            Country = "france",
-            DietaryRestrictions = new[] { "gluten_free" }
+            Id = "user-nonemployee-123456789",
+            LoggedIn = false,
+            Employee = false,
+            Country = "spain",
+            DietaryRestrictions = new[] { "gluten_free" },
+            Version = "2.0.0"
         };
     }
 }
