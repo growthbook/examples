@@ -4,8 +4,8 @@ using System.Collections.Concurrent;
 namespace GrowthBook.Web.Example.Examples;
 
 /// <summary>
-/// Quick example of a custom in-memory feature cache. This cache is always treated as expired if it has no features 
-/// but then retains them indefinitely once added. 
+/// Quick example of a custom in-memory feature cache. Unlike the default implementation, this cache is 
+/// always treated as expired if it has no features but then retains them indefinitely once added. 
 /// </summary>
 public class GrowthBookExampleFeatureCache : IGrowthBookFeatureCache
 {

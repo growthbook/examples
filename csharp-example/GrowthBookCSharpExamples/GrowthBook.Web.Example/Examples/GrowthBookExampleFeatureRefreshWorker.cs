@@ -8,16 +8,16 @@ using static GrowthBook.Web.Example.Examples.GrowthBookExample;
 namespace GrowthBook.Web.Example.Examples;
 
 /// <summary>
-/// Quick example of a custom feature refresh worker. This has no support for near-realtime server sent events and
-/// always fetches from the GrowthBook API when the cache is expired.
+/// Quick example of a custom feature refresh worker. Unlike the default implementation, this example has no support for 
+/// near-realtime server sent events and always fetches from the GrowthBook API when the cache is expired.
 /// </summary>
 public class GrowthBookExampleFeatureRefreshWorker : IGrowthBookFeatureRefreshWorker
 {
     private readonly IHttpClientFactory _httpClientFactory;
-    private readonly IConfiguration _config;
+    private readonly GrowthBookConfigurationOptions _config;
     private readonly IGrowthBookFeatureCache _cache;
 
-    public GrowthBookExampleFeatureRefreshWorker(IGrowthBookFeatureCache cache, IHttpClientFactory httpClientFactory, IConfiguration config)
+    public GrowthBookExampleFeatureRefreshWorker(IGrowthBookFeatureCache cache, IHttpClientFactory httpClientFactory, GrowthBookConfigurationOptions config)
     {
         _cache = cache;
         _httpClientFactory = httpClientFactory;
@@ -34,8 +34,7 @@ public class GrowthBookExampleFeatureRefreshWorker : IGrowthBookFeatureRefreshWo
         }
 
         var httpClient = _httpClientFactory.CreateClient(ConfiguredClients.DefaultApiClient);
-        var apiKey = _config[ExampleConfigurationKey.GrowthBookExampleApiKey];
-        var url = Path.Combine("https://cdn.growthbook.io/api/features/", apiKey);
+        var url = Path.Combine("https://cdn.growthbook.io/api/features/", _config.ClientKey);
 
         var response = await httpClient.GetFeaturesFrom(url, NullLogger.Instance, new(), CancellationToken.None);
 

@@ -2,8 +2,8 @@
 namespace GrowthBook.Web.Example.Examples;
 
 /// <summary>
-/// Quick example of a feature repository. This has no support for retrieval options and will always attempt to refresh
-/// directly from the refresh worker.
+/// Quick example of a feature repository. Unlike the default implementation, this has no support for retrieval options 
+/// and will always attempt to refresh directly from the refresh worker.
 /// </summary>
 public class GrowthBookExampleFeatureRepository : IGrowthBookFeatureRepository
 {

@@ -5,12 +5,15 @@ using Newtonsoft.Json.Linq;
 
 namespace GrowthBook.Web.Example.Examples.Basic;
 
+/// <summary>
+/// This example illustrates a simple use of GrowthBook by setting up and executing everything inline.
+/// </summary>
 public class InlineUsageExample : GrowthBookExample
 {
     private sealed class FeaturesResponse
     {
-        public Dictionary<string, Feature> Features { get; set; }
-        public string EncryptedFeatures { get; set; }
+        public Dictionary<string, Feature>? Features { get; set; }
+        public string? EncryptedFeatures { get; set; }
     }
 
     private readonly ILogger<InlineUsageExample> _logger;
@@ -43,16 +46,17 @@ public class InlineUsageExample : GrowthBookExample
         }
 
         // These property values differ from the values in the InjectionUsage example because this illustrates the
-        // way that the rules (if any) that are a part of a given feature can help affect the result.
+        // way that the rules (if any) that are a part of a given feature can help affect the result by evaluating
+        // them against the current attributes.
 
         var attributes = new JObject
         {
-            ["id"] = "user-employee-123456789",
+            ["id"] = ExampleAttribute.Id,
             ["loggedIn"] = true,
             ["employee"] = true,
-            ["country"] = "france",
-            ["dietaryRestrictions"] = new JArray("gluten_free"),
-            ["version"] = "1.0.0"
+            ["country"] = ExampleAttribute.Country.France,
+            ["dietaryRestrictions"] = new JArray(ExampleAttribute.DietaryRestriction.GlutenFree),
+            ["version"] = ExampleAttribute.Version.V1
         };
 
         // The Context contains all of the information that a given GrowthBook feature evaluation will need.
@@ -77,7 +81,7 @@ public class InlineUsageExample : GrowthBookExample
 
     private async Task<FeaturesResponse?> GetFeaturesFromApi()
     {
-        var apiKey = _config[ExampleConfigurationKey.GrowthBookExampleApiKey];
+        var apiKey = _config[ExampleConfigurationKey.GrowthBookExampleClientKey];
         var url = Path.Combine("https://cdn.growthbook.io/api/features/", apiKey);
 
         var httpClient = _httpClientFactory.CreateClient();

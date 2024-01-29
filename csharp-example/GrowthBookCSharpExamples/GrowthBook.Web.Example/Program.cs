@@ -53,7 +53,7 @@ builder.Services
 
         return new()
         {
-            ClientKey = config[GrowthBookExample.ExampleConfigurationKey.GrowthBookExampleApiKey],
+            ClientKey = config[GrowthBookExample.ExampleConfigurationKey.GrowthBookExampleClientKey],
             DecryptionKey = config[GrowthBookExample.ExampleConfigurationKey.GrowthBookExampleDecryptionKey],
         };
     })

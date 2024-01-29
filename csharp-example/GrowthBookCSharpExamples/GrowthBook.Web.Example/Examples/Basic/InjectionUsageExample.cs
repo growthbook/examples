@@ -6,14 +6,15 @@ using System;
 
 namespace GrowthBook.Web.Example.Examples.Basic;
 
+/// <summary>
+/// This example illustrates a simple use of GrowthBook through dependency injection.
+/// </summary>
 public class InjectionUsageExample : GrowthBookExample
 {
-    private readonly ILogger<GrowthBookExample> _logger;
     private readonly IGrowthBook _growthBook;
 
-    public InjectionUsageExample(ILogger<GrowthBookExample> logger, IGrowthBook growthBook)
+    public InjectionUsageExample(IGrowthBook growthBook)
     {
-        _logger = logger;
         _growthBook = growthBook;
     }
 
