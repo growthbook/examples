@@ -1,8 +1,11 @@
-import gb from "@/lib/growthbook/server";
+import { createGB } from "@/lib/growthbook";
 import { cookies } from "next/headers";
 import ClientComponent from "./ClientComponent";
 
 export default async function ServerDynamic() {
+  // create instance per request, server-side
+  const gb = createGB();
+
   await gb.loadFeatures({ timeout: 1000 });
 
   const cookieStore = cookies();

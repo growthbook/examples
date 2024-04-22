@@ -5,11 +5,11 @@ const Loading = () => {
 };
 export default async function ServerStreaming() {
   return (
-    <div>
+    <>
       <div className="text-4xl my-4">Server Component - Streaming Render</div>
       <Suspense fallback={<Loading />}>
         <AsyncComponent />
       </Suspense>
-    </div>
+    </>
   );
 }

@@ -1,9 +1,12 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { cookies } from "next/headers";
-import gb from "@/lib/growthbook/server";
+import { createGB } from "@/lib/growthbook";
 
 export async function middleware(request: NextRequest) {
+  // create instance per request, server-side
+  const gb = createGB();
+
   await gb.loadFeatures({ timeout: 1000 });
 
   const cookieStore = cookies();

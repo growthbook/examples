@@ -1,5 +1,6 @@
-import gb from "@/lib/growthbook/server";
+import { createGB } from "@/lib/growthbook";
 export default async function ServerStatic() {
+  const gb = createGB();
   await gb.loadFeatures({ timeout: 1000 });
   gb.setAttributes({
     country: "US",

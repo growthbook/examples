@@ -1,9 +1,14 @@
 "use client";
-import { useEffect } from "react";
 import { GrowthBookProvider } from "@growthbook/growthbook-react";
+import { useEffect } from "react";
 import Cookies from "js-cookie";
-import gb from "@/lib/growthbook/client";
+import { createGB } from "@/lib/growthbook";
 import ClientComponent from "./ClientComponent";
+
+const gb = createGB({
+  // client-side feature
+  subscribeToChanges: true,
+});
 
 export default function ClientPage() {
   useEffect(() => {
