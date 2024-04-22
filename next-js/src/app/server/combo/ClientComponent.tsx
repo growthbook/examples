@@ -1,7 +1,7 @@
 "use client";
 import Cookies from "js-cookie";
-import { createGB } from "@/lib/growthbook";
 import { FeatureDefinition } from "@growthbook/growthbook";
+import { createGB } from "@/lib/growthbook";
 
 const gb = createGB({
   // client-side feature

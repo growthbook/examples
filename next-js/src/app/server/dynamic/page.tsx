@@ -1,5 +1,5 @@
-import { createGB } from "@/lib/growthbook";
 import { cookies } from "next/headers";
+import { createGB } from "@/lib/growthbook";
 
 export default async function ServerDynamic() {
   // create instance per request, server-side
@@ -7,6 +7,7 @@ export default async function ServerDynamic() {
 
   await gb.loadFeatures({ timeout: 1000 });
 
+  // using cookies means next will render this page dynamically
   const cookieStore = cookies();
   const userId = cookieStore.get("gb-next-example-userId");
 

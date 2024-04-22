@@ -1,8 +1,8 @@
-import { createGB } from "@/lib/growthbook";
 import { cookies } from "next/headers";
+import { createGB } from "@/lib/growthbook";
 import ClientComponent from "./ClientComponent";
 
-export default async function ServerDynamic() {
+export default async function ServerCombo() {
   // create instance per request, server-side
   const gb = createGB();
 

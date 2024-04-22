@@ -1,5 +1,5 @@
-import { createGB } from "@/lib/growthbook";
 import { cookies } from "next/headers";
+import { createGB } from "@/lib/growthbook";
 
 export default async function AsyncComponent() {
   // create instance per request, server-side
@@ -30,7 +30,7 @@ export default async function AsyncComponent() {
         >
           Partial Prerendering (PPR)
         </a>{" "}
-        in versions of Next.js that have it enabled.
+        in newer versions of Next.js that have it enabled.
       </p>
       <ul>
         <li>
