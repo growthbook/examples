@@ -1,8 +1,6 @@
 import { createGB } from "@/lib/growthbook";
 import ClientComponent from "./ClientComponent";
 
-export const revalidate = 3600; // refresh cache every hour
-
 export default async function ServerCombo() {
   // create instance per request, server-side
   const gb = createGB();
