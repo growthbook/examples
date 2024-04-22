@@ -1,6 +1,6 @@
 "use client";
 import Cookies from "js-cookie";
-import gb from "@/lib/growthbook";
+import gb from "@/lib/growthbook/client";
 import { FeatureDefinition } from "@growthbook/growthbook";
 
 export default function ClientComponent({

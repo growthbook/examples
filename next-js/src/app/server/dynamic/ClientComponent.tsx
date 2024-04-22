@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
-import gb from "@/lib/growthbook";
+import gb from "@/lib/growthbook/client";
 
 export default function ClientPage() {
   const [isLoading, setIsLoading] = useState(false);

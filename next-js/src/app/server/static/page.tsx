@@ -1,4 +1,4 @@
-import gb from "@/lib/growthbook";
+import gb from "@/lib/growthbook/server";
 export default async function ServerStatic() {
   await gb.loadFeatures({ timeout: 1000 });
   gb.setAttributes({

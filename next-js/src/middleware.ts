@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { cookies } from "next/headers";
-import gb from "@/lib/growthbook";
+import gb from "@/lib/growthbook/server";
 
 export async function middleware(request: NextRequest) {
   await gb.loadFeatures({ timeout: 1000 });

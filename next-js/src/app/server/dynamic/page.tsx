@@ -1,4 +1,4 @@
-import gb from "@/lib/growthbook";
+import gb from "@/lib/growthbook/server";
 import { cookies } from "next/headers";
 
 export default async function ServerDynamic() {
