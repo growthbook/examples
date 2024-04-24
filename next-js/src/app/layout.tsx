@@ -17,13 +17,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <div className="p-4 max-w-2xl">
-          <div className="text-4xl my-4">
-            <Link href="/">GrowthBook Next.js Example</Link>
-          </div>
-          {children}
-        </div>
+      <body className={`${inter.className}`}>
+        <h1 className="mb-4">
+          <Link href="/">GrowthBook Next.js Example</Link>
+        </h1>
+        {children}
       </body>
     </html>
   );

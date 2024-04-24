@@ -1,17 +1,17 @@
+import { getInstance } from "@/lib/growthbookServer";
+import { GrowthBookTracking } from "@/lib/growthbookClient";
 import { cookies } from "next/headers";
-import { createGB } from "@/lib/growthbook";
+import { GB_UUID_COOKIE } from "@/middleware";
 
 export default async function AsyncComponent() {
   // create instance per request, server-side
-  const gb = createGB();
+  const gb = await getInstance();
 
-  await gb.loadFeatures({ timeout: 1000 });
-
-  const cookieStore = cookies();
-  const userId = cookieStore.get("gb-next-example-userId");
+  // Artificial 2 second delay to simulate a slow server
+  await new Promise((resolve) => setTimeout(resolve, 2000));
 
   gb.setAttributes({
-    id: userId,
+    id: cookies().get(GB_UUID_COOKIE)?.value || "",
   });
 
   const feature1Enabled = gb.isOn("feature1");
@@ -19,10 +19,11 @@ export default async function AsyncComponent() {
 
   return (
     <div>
-      <p className="my-2">
-        This component is streamed inside a server component.
+      <p>
+        This component is streamed inside a server component (with an artificial
+        2s delay).
       </p>
-      <p className="my-2">
+      <p>
         The code implemented here will automatically leverage{" "}
         <a
           href="https://nextjs.org/docs/app/api-reference/next-config-js/partial-prerendering"
@@ -40,6 +41,8 @@ export default async function AsyncComponent() {
           feature2: <strong>{feature2Value}</strong>
         </li>
       </ul>
+
+      <GrowthBookTracking data={gb.getDeferredTrackingCalls()} />
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { revalidateTag } from "next/cache";
 
 // Use a route handler to refresh all cache entries related to GrowthBook.
@@ -7,4 +7,6 @@ import { revalidateTag } from "next/cache";
 export const POST = (_req: NextRequest) => {
   // TODO assert request is authorized from GrowthBook instance
   revalidateTag("growthbook");
+
+  return NextResponse.json({ message: "Features revalidated" });
 };

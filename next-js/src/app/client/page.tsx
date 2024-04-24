@@ -1,23 +1,25 @@
 "use client";
+import Cookies from "js-cookie";
 import { GrowthBookProvider } from "@growthbook/growthbook-react";
 import { useEffect } from "react";
-import Cookies from "js-cookie";
-import { createGB } from "@/lib/growthbook";
 import ClientComponent from "./ClientComponent";
-
-const gb = createGB({
-  // client-side feature
-  subscribeToChanges: true,
-});
+import { gb } from "@/lib/growthbookClient";
+import { GB_UUID_COOKIE } from "@/middleware";
 
 export default function ClientPage() {
   useEffect(() => {
     const load = async () => {
       try {
         await gb.loadFeatures();
-        const userId = Cookies.get("gb-next-example-userId");
+
+        let uuid = Cookies.get(GB_UUID_COOKIE);
+        if (!uuid) {
+          uuid = Math.random().toString(36).substring(2);
+          Cookies.set(GB_UUID_COOKIE, uuid);
+        }
+
         gb.setAttributes({
-          id: userId,
+          id: uuid,
         });
       } catch (e) {
         console.error(e);

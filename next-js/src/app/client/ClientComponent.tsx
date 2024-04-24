@@ -1,15 +1,23 @@
 "use client";
 import { useFeatureIsOn, useFeatureValue } from "@growthbook/growthbook-react";
+import Link from "next/link";
+
 export default function ClientComponent() {
   const feature1Enabled = useFeatureIsOn("feature1");
   const feature2Value = useFeatureValue("feature2", "fallback");
   return (
     <div>
-      <div className="text-4xl my-4">Client Component</div>
-      <p className="my-2">
-        This component renders client-side. The page initially delivered to the
-        client will not have FF values loaded, which can result in a
-        &apos;flicker&apos; when values are loaded asynchronously client-side.
+      <h2>Client Rendering (Unoptimized)</h2>
+      <p>
+        This component renders entirely client-side. The page initially
+        delivered to the client will not have feature definitions loaded, and a
+        network request will be required. This can result in a
+        &apos;flicker&apos; where fallback values are rendered first and then
+        swapped in with their real values later.
+      </p>
+      <p>
+        To avoid this flicker, check out the{" "}
+        <Link href="/client-optimized">Optimized Client</Link> example.
       </p>
       <ul>
         <li>

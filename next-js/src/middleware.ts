@@ -1,32 +1,37 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { cookies } from "next/headers";
-import { createGB } from "@/lib/growthbook";
+
+// Ensure a UUID cookie is always set to enable experimentation
+export const GB_UUID_COOKIE = "gb-next-example-userId";
 
 export async function middleware(request: NextRequest) {
-  // create instance per request, server-side
-  const gb = createGB();
+  // Generate a UUID if it doesn't exist yet
+  let uuid = request.cookies.get(GB_UUID_COOKIE)?.value;
+  let needsUpdate = false;
+  if (!uuid) {
+    uuid = crypto.randomUUID();
+    needsUpdate = true;
 
-  await gb.loadFeatures({ timeout: 1000 });
+    // Set the cookie on the current request
+    request.cookies.set(GB_UUID_COOKIE, uuid);
+  }
 
-  const cookieStore = cookies();
-  const userId = cookieStore.get("gb-next-example-userId");
-
-  gb.setAttributes({
-    id: userId,
+  // Forward the request to the server
+  const response = NextResponse.next({
+    request: {
+      headers: new Headers(request.headers),
+    },
   });
 
-  const feature1Enabled = gb.isOn("feature1");
-  const feature2Value = gb.getFeatureValue("feature2", "fallback");
+  // Add the newly created UUID to the response headers to persist in the browser
+  if (needsUpdate) {
+    response.cookies.set(GB_UUID_COOKIE, uuid);
+  }
 
-  return NextResponse.redirect(
-    new URL(
-      `/client/middleware?feature1=${feature1Enabled}&feature2=${feature2Value}`,
-      request.url
-    )
-  );
+  return response;
 }
 
+// Run for all pages that need cookies available server-side
 export const config = {
-  matcher: "/middleware",
+  matcher: ["/streaming", "/server", "/hybrid", "/client-optimized"],
 };
