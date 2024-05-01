@@ -1,32 +1,40 @@
 "use client";
 import Cookies from "js-cookie";
-import { GrowthBookProvider } from "@growthbook/growthbook-react";
-import { useEffect } from "react";
+import { GrowthBook, GrowthBookProvider } from "@growthbook/growthbook-react";
+import { useEffect, useMemo } from "react";
 import ClientComponent from "./ClientComponent";
-import { gb } from "@/lib/growthbookClient";
 import { GB_UUID_COOKIE } from "@/middleware";
+import { onExperimentView } from "@/lib/GrowthBookTracking";
 
 export default function ClientPage() {
-  useEffect(() => {
-    const load = async () => {
-      try {
-        await gb.loadFeatures();
-
-        let uuid = Cookies.get(GB_UUID_COOKIE);
-        if (!uuid) {
-          uuid = Math.random().toString(36).substring(2);
-          Cookies.set(GB_UUID_COOKIE, uuid);
-        }
-
-        gb.setAttributes({
-          id: uuid,
-        });
-      } catch (e) {
-        console.error(e);
-      }
-    };
-    load();
+  // Create a single memoized GrowthBook instance for the client
+  const gb = useMemo(() => {
+    return new GrowthBook({
+      apiHost: process.env.NEXT_PUBLIC_GROWTHBOOK_API_HOST,
+      clientKey: process.env.NEXT_PUBLIC_GROWTHBOOK_CLIENT_KEY,
+      decryptionKey: process.env.NEXT_PUBLIC_GROWTHBOOK_DECRYPTION_KEY,
+      trackingCallback: onExperimentView,
+    });
   }, []);
+
+  useEffect(() => {
+    // Fetch feature payload from GrowthBook
+    gb.init({
+      // Optional, enable streaming updates
+      streaming: true,
+    });
+
+    // Set targeting attributes for the user
+    let uuid = Cookies.get(GB_UUID_COOKIE);
+    if (!uuid) {
+      uuid = Math.random().toString(36).substring(2);
+      Cookies.set(GB_UUID_COOKIE, uuid);
+    }
+    gb.setAttributes({
+      id: uuid,
+    });
+  }, [gb]);
+
   return (
     <GrowthBookProvider growthbook={gb}>
       <ClientComponent />

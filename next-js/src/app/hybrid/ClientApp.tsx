@@ -1,39 +1,33 @@
 "use client";
-import Cookies from "js-cookie";
-import { AutoExperiment, FeatureDefinition } from "@growthbook/growthbook";
-import { gb, setPayload } from "@/lib/growthbookClient";
-import { GrowthBookProvider } from "@growthbook/growthbook-react";
-import ClientComponent from "./ClientComponent";
+import { onExperimentView } from "@/lib/GrowthBookTracking";
+import { GrowthBookPayload } from "@growthbook/growthbook";
+import { GrowthBook, GrowthBookProvider } from "@growthbook/growthbook-react";
+import { PropsWithChildren, useMemo } from "react";
 import { GB_UUID_COOKIE } from "@/middleware";
-import { useCallback, useEffect, useRef } from "react";
+import Cookies from "js-cookie";
 
 export default function ClientApp({
   payload,
-}: {
-  payload: {
-    features: Record<string, FeatureDefinition<unknown>>;
-    experiments: AutoExperiment[];
-  };
-}) {
-  // Helper to hydrate client-side GrowthBook instance with payload from the server
-  const hydrate = useCallback(() => {
-    setPayload(payload);
-    gb.setAttributes({
-      id: Cookies.get(GB_UUID_COOKIE),
-    });
-  }, [payload]);
-
-  // Hydrate immediately on first render and whenever the payload changes
-  const ref = useRef<boolean>();
-  if (!ref.current) {
-    ref.current = true;
-    hydrate();
-  }
-  useEffect(() => hydrate(), [hydrate]);
-
-  return (
-    <GrowthBookProvider growthbook={gb}>
-      <ClientComponent />
-    </GrowthBookProvider>
+  children,
+}: PropsWithChildren<{ payload: GrowthBookPayload }>) {
+  // Create a singleton GrowthBook instance for this page
+  const gb = useMemo(
+    () =>
+      new GrowthBook({
+        apiHost: process.env.NEXT_PUBLIC_GROWTHBOOK_API_HOST,
+        clientKey: process.env.NEXT_PUBLIC_GROWTHBOOK_CLIENT_KEY,
+        decryptionKey: process.env.NEXT_PUBLIC_GROWTHBOOK_DECRYPTION_KEY,
+        trackingCallback: onExperimentView,
+        attributes: {
+          id: Cookies.get(GB_UUID_COOKIE),
+        },
+      }).initSync({
+        payload,
+        // Optional, enable streaming updates
+        streaming: true,
+      }),
+    [payload]
   );
+
+  return <GrowthBookProvider growthbook={gb}>{children}</GrowthBookProvider>;
 }
