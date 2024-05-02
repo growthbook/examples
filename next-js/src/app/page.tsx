@@ -93,7 +93,7 @@ export default function Home() {
           user saw is sent to the client where an analytics event is triggered
           (or console.log in these examples). This happens via the{" "}
           <code>GrowthBookTracking</code> client component defined in{" "}
-          <code>src/lib/growthbookClient.ts</code>.
+          <code>src/lib/GrowthBookTracking</code>.
         </p>
       </section>
     </main>
