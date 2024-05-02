@@ -1,17 +1,13 @@
 "use client";
 import { onExperimentView } from "@/lib/GrowthBookTracking";
 import ClientComponent from "./ClientComponent";
-import { FeatureApiResponse } from "@growthbook/growthbook";
-import { GrowthBook, GrowthBookProvider } from "@growthbook/growthbook-react";
+import { GrowthBook, GrowthBookPayload } from "@growthbook/growthbook";
+import { GrowthBookProvider } from "@growthbook/growthbook-react";
 import { useMemo } from "react";
 import { GB_UUID_COOKIE } from "@/middleware";
 import Cookies from "js-cookie";
 
-export default function ClientApp({
-  payload,
-}: {
-  payload: FeatureApiResponse;
-}) {
+export default function ClientApp({ payload }: { payload: GrowthBookPayload }) {
   // Create a singleton GrowthBook instance for this page
   const gb = useMemo(
     () =>

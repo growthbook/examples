@@ -20,6 +20,6 @@ export function configureServerSideGrowthBook() {
 
   // Disable the built-in cache since we're using Next.js's fetch cache instead
   configureCache({
-    disableLocalCache: true,
+    disableCache: true,
   });
 }
