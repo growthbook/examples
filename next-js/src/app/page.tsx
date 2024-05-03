@@ -15,14 +15,9 @@ export default function Home() {
             language.
           </li>
           <li>
-            Next, create a <code>.env.local</code> file in the root of this
-            example with the following contents (fill in values with the ones
-            shown after creating your SDK Connection):
-            <pre>{`NEXT_PUBLIC_GROWTHBOOK_CLIENT_KEY=
-NEXT_PUBLIC_GROWTHBOOK_API_HOST=
-# Optional (only if you enabled encryption):
-NEXT_PUBLIC_GROWTHBOOK_DECRYPTION_KEY=
-`}</pre>
+            Next, in this example root, copy <code>.env.local.example</code> to{" "}
+            <code>.env.local</code> and fill in the values from your GrowthBook
+            SDK Connection.
           </li>
           <li>
             <p>
@@ -98,7 +93,7 @@ NEXT_PUBLIC_GROWTHBOOK_DECRYPTION_KEY=
           user saw is sent to the client where an analytics event is triggered
           (or console.log in these examples). This happens via the{" "}
           <code>GrowthBookTracking</code> client component defined in{" "}
-          <code>src/lib/growthbookClient.ts</code>.
+          <code>src/lib/GrowthBookTracking</code>.
         </p>
       </section>
     </main>

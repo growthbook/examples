@@ -1,13 +1,29 @@
 import RevalidateMessage from "@/app/revalidate/RevalidateMessage";
-import { getInstance } from "@/lib/growthbookServer";
+import { configureServerSideGrowthBook } from "@/lib/growthbookServer";
+import { GrowthBook } from "@growthbook/growthbook";
 
 export default async function ServerStatic() {
+  // Helper to configure cache for next.js
+  configureServerSideGrowthBook();
+
+  // Create and initialize a GrowthBook instance
+  const gb = new GrowthBook({
+    apiHost: process.env.NEXT_PUBLIC_GROWTHBOOK_API_HOST,
+    clientKey: process.env.NEXT_PUBLIC_GROWTHBOOK_CLIENT_KEY,
+    decryptionKey: process.env.NEXT_PUBLIC_GROWTHBOOK_DECRYPTION_KEY,
+  });
+  await gb.init({ timeout: 1000 });
+
   // By not using cookies or headers, this page can be statically rendered
   // Note: This means you can't target individual users or run experiments
-  const gb = await getInstance();
 
+  // Evaluate any feature flags
   const feature1Enabled = gb.isOn("feature1");
   const feature2Value = gb.getFeatureValue("feature2", "fallback");
+
+  // Cleanup your GrowthBook instance
+  gb.destroy();
+
   return (
     <div>
       <h2>Static Pages</h2>

@@ -1,9 +1,25 @@
-import { getInstance, getPayload } from "@/lib/growthbookServer";
+import { configureServerSideGrowthBook } from "@/lib/growthbookServer";
 import ClientApp from "./ClientApp";
+import { GrowthBook } from "@growthbook/growthbook";
 
 export default async function PrerenderedClientPage() {
-  // Get server-side GrowthBook instance in order to fetch the feature flag payload
-  const gb = await getInstance();
+  // Helper to configure cache for next.js
+  configureServerSideGrowthBook();
 
-  return <ClientApp payload={getPayload(gb)} />;
+  // Create and initialize a GrowthBook instance
+  const gb = new GrowthBook({
+    apiHost: process.env.NEXT_PUBLIC_GROWTHBOOK_API_HOST,
+    clientKey: process.env.NEXT_PUBLIC_GROWTHBOOK_CLIENT_KEY,
+    decryptionKey: process.env.NEXT_PUBLIC_GROWTHBOOK_DECRYPTION_KEY,
+  });
+  await gb.init({ timeout: 1000 });
+
+  // Get the payload to hydrate the client-side GrowthBook instance
+  // We need the decrypted payload so the initial client-render can be synchronous
+  const payload = gb.getDecryptedPayload();
+
+  // Cleanup your GrowthBook instance
+  gb.destroy();
+
+  return <ClientApp payload={payload} />;
 }
