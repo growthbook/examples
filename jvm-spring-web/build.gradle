@@ -1,3 +1,5 @@
+apply from: 'versioning.gradle'
+
 plugins {
 	id 'org.springframework.boot' version '2.7.4'
 	id 'io.spring.dependency-management' version '1.0.14.RELEASE'
@@ -5,7 +7,9 @@ plugins {
 }
 
 group = 'com.example'
-version = '0.0.1-SNAPSHOT'
+//version = '0.0.1-SNAPSHOT'
+// Set the project version
+version = readVersion()
 sourceCompatibility = '17'
 
 repositories {
