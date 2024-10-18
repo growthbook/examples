@@ -30,15 +30,15 @@ jobs:
     - name: Determine Next Version
       id: determine_version
       run: |
-        echo "Current Version: $(./gradlew -q version)"
         # Extracting version type (major/minor/patch) from commit message or PR title
         if [[ "$GITHUB_REF" == refs/heads/release/* ]]; then
           VERSION_TYPE="minor"
         elif [[ "$GITHUB_REF" == refs/heads/main ]]; then
           VERSION_TYPE="patch"
         fi
-        # Bumping version accordingly
-        NEW_VERSION=$(./gradlew incrementVersion -Ptype=$VERSION_TYPE -q)
+        # Bumping version accordingly using a custom script or Gradle task
+        NEW_VERSION=$(./gradlew -q printVersion)
+        ./gradlew bumpVersion -Ptype=$VERSION_TYPE
         echo "::set-output name=new_version::$NEW_VERSION"
       working-directory: ./jvm-spring-web
 
