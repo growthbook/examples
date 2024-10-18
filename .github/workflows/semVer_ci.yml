@@ -17,12 +17,15 @@ jobs:
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v3
+      with:
+        working-directory: ./jvm-spring-web
 
     - name: Set up JDK
       uses: actions/setup-java@v3
       with:
         distribution: 'temurin'
         java-version: '17'
+        working-directory: ./jvm-spring-web
 
     - name: Determine Next Version
       id: determine_version
@@ -37,6 +40,7 @@ jobs:
         # Bumping version accordingly
         NEW_VERSION=$(./gradlew incrementVersion -Ptype=$VERSION_TYPE -q)
         echo "::set-output name=new_version::$NEW_VERSION"
+      working-directory: ./jvm-spring-web
 
     - name: Commit Version Change
       if: ${{ github.ref == 'refs/heads/main' }}
@@ -45,3 +49,4 @@ jobs:
         git config user.email "actions@github.com"
         git commit -am "Bump version to ${{ steps.determine_version.outputs.new_version }}"
         git push origin main
+      working-directory: ./jvm-spring-web
