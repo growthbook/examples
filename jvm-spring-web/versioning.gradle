@@ -1,0 +1,52 @@
+// versioning.gradle
+
+def versionFile = file('version.txt')
+
+// Function to read version from file
+def readVersion() {
+    if (versionFile.exists()) {
+        return versionFile.text.trim()
+    } else {
+        return '0.1.0' // Default version if file does not exist
+    }
+}
+
+// Function to write version to file
+def writeVersion(newVersion) {
+    versionFile.text = newVersion
+}
+
+
+
+// Task to print the current version
+task printVersion {
+    doLast {
+        println version
+    }
+}
+
+// Task to bump the version
+task bumpVersion {
+    doLast {
+        def currentVersion = version.split('\\.')
+        def versionType = project.hasProperty('type') ? project.property('type') : 'patch'
+
+        if (versionType == 'major') {
+            currentVersion[0] = (currentVersion[0].toInteger() + 1).toString()
+            currentVersion[1] = '0'
+            currentVersion[2] = '0'
+        } else if (versionType == 'minor') {
+            currentVersion[1] = (currentVersion[1].toInteger() + 1).toString()
+            currentVersion[2] = '0'
+        } else if (versionType == 'patch') {
+            currentVersion[2] = (currentVersion[2].toInteger() + 1).toString()
+        } else {
+            throw new GradleException("Unknown version type: $versionType. Use 'major', 'minor', or 'patch'.")
+        }
+
+        def newVersion = currentVersion.join('.')
+        writeVersion(newVersion)
+        println "Version bumped to $newVersion"
+    }
+}
+
