@@ -3,7 +3,8 @@
 def versionFile = file('version.txt')
 
 // Function to read version from file
-def readVersion() {
+ext.readVersion = {
+    //def versionFile = file('version.txt')
     if (versionFile.exists()) {
         return versionFile.text.trim()
     } else {
@@ -16,7 +17,7 @@ def writeVersion(newVersion) {
     versionFile.text = newVersion
 }
 
-
+version = readVersion()
 
 // Task to print the current version
 task printVersion {
