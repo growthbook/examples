@@ -1,0 +1,46 @@
+name: Semantic Versioning and Build
+
+on:
+  push:
+    branches:
+      - main
+      - 'release/*'
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  versioning:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: Set up JDK
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+
+    - name: Determine Next Version
+      id: determine_version
+      run: |
+        echo "Current Version: $(./gradlew -q version)"
+        # Extracting version type (major/minor/patch) from commit message or PR title
+        if [[ "$GITHUB_REF" == refs/heads/release/* ]]; then
+          VERSION_TYPE="minor"
+        elif [[ "$GITHUB_REF" == refs/heads/main ]]; then
+          VERSION_TYPE="patch"
+        fi
+        # Bumping version accordingly
+        NEW_VERSION=$(./gradlew incrementVersion -Ptype=$VERSION_TYPE -q)
+        echo "::set-output name=new_version::$NEW_VERSION"
+
+    - name: Commit Version Change
+      if: ${{ github.ref == 'refs/heads/main' }}
+      run: |
+        git config user.name "GitHub Actions"
+        git config user.email "actions@github.com"
+        git commit -am "Bump version to ${{ steps.determine_version.outputs.new_version }}"
+        git push origin main
