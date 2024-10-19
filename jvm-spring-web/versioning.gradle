@@ -1,10 +1,8 @@
 // versioning.gradle
 
-def versionFile = file('version.txt')
-
 // Function to read version from file
 ext.readVersion = {
-    //def versionFile = file('version.txt')
+    def versionFile = file('version.txt')
     if (versionFile.exists()) {
         return versionFile.text.trim()
     } else {
@@ -14,6 +12,7 @@ ext.readVersion = {
 
 // Function to write version to file
 def writeVersion(newVersion) {
+    def versionFile = file('version.txt')
     versionFile.text = newVersion
 }
 
