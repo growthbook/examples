@@ -33,9 +33,19 @@ jobs:
         # Extracting version type (major/minor/patch) from commit message or PR title
         if [[ "$GITHUB_REF" == refs/heads/release/* ]]; then
           VERSION_TYPE="minor"
-        elif [[ "$GITHUB_REF" == refs/heads/main ]]; then
+        # elif [[ "$GITHUB_REF" == refs/heads/main ]]; then
+        #   VERSION_TYPE="patch"
+        else
           VERSION_TYPE="patch"
         fi
+
+        # Determine if a major version bump is needed (using a ceiling of 100 for minor version)
+        CURRENT_VERSION=$(./gradlew -q printVersion)
+        MINOR_VERSION=$(echo $CURRENT_VERSION | awk -F. '{print $2}')
+        if [[ "$MINOR_VERSION" -ge 100 ]]; then
+          VERSION_TYPE="major"
+        fi
+
         # Bumping version accordingly using a custom script or Gradle task
         NEW_VERSION=$(./gradlew -q printVersion)
         ./gradlew bumpVersion -Ptype=$VERSION_TYPE
@@ -49,4 +59,23 @@ jobs:
         git config user.email "actions@github.com"
         git commit -am "Bump version to ${{ steps.determine_version.outputs.new_version }}"
         git push origin main
+      working-directory: ./jvm-spring-web
+
+    - name: Generate Summary of Changes
+      id: generate_summary
+      run: |
+        SUMMARY_FILE="change_summary.md"
+        git log -1 --pretty=format:"%h - %s (%an)" >> $SUMMARY_FILE
+        echo "Summary of changes updated in $SUMMARY_FILE"
+        cat $SUMMARY_FILE
+      working-directory: ./jvm-spring-web
+
+    - name: Create Release Notes for Major Version
+      if: ${{ steps.determine_version.outputs.new_version }} =~ '^\d+\.0\.0$'
+      run: |
+        RELEASE_NOTES_FILE="release_notes.md"
+        RELEASE_NOTES="# Release Notes for version ${{ steps.determine_version.outputs.new_version }}\n\n$(cat change_summary.md)"
+        echo -e "$RELEASE_NOTES" > $RELEASE_NOTES_FILE
+        echo "Release notes created in $RELEASE_NOTES_FILE"
+        cat $RELEASE_NOTES_FILE
       working-directory: ./jvm-spring-web
