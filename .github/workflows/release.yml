@@ -32,8 +32,14 @@ jobs:
         # Use the provided version type input for the bump, default to 'patch' if not provided
         VERSION_TYPE="${{ github.event.inputs.version_type || 'patch' }}"
 
-        # Determine the next version
+        # Determine if a major version bump is needed (using a ceiling of 100 for minor version)
         CURRENT_VERSION=$(./gradlew -q printVersion)
+        MINOR_VERSION=$(echo $CURRENT_VERSION | awk -F. '{print $2}')
+        if [[ "$MINOR_VERSION" -ge 100 ]]; then
+          VERSION_TYPE="major"
+        fi
+
+        # Determine the next version
         ./gradlew bumpVersion -Ptype=$VERSION_TYPE
         NEW_VERSION=$(./gradlew -q printVersion)
         echo "::set-output name=new_version::$NEW_VERSION"
