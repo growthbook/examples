@@ -55,7 +55,7 @@ jobs:
         # Bumping version accordingly using a custom script or Gradle task
         ./gradlew bumpVersion -Ptype=$VERSION_TYPE
         NEW_VERSION=$(./gradlew -q printVersion)
-        echo "::set-output name=new_version::$NEW_VERSION"
+        echo "new_version=$NEW_VERSION" >> $GITHUB_ENV
       working-directory: ${{ env.WORKING_DIR }}
 
     - name: Generate and Commit Summary of Changes
@@ -67,14 +67,14 @@ jobs:
         echo "Summary of changes updated in $SUMMARY_FILE"
         cat $SUMMARY_FILE
         git add $SUMMARY_FILE
-        git commit -m "Update change summary for version ${{ steps.determine_version.outputs.new_version }}"
+        git commit -m "Update change summary for version ${{ env.new_version }}"
         git push origin HEAD
       working-directory: ${{ env.WORKING_DIR }}
 
     - name: Commit Version Changes for Feature Branches
       run: |
         git add version.txt
-        git commit -m "Bump version to ${{ steps.determine_version.outputs.new_version }}"
+        git commit -m "Bump version to ${{ env.new_version }}"
         git push origin HEAD
       working-directory: ${{ env.WORKING_DIR }}
 
@@ -82,8 +82,8 @@ jobs:
       if: ${{ github.ref == 'refs/heads/release/*'}}
       uses: softprops/action-gh-release@v1
       with:
-        tag_name: ${{ steps.determine_version.outputs.new_version }}
-        name: Release ${{ steps.determine_version.outputs.new_version }}
+        tag_name: ${{ env.new_version }}
+        name: Release ${{ env.new_version }}
         body: |
           $(cat change_summary.md)
       env:
