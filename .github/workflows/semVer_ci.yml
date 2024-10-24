@@ -1,5 +1,8 @@
 name: Semantic Versioning and Build
 
+env:
+  WORKING_DIR: ./jvm-spring-web
+
 on:
   push:
     branches:
@@ -18,25 +21,28 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v3
       with:
-        working-directory: ./jvm-spring-web
+        working-directory: ${{ env.WORKING_DIR }}
+
+    - name: Configure Git
+      run: |
+        git config user.name "GitHub Actions"
+        git config user.email "actions@github.com"
+      working-directory: ${{ env.WORKING_DIR }}
 
     - name: Set up JDK
       uses: actions/setup-java@v3
       with:
         distribution: 'temurin'
         java-version: '17'
-        working-directory: ./jvm-spring-web
+        working-directory: ${{ env.WORKING_DIR }}
 
     - name: Determine Next Version
       id: determine_version
       run: |
         # Extracting version type (major/minor/patch) from commit message or PR title
+        VERSION_TYPE="patch"
         if [[ "$GITHUB_REF" == refs/heads/release/* ]]; then
           VERSION_TYPE="minor"
-        # elif [[ "$GITHUB_REF" == refs/heads/main ]]; then
-        #   VERSION_TYPE="patch"
-        else
-          VERSION_TYPE="patch"
         fi
 
         # Determine if a major version bump is needed (using a ceiling of 100 for minor version)
@@ -50,32 +56,35 @@ jobs:
         NEW_VERSION=$(./gradlew -q printVersion)
         ./gradlew bumpVersion -Ptype=$VERSION_TYPE
         echo "::set-output name=new_version::$NEW_VERSION"
-      working-directory: ./jvm-spring-web
+      working-directory: ${{ env.WORKING_DIR }}
 
-    - name: Commit Version Change
-      if: ${{ github.ref == 'refs/heads/main' }}
-      run: |
-        git config user.name "GitHub Actions"
-        git config user.email "actions@github.com"
-        git commit -am "Bump version to ${{ steps.determine_version.outputs.new_version }}"
-        git push origin main
-      working-directory: ./jvm-spring-web
-
-    - name: Generate Summary of Changes
-      id: generate_summary
+    - name: Generate and Commit Summary of Changes
+      if: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/feat/auto-release'}}
       run: |
         SUMMARY_FILE="change_summary.md"
         git log -1 --pretty=format:"%h - %s (%an)" >> $SUMMARY_FILE
         echo "Summary of changes updated in $SUMMARY_FILE"
         cat $SUMMARY_FILE
-      working-directory: ./jvm-spring-web
+        git add $SUMMARY_FILE
+        git commit -m "Update change summary for version ${{ steps.determine_version.outputs.new_version }}"
+        git push origin HEAD
+      working-directory: ${{ env.WORKING_DIR }}
 
-    - name: Create Release Notes for Major Version
-      if: ${{ steps.determine_version.outputs.new_version }} =~ '^\d+\.0\.0$'
+    - name: Commit Version Changes for Feature Branches
+      if: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/release/*' }}
       run: |
-        RELEASE_NOTES_FILE="release_notes.md"
-        RELEASE_NOTES="# Release Notes for version ${{ steps.determine_version.outputs.new_version }}\n\n$(cat change_summary.md)"
-        echo -e "$RELEASE_NOTES" > $RELEASE_NOTES_FILE
-        echo "Release notes created in $RELEASE_NOTES_FILE"
-        cat $RELEASE_NOTES_FILE
-      working-directory: ./jvm-spring-web
+        git add version.txt
+        git commit -m "Bump version to ${{ steps.determine_version.outputs.new_version }}"
+        git push origin HEAD
+      working-directory: ${{ env.WORKING_DIR }}
+
+    - name: Create GitHub Release for Major Version
+      if: ${{ github.ref == 'refs/heads/release/*'}}
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ steps.determine_version.outputs.new_version }}
+        name: Release ${{ steps.determine_version.outputs.new_version }}
+        body: |
+          $(cat change_summary.md)
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
