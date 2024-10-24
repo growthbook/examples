@@ -59,7 +59,8 @@ jobs:
       working-directory: ${{ env.WORKING_DIR }}
 
     - name: Generate and Commit Summary of Changes
-      if: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/feat/auto-release'}}
+      # Is this task, even necessary?
+      if: ${{ github.ref == 'refs/heads/feat/auto-release'}}
       run: |
         SUMMARY_FILE="change_summary.md"
         git log -1 --pretty=format:"%h - %s (%an)" >> $SUMMARY_FILE
@@ -71,14 +72,13 @@ jobs:
       working-directory: ${{ env.WORKING_DIR }}
 
     - name: Commit Version Changes for Feature Branches
-      if: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/release/*' }}
       run: |
         git add version.txt
         git commit -m "Bump version to ${{ steps.determine_version.outputs.new_version }}"
         git push origin HEAD
       working-directory: ${{ env.WORKING_DIR }}
 
-    - name: Create GitHub Release for Major Version
+    - name: Create GitHub Release for Release Branches
       if: ${{ github.ref == 'refs/heads/release/*'}}
       uses: softprops/action-gh-release@v1
       with:
