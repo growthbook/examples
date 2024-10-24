@@ -1,1 +1,1 @@
-fa849ef - use release action and commit changes (Madhu Chavva)
+fa849ef - use release action and commit changes (Madhu Chavva)a6714cd - add release workflow (Madhu Chavva)
