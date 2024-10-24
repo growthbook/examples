@@ -46,7 +46,7 @@ task bumpVersion {
 
         def newVersion = currentVersion.join('.')
         writeVersion(newVersion)
-        println "Version bumped to $newVersion"
+        println "Version bumped to $newVersion from $version"
     }
 }
 

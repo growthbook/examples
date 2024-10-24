@@ -53,8 +53,8 @@ jobs:
         fi
 
         # Bumping version accordingly using a custom script or Gradle task
-        NEW_VERSION=$(./gradlew -q printVersion)
         ./gradlew bumpVersion -Ptype=$VERSION_TYPE
+        NEW_VERSION=$(./gradlew -q printVersion)
         echo "::set-output name=new_version::$NEW_VERSION"
       working-directory: ${{ env.WORKING_DIR }}
 
