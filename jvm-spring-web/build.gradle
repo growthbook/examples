@@ -4,8 +4,12 @@ plugins {
 	id 'java'
 }
 
+apply from: 'versioning.gradle'
+
 group = 'com.example'
-version = '0.0.1-SNAPSHOT'
+//version = '0.0.1-SNAPSHOT'
+// Set the project version
+version = readVersion()
 sourceCompatibility = '17'
 
 repositories {
