@@ -9,7 +9,7 @@ Before you begin ensure you have the following:
 
 ## Overview
 
-// TODO
+The guide below takes you through the steps to spin up this demo with a live connection to Contentful and GrowthBook.
 
 ## Setup Instructions
 
@@ -23,6 +23,8 @@ Before you begin ensure you have the following:
 4. Select **JavaScript** or **React** as your language
 5. Save your **API Host** URL and **Client Key** for later use
 
+![SDK connection UI](./screenshots/sdk-connection-data.png)
+
 **Configure Your Data Source**
 
 1. Go to **Metrics and Data** &rarr; **Data Sources** in GrowthBook
@@ -31,12 +33,16 @@ Before you begin ensure you have the following:
 4. Follow the connection guide
 5. Note your data source ID for later use
 
+![Data source id is the last of the URL on the data source page](./screenshots/data-source-id.png)
+
 **Generate API Key**
 
 1. Navigate to **Settings** &rarr; **API Keys**
 2. Click **Create New Key**
 3. Select `admin` role
 4. Save the generated key securely
+
+![API generation UI](./screenshots/api-keys.png)
 
 ### 2. Setting Up Contentful
 
@@ -111,7 +117,7 @@ npm run dev
 
 Let's create a simple A/B test comparing two product variants:
 
-// TODO screenshot
+![GrowthBook Example Product Page showing 3 different t-shirts](./screenshots/product-demo.png)
 
 1. Access Product Page
 
@@ -246,5 +252,5 @@ Data about which variation the user saw is sent to the client where an analytics
 
 ### Getting Help
 
-- Join our Community Forum
-- Submit issue on GitHuB
+- Join our [Community Forum](https://slack.growthbook.io/?ref=community-page)
+- Submit issue on [GitHub](https://github.com/growthbook/examples/contentful)
