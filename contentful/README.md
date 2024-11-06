@@ -4,7 +4,7 @@ This example codebase is a Next.js app that demonstrates how to integrate **Cont
 
 Before you begin ensure you have the following:
 
-[] [GrowthBook account](https://www.growthbook.io) (free tier available)
+[] [GrowthBook account](https://www.growthbook.io) (free tier available)  
 [] [Contentful account](https://www.contentful.com) (free tier available)
 
 ## Overview
@@ -158,7 +158,7 @@ The **GrowthBook Experiment** content model is fetched via the following GraphQL
 
 To get specific Variation content, make an additional call to the Contentful API using its `id` and `_typname`, or, as in the example below, add the fields for each Content Type you want to be able to experiment on.
 
-```graphql
+```ts
 // src/app/lib/growthbookExperiment.ts
 export const GROWTHBOOK_EXPERIMENT_GRAPHQL_FIELDS = `
     sys {
@@ -233,7 +233,8 @@ Data about which variation the user saw is sent to the client where an analytics
 
 2. Variations Not Switching
 
-- Confirm experiment is published
+- Confirm experiment has been started and is in state "Running"
+- Confirm experiment and it's parent container are published
 - Check Growthbook connection
 - Verify targeting attributes
 
