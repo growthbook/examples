@@ -24,7 +24,7 @@ const Product = ({ product }: { product: ProductInterface }) => (
 );
 
 export default async function Home() {
-  const slug = "products";
+  const slug = "product";
 
   const page = await getPage(slug);
 
@@ -63,14 +63,12 @@ export default async function Home() {
   const trackingData = gb.getDeferredTrackingCalls();
 
   return (
-    <div>
+    <div className="container mx-auto p-4">
       <h1>{page.title}</h1>
       <p>{page.description}</p>
-      <h2>Products</h2>
+      <h2 className="mt-6">Products</h2>
       <div className="product-container">
-        {items.map((item) => (
-          <Product key={item.sys.id} product={item} />
-        ))}
+        {items.map((item) => <Product key={item.sys.id} product={item} />)}
       </div>
       <GrowthBookTracking data={trackingData} />
     </div>

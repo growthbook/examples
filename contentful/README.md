@@ -1,66 +1,165 @@
-## Description
+This example codebase is a Next.js app that demonstrates how to integrate **Contentful** CMS and **GrowthBook** for A/B testing and feature flag management. This integration enables teams to run experiments directly from their familiar Contentful interface while leveraging GrowthBook's powerful experimentation capabilities.
 
-This is an example front-end app that uses Contentful as its Content Management System. In Contentful, there is a Growthbook app plugin that, once installed, will let your content creators create experiments on their own. This app has an example of how you can take a `Growthbook Experiment` content model and show the right variation to the user.
+## Requirements
 
-## Configuration
+Before you begin ensure you have the following:
 
-1. **Setting up Growthbook**
+[] [GrowthBook account](https://www.growthbook.io) (free tier available)
+[] [Contentful account](https://www.contentful.com) (free tier available)
 
-   a. First, create a free [GrowthBook Account](https://www.growthbook.io) and add a new SDK Connection, selecting JavaScript (or React) as the language.
+## Overview
 
-   b. Create a new [datasource](https://docs.growthbook.io/warehouses) and connect it to your data warehouse.
+// TODO
 
-   c. Go to **Settings -> API keys** and create a key with an `admin` role. (This is needed for Contentful to connect to Growthbook and add experiments and feature flags.)
+## Setup Instructions
 
-2. **Setting up Contentful**
+### 1. Setting Up GrowthBook
 
-   a. Next, create a free [Contentful Account](https://www.contentful.com).
+**Create Your SDK Connection**
 
-   b. Click the gear icon in the upper right and go to **API keys** and create a new API key. (This is used by your front-end app/this example app to connect to Contentful to get the content.)
+1. Log in to GrowthBook
+2. Navigate to **SDK Configuration** &rarr; **SDK Connections** in the sidebar
+3. Click **Add SDK Connection**
+4. Select **JavaScript** or **React** as your language
+5. Save your **API Host** URL and **Client Key** for later use
 
-   c. Also go to the gear icon and click on **CMA tokens** and create a new token. (This is used by a script within this example app to create example Content Models and Content within Contentful without you having to set it up manually.)
+**Configure Your Data Source**
 
-   d. Add the Growthbook App to your Contentful Space by going to **Apps -> Marketplace -> A/B tests -> Growthbook** and clicking Install. On the configuration page, enter the URL of your Growthbook instance, the API Key from step 1c, and the Datasource from step 1b. This will create a new content model called `Growthbook Experiment` that you can use to create experiments in Contentful.
+1. Go to **Metrics and Data** &rarr; **Data Sources** in GrowthBook
+2. Click **Add Data Source**
+3. Choose your preferred analytics platform
+4. Follow the connection guide
+5. Note your data source ID for later use
 
-3. **Setting up this example app**
+**Generate API Key**
 
-   a. Next, in this example root, copy `.env.local.example` to `.env.local` and fill in the values from your GrowthBook SDK Connection (step 1a), the Contentful API key info (step 2b), and the Contentful CMA token (step 2c).
+1. Navigate to **Settings** &rarr; **API Keys**
+2. Click **Create New Key**
+3. Select `admin` role
+4. Save the generated key securely
 
-   b. In the terminal run: `npm run create-contentful-content`. This will create the `Growthbook Example Page` and the `Growthbook Example Product` Content Models in Contentful. It will also create a `Growthbook Example Product Page` and four products as Contentful Content.
+### 2. Setting Up Contentful
 
-   c. Run `npm run dev` and go to the [product page](http://localhost:3000) to see the Contentful content.
+**Create API Access**
 
-4. **Pretend to be a Content Editor creating a GB A/B test**
+1. Log in to your Contentful Space
+2. Click the gear icon (Settings)
+3. Navigate to **API keys**
+4. Click **Add API key**
+5. Save the **Space ID**, **Content Delivery API** token, and **Content Preview API** token
 
-   a. In the Contentful app, go to the **Growthbook Example Product Page**, click the three dots next to the **Control** t-shirt in the Products collection, and click **Remove**.
+**Generate CMA Token**
 
-   b. Click **Add content** and select **Growthbook Experiment** as the Content Type.
+1. Still in Settings, go to **CMA tokens**
+2. Click **Create new token**
+3. Name it "GrowthBook Content Management Access"
+4. Be sure to securly save the token, as you won't be able to access it again.
 
-   c. Enter `Contentful Example` for the Experiment name.
+**Install GrowthBook Plugin**
 
-   d. Click "Add Variation" and select the Link an existing variant option. Select the **Control t-shirt**.
+// TODO May need revision
 
-   e. Click "Add Variation" and select the Link an existing variant option. Select the **Variant t-shirt**.
+1. Go to **Apps** &rarr; **Marketplace**
+2. Search for GrowthBook
+3. Click **Install**
+4. Configure the plugin:
 
-   f. The **Create New Experiment** should now be clickable. Click it.
+- Enter your GrowthBook API host URL
+- Paste your Admin API key
+- Set your data source
+- Click **Save**
 
-   g. Click start experiment.
+### 3. Configuring the Example App
 
-   h. Click **publish**.
+1. Clone the repository and install dependencies
 
-   i. Click `<-` to go back to the Product Page.
+```bash
+git clone https://github.com/growthbook/examples.git
+cd examples/contentful
+npm install
+```
 
-   j. Click **Publish** on the Product Page.
+2. Set up environmental variables:
 
-   k. Go to the [product page](http://localhost:3000) to see which content Growthbook has chosen to show. As this example initialized Growthbook with a random targeting attribute id, it pretends each page load is a new user. You can refresh a few times to see Growthbook serve the control t-shirt sometimes and the variant t-shirt other times.
+```bash
+cp .env.local.example .env.local
+```
 
-## How it Works
-
-This example uses server-side Growthbook. For client-side Growthbook, see the next-js example.
-
-The code in `src/app/lib/growthbookExperiment.ts` shows the GraphQL to get the **Growthbook Experiment** content model which contains the `featureFlagId` and the `variationsCollection`. In order to get the Variation you can either load the variation content by it's id and \_\_typename in a separate call to Contentful API, or add the fields for each Content Type you want to be able to experiment on like in the example below:
+3. Fill in your `.env.local` with the saved keys:
 
 ```
+CONTENTFUL_SPACE_ID=your_space_id
+CONTENTFUL_ACCESS_TOKEN=your_access_token
+CONTENTFUL_PREVIEW_ACCESS_TOKEN=your_preview_token
+CONTENTFUL_MANAGEMENT_TOKEN=CMA_token
+GROWTHBOOK_API_HOST=your_growthbook_url
+```
+
+4. Create initial content models:
+
+```bash
+npm run create-contentful-content
+```
+
+5. Start the development server:
+
+```bash
+npm run dev
+```
+
+**Running Your First Experiment**
+
+Let's create a simple A/B test comparing two product variants:
+
+// TODO screenshot
+
+1. Access Product Page
+
+- Open Contentful
+- Navigate to **GrowthBook Example: Product Page**
+- Click the overflow menu and remove the "Control t-shirt" from the Products collection
+
+2. Create Experiment
+
+- Click **Add content**
+- Select **GrowthBook Experiment**
+- Add an **Experiment Name**
+
+3. Add Variations
+
+- Click **Add Variation** &rarr; **Link an existing variant**
+- Select **Control t-shirt**
+- Repeat for **Variant t-shirt**
+
+4. Launch Experiment
+
+- Click **Create New Experiment**
+- Click **Start Experiment**
+- Click **Publish**
+
+5. Update Product Page
+
+- Return to Product Page
+- Click **Publish**
+
+6. View Results
+
+- View your product page
+- Refresh to see different variations
+- Notice how GrowthBook alternates between control and variant 😎
+
+## Technical Implementation
+
+This integration uses GrowthBook's server-side Next.js implementation for optimal performance. For additional examples of integrating GrowthBook with Next.js, including client-side implementation, see our other [Next.js examples](https://github.com/growthbook/examples/tree/main/next-js).
+
+### Content Model Structure
+
+The **GrowthBook Experiment** content model is fetched via the following GraphQL code, which contains the `featureFlagId` and the `variationsCollection`. The response contains data about your experiment content, as you set it up in Contentful.
+
+To get specific Variation content, make an additional call to the Contentful API using its `id` and `_typname`, or, as in the example below, add the fields for each Content Type you want to be able to experiment on.
+
+```graphql
+// src/app/lib/growthbookExperiment.ts
 export const GROWTHBOOK_EXPERIMENT_GRAPHQL_FIELDS = `
     sys {
         id
@@ -80,9 +179,11 @@ export const GROWTHBOOK_EXPERIMENT_GRAPHQL_FIELDS = `
 `;
 ```
 
-The `getVariation` function shows how to get the variation from it. Basically, calling `gb.getFeatureValue` with the `featureFlagId` will return the index of the variation to show in the `variationsCollection`.
+### Variation Selection Logic
 
-```
+The `getVariation` function uses your GrowthBook data to determine the variation's state. Calling `gb.getFeatureValue` with the `featureFlagId` returns the index of the variation to show in the `variationsCollection`.
+
+```ts
 export function getVariation(
   gb: GrowthBook,
   growthbookExperiment: GrowthbookExperimentInterface
@@ -91,27 +192,58 @@ export function getVariation(
   const variationsCollection = growthbookExperiment.variationsCollection;
   const index = gb.getFeatureValue(featureFlagId ?? "", 0);
 
-  // This can only happen if the experiment is out of sync with the published version.
   if (index > variationsCollection.items.length + 1) {
     return variationsCollection.items[0];
   }
-  const variation = variationsCollection.items[index];
-
-  return variation;
+  return variationsCollection.items[index];
 }
 ```
 
-The `src/app/page.tsx` file contains the Growthbook object and initialization. It also shows how you can convert GrowthbookExperiment to the variation the user should see.
+### GrowthBook Initializiation and Content Rendering
 
+In `src/app/page.tsx`, we configure and initialize GrowthBook. The following code uses the `getVariation` function from above to conditionally render the variation the user should see.
+
+```ts
+const items = page.productsCollection.items.map((item) => {
+  if (item.__typename === "GrowthbookExperiment") {
+    return getVariation(gb, item);
+  }
+
+  return item;
+});
 ```
- const items = page.productsCollection.items.map((item) => {
-    if (item.__typename === "GrowthbookExperiment") {
-      return getVariation(gb, item);
-    }
-    return item;
-  });
-```
 
-Server-fetched feature flags and experiment definitions are persisted in the Next.js data cache for 60 seconds (configurable in `src/app/lib/growthbookServer.ts`). For faster updates, there is a `POST /revalidate` route handler that can be triggered from an SDK Webhook in GrowthBook.
+### Caching
 
-Data about which variation the user saw is sent to the client where an analytics event is triggered (or console.log in these examples). This happens via the `GrowthBookTracking` client component defined in `src/app/lib/GrowthBookTracking`.
+Server-fetched feature flags and experiment definitions are persisted in the Next.js data cache for 60 seconds (configurable in `src/app/lib/growthbookServer.ts`). For faster updates, use the `POST /revalidate` route handler via an SDK Webhook in GrowthBook.
+
+### Tracking CallBack
+
+Data about which variation the user saw is sent to the client where an analytics event is triggered (or `console.log` in these examples). This happens via the `GrowthBookTracking` client component defined in `src/app/lib/GrowthBookTracking.ts`.
+
+## Troubleshooting
+
+### Common Issues
+
+1. Content Model Not Appearing
+
+- Verify CMA token permissions
+- Run `create-contentful-content` script again
+- Check Contentful Space access
+
+2. Variations Not Switching
+
+- Confirm experiment is published
+- Check Growthbook connection
+- Verify targeting attributes
+
+3. Plugin Installation Fails
+
+- Verify admin API key permissions
+- Check Growthbook URL format
+- Confirm data source ID
+
+### Getting Help
+
+- Join our Community Forum
+- Submit issue on GitHuB
