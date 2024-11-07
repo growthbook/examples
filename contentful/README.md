@@ -162,7 +162,7 @@ This integration uses GrowthBook's server-side Next.js implementation for optima
 
 The **GrowthBook Experiment** content model is fetched via the following GraphQL code, which contains the `featureFlagId` and the `variationsCollection`. The response contains data about your experiment content, as you set it up in Contentful.
 
-To get specific Variation content, make an additional call to the Contentful API using its `id` and `_typname`, or, as in the example below, add the fields for each Content Type you want to be able to experiment on.
+To get specific Variation content, make an additional call to the Contentful API using its `id` and `_typename`, or, as in the example below, add the fields for each Content Type you want to be able to experiment on.
 
 ```ts
 // src/app/lib/growthbookExperiment.ts
