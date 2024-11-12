@@ -9,10 +9,10 @@ export const growthbookMiddleware = createMiddleware<{
 }>(async (c, next) => {
   // Instantiate GrowthBook with your connection details
   const gb = new GrowthBook({
-    apiHost: "https://cdn.growthbook.io",
-    clientKey: "sdk-QHVPAFSjyMARduDY",
+    apiHost: "https://cdn.growthbook.io", // Update with your API host
+    clientKey: "YOUR-SDK-KEY",
     trackingCallback: (experiment, result) => {
-      console.log("Tracking", { experiment, result }); // Update function to send experiment exposure to your analytics platform
+      console.log("Experiment Viewed", { experiment, result }); // Update function to send experiment exposure to your analytics platform
     },
   });
 
@@ -25,14 +25,14 @@ export const growthbookMiddleware = createMiddleware<{
     setCookie(c, "gb_uuid", uuid);
   }
 
-  // Pass GrowthBook the ID and other attributes as need
+  // Pass GrowthBook the ID and other attributes as needed
   gb.setAttributes({
     id: uuid,
     // ...
   });
 
   // Initialize GrowthBook
-  await gb.init({ timeout: 5000 });
+  await gb.init({ timeout: 1000 });
 
   // Add the instance to the context
   c.set("gb", gb);
