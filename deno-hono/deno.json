@@ -1,0 +1,17 @@
+{
+  "imports": {
+    "@growthbook/growthbook": "jsr:@growthbook/growthbook@^1.2.2",
+    "hono": "jsr:@hono/hono@^4.6.8",
+    "tailwindcss": "npm:tailwindcss@^3.4.14"
+  },
+  "tasks": {
+    "start": "deno run --allow-net main.ts",
+    "watch:jsx": "deno run -A --watch main.tsx",
+    "watch:css": "deno run -A npm:tailwindcss -i src/css/input.css -o static/style.css --watch",
+    "dev": "deno task watch:css & deno task watch:jsx"
+  },
+  "compilerOptions": {
+    "jsx": "precompile",
+    "jsxImportSource": "hono/jsx"
+  }
+}
