@@ -1,7 +1,7 @@
 import { Props } from "../../main.tsx";
 
 export function Hero({ gb }: Props) {
-  const headline = gb?.getFeatureValue(
+  const headline = gb.getFeatureValue(
     "headline",
     "Revolutionize Your Finances with AI",
   );
