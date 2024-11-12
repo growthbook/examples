@@ -13,15 +13,18 @@ const app = new Hono();
 app.use("/static/*", serveStatic({ root: "./" }));
 app.use("/favicon.ico", serveStatic({ path: "./favicon.ico" }));
 
-export type Props = { companyName?: string; gb?: GrowthBook };
+export type Props = { companyName?: string; gb: GrowthBook };
 
-function Layout({ companyName, children }: PropsWithChildren<Props>) {
+function Layout(
+  { companyName, children }: PropsWithChildren<Omit<Props, "gb">>,
+) {
   return (
     <html>
       <head lang="en">
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Deno + Hono + GrowthBook</title>
+        <link rel="icon" href="/favicon.ico" />
         <link rel="stylesheet" href="/static/style.css" />
       </head>
 

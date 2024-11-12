@@ -1,6 +1,6 @@
 import { Props } from "../../main.tsx";
 
-export function Navbar({ companyName }: Props) {
+export function Navbar({ companyName }: Omit<Props, "gb">) {
   return (
     <header className="px-4 lg:px-6 h-14 flex items-center">
       <a className="flex items-center justify-center gap-1" href="#">

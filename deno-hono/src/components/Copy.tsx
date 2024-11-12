@@ -1,6 +1,6 @@
 import type { Props } from "../../main.tsx";
 
-export function Copy({ companyName }: Props) {
+export function Copy({ companyName }: Omit<Props, "gb">) {
   return (
     <>
       <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-100">
