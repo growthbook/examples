@@ -35,7 +35,7 @@ public class AcmeDonutsFeatureService extends GBFeaturesRepository {
     }
 
     void handleError(FeatureFetchException e) {
-        e.printStackTrace();
+        //e.printStackTrace();
 
         switch (e.getErrorCode()) {
             case NO_RESPONSE_ERROR -> {
@@ -46,9 +46,7 @@ public class AcmeDonutsFeatureService extends GBFeaturesRepository {
                 // SSE is not applicable for this service but this was added here for completion.
             }
 
-            case CONFIGURATION_ERROR, UNKNOWN -> {
-                throw new RuntimeException(e);
-            }
+            case CONFIGURATION_ERROR, UNKNOWN -> throw new RuntimeException(e);
         }
     }
 }
