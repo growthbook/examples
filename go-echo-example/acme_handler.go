@@ -1,24 +1,28 @@
 package main
 
 import (
+	"net/http"
 	"time"
 
 	"github.com/growthbook/growthbook-golang"
+	"github.com/labstack/echo/v4"
 )
 
-// Handles multiple feature lookups.
+// Handles multiple feature lookups in one handler.
 
-func acmeHandler(gb *growthbook.Client, attrs growthbook.Attributes) (map[string]any, error) {
+func acmeHandler(c echo.Context) error {
+	cc := c.(*CustomContext)
+
 	// String value.
-	bannerText, err := gb.EvalFeature("banner_text", attrs)
+	bannerText, err := cc.GB.EvalFeature("banner_text", cc.Attributes)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	// Boolean feature flag.
-	useDarkMode, err := gb.EvalFeature("dark_mode", attrs)
+	useDarkMode, err := cc.GB.EvalFeature("dark_mode", cc.Attributes)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	// Compound value.
@@ -26,25 +30,25 @@ func acmeHandler(gb *growthbook.Client, attrs growthbook.Attributes) (map[string
 		MealType: "standard",
 		Dessert:  "Apple Pie",
 	}
-	mealOverrides, err := gb.EvalFeature("meal_overrides_gluten_free", attrs)
+	mealOverrides, err := cc.GB.EvalFeature("meal_overrides_gluten_free", cc.Attributes)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	// Evaluate an inline experiment.
 	experiment := growthbook.
 		NewExperiment("font_colour").
 		WithVariations("red", "orange", "yellow", "green", "blue", "purple")
-	result, err := gb.Run(experiment, attrs)
+	result, err := cc.GB.Run(experiment, cc.Attributes)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	var usernameColour = result.Value.(string)
 
 	// Debugging data for the response.
-	year, month, day := gb.LatestFeatureUpdate().Date()
+	year, month, day := cc.GB.LatestFeatureUpdate().Date()
 
-	return map[string]any{
+	retval := map[string]any{
 		"greeting":       bannerText.GetValueWithDefault("???"),
 		"dark_mode":      useDarkMode.On,
 		"font_colour":    usernameColour,
@@ -55,9 +59,11 @@ func acmeHandler(gb *growthbook.Client, attrs growthbook.Attributes) (map[string
 				"month": month,
 				"year":  year,
 				"date":  day,
-				"time":  gb.LatestFeatureUpdate().Format(time.Kitchen),
+				"time":  cc.GB.LatestFeatureUpdate().Format(time.Kitchen),
 			},
-			"features": gb.Features(), // See all features, for debugging.
+			"features": cc.GB.Features(), // See all features, for debugging.
 		},
-	}, nil
+	}
+
+	return c.JSON(http.StatusOK, retval)
 }
