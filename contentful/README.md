@@ -63,8 +63,6 @@ The guide below takes you through the steps to spin up this demo with a live con
 
 **Install GrowthBook Plugin**
 
-// TODO May need revision
-
 1. Go to **Apps** &rarr; **Marketplace**
 2. Search for GrowthBook
 3. Click **Install**
