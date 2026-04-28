@@ -2,7 +2,7 @@ import { configureServerSideGrowthBook } from "@/lib/growthbookServer";
 import { cookies } from "next/headers";
 import { GB_UUID_COOKIE } from "@/middleware";
 import { GrowthBook } from "@growthbook/growthbook";
-import { GrowthBookTracking } from "@/lib/GrowthBookTracking";
+import { growthbookManagedWarehouseServerPlugins } from "@/lib/growthbookManagedWarehouse";
 
 export default async function AsyncComponent() {
   // Helper to configure cache for next.js
@@ -13,6 +13,7 @@ export default async function AsyncComponent() {
     apiHost: process.env.NEXT_PUBLIC_GROWTHBOOK_API_HOST,
     clientKey: process.env.NEXT_PUBLIC_GROWTHBOOK_CLIENT_KEY,
     decryptionKey: process.env.NEXT_PUBLIC_GROWTHBOOK_DECRYPTION_KEY,
+    plugins: growthbookManagedWarehouseServerPlugins(),
   });
   await gb.init({ timeout: 1000 });
 
@@ -27,10 +28,6 @@ export default async function AsyncComponent() {
   // Evaluate any feature flags
   const feature1Enabled = gb.isOn("feature1");
   const feature2Value = gb.getFeatureValue("feature2", "fallback");
-
-  // If the above features ran any experiments, get the tracking call data
-  // This is passed into the <GrowthBookTracking> client component below
-  const trackingData = gb.getDeferredTrackingCalls();
 
   // Cleanup your GrowthBook instance
   gb.destroy();
@@ -59,8 +56,6 @@ export default async function AsyncComponent() {
           feature2: <strong>{feature2Value}</strong>
         </li>
       </ul>
-
-      <GrowthBookTracking data={trackingData} />
     </div>
   );
 }

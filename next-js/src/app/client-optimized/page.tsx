@@ -1,6 +1,7 @@
 import { configureServerSideGrowthBook } from "@/lib/growthbookServer";
 import ClientApp from "./ClientApp";
 import { GrowthBook } from "@growthbook/growthbook";
+import { growthbookManagedWarehouseServerPlugins } from "@/lib/growthbookManagedWarehouse";
 
 export default async function PrerenderedClientPage() {
   // Helper to configure cache for next.js
@@ -11,6 +12,7 @@ export default async function PrerenderedClientPage() {
     apiHost: process.env.NEXT_PUBLIC_GROWTHBOOK_API_HOST,
     clientKey: process.env.NEXT_PUBLIC_GROWTHBOOK_CLIENT_KEY,
     decryptionKey: process.env.NEXT_PUBLIC_GROWTHBOOK_DECRYPTION_KEY,
+    plugins: growthbookManagedWarehouseServerPlugins(),
   });
   await gb.init({ timeout: 1000 });
 

@@ -1,15 +1,15 @@
 "use client";
-import { onExperimentView } from "@/lib/GrowthBookTracking";
 import { GrowthBookPayload } from "@growthbook/growthbook";
 import { GrowthBook, GrowthBookProvider } from "@growthbook/growthbook-react";
 import { PropsWithChildren, useMemo } from "react";
-import { GB_UUID_COOKIE } from "@/middleware";
-import Cookies from "js-cookie";
+import { growthbookManagedWarehouseClientPlugins } from "@/lib/growthbookManagedWarehouse";
 
 export default function ClientApp({
   payload,
   children,
 }: PropsWithChildren<{ payload: GrowthBookPayload }>) {
+  const isBrowser = typeof window !== "undefined";
+
   // Create a singleton GrowthBook instance for this page
   const gb = useMemo(
     () =>
@@ -17,16 +17,13 @@ export default function ClientApp({
         apiHost: process.env.NEXT_PUBLIC_GROWTHBOOK_API_HOST,
         clientKey: process.env.NEXT_PUBLIC_GROWTHBOOK_CLIENT_KEY,
         decryptionKey: process.env.NEXT_PUBLIC_GROWTHBOOK_DECRYPTION_KEY,
-        trackingCallback: onExperimentView,
-        attributes: {
-          id: Cookies.get(GB_UUID_COOKIE),
-        },
+        plugins: growthbookManagedWarehouseClientPlugins(isBrowser),
       }).initSync({
         payload,
         // Optional, enable streaming updates
         streaming: true,
       }),
-    [payload]
+    [payload, isBrowser]
   );
 
   return <GrowthBookProvider growthbook={gb}>{children}</GrowthBookProvider>;

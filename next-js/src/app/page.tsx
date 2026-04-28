@@ -89,11 +89,19 @@ export default function Home() {
           from an SDK Webhook in GrowthBook.
         </p>
         <p>
-          If an experiment is run server-side, data about which variation the
-          user saw is sent to the client where an analytics event is triggered
-          (or console.log in these examples). This happens via the{" "}
-          <code>GrowthBookTracking</code> client component defined in{" "}
-          <code>src/lib/GrowthBookTracking</code>.
+          Experiment views and feature evaluations are sent to GrowthBook
+          Managed Warehouse using the{" "}
+          <code>growthbookTrackingPlugin</code> and{" "}
+          <code>autoAttributesPlugin</code> (client only) from{" "}
+          <code>@growthbook/growthbook/plugins</code>. See the{" "}
+          <a
+            href="https://docs.growthbook.io/app/managed-warehouse#client-side-javascript--react"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Managed Warehouse docs
+          </a>
+          .
         </p>
       </section>
     </main>

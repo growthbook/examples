@@ -4,7 +4,7 @@ import ClientApp from "./ClientApp";
 import RevalidateMessage from "@/app/revalidate/RevalidateMessage";
 import { GrowthBook } from "@growthbook/growthbook";
 import { configureServerSideGrowthBook } from "@/lib/growthbookServer";
-import { GrowthBookTracking } from "@/lib/GrowthBookTracking";
+import { growthbookManagedWarehouseServerPlugins } from "@/lib/growthbookManagedWarehouse";
 import ClientComponent from "./ClientComponent";
 
 export default async function ServerCombo() {
@@ -16,6 +16,7 @@ export default async function ServerCombo() {
     apiHost: process.env.NEXT_PUBLIC_GROWTHBOOK_API_HOST,
     clientKey: process.env.NEXT_PUBLIC_GROWTHBOOK_CLIENT_KEY,
     decryptionKey: process.env.NEXT_PUBLIC_GROWTHBOOK_DECRYPTION_KEY,
+    plugins: growthbookManagedWarehouseServerPlugins(),
   });
   await gb.init({ timeout: 1000 });
 
@@ -31,10 +32,6 @@ export default async function ServerCombo() {
   // Get the payload to hydrate the client-side GrowthBook instance
   // We need the decrypted payload so the initial client-render can be synchronous
   const payload = gb.getDecryptedPayload();
-
-  // If the above features ran any experiments, get the tracking call data
-  // This is passed into the <GrowthBookTracking> client component below
-  const trackingData = gb.getDeferredTrackingCalls();
 
   // Cleanup your GrowthBook instance
   gb.destroy();
@@ -62,8 +59,6 @@ export default async function ServerCombo() {
       </ClientApp>
 
       <RevalidateMessage />
-
-      <GrowthBookTracking data={trackingData} />
     </div>
   );
 }
