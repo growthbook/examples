@@ -9,8 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@growthbook/growthbook": "^1.6.5",
-    "@growthbook/growthbook-react": "^1.6.5",
+    "@growthbook/growthbook": "file:../../growthbook/packages/sdk-js",
+    "@growthbook/growthbook-react": "file:../../growthbook/packages/sdk-react",
     "js-cookie": "^3.0.5",
     "next": "14.2.2",
     "react": "^18",

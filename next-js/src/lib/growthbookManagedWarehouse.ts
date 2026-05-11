@@ -1,3 +1,4 @@
+import { growthbookErrorTrackingPlugin } from "@growthbook/growthbook";
 import {
   autoAttributesPlugin,
   growthbookTrackingPlugin,
@@ -12,6 +13,12 @@ const trackingPlugin = () =>
     debug: true,
   });
 
+/** Install after {@link growthbookTrackingPlugin} on the same GrowthBook instance. */
+const errorTrackingPlugin = () =>
+  growthbookErrorTrackingPlugin({
+    release: process.env.NEXT_PUBLIC_APP_RELEASE,
+  });
+
 /**
  * Managed Warehouse event tracking for browser GrowthBook instances.
  * Pass `includeAutoAttributes` only when `typeof window !== "undefined"` so SSR
@@ -21,7 +28,7 @@ const trackingPlugin = () =>
 export function growthbookManagedWarehouseClientPlugins(
   includeAutoAttributes: boolean
 ) {
-  const plugins = [trackingPlugin()];
+  const plugins = [trackingPlugin(), errorTrackingPlugin()];
   if (includeAutoAttributes) {
     plugins.unshift(
       autoAttributesPlugin({
@@ -35,5 +42,5 @@ export function growthbookManagedWarehouseClientPlugins(
 
 /** Same ingest pipeline without auto-attributes (server has no `window`). */
 export function growthbookManagedWarehouseServerPlugins() {
-  return [trackingPlugin()];
+  return [trackingPlugin(), errorTrackingPlugin()];
 }

@@ -60,6 +60,10 @@ export default function Home() {
             Supports experimental Partial Prerendering
           </li>
           <li>
+            <Link href="/errors-demo">Managed warehouse error tracking</Link> —{" "}
+            Throw a test error and send it through the ingest pipeline
+          </li>
+          <li>
             <Link href="/client">Client Rendering (Unoptimized)</Link> - Fetch
             and use flags client-side (flicker warning)
           </li>
