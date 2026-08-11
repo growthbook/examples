@@ -1,0 +1,4 @@
+fastapi>=0.110
+uvicorn>=0.29
+growthbook>=2.4.0
+redis>=5.0
