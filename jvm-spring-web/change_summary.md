@@ -1,0 +1,1 @@
+fa849ef - use release action and commit changes (Madhu Chavva)a6714cd - add release workflow (Madhu Chavva)733cecc - read latest version for commit (Madhu Chavva)bdc9264 - fix set_output warning (Madhu Chavva)5c2120a - use minor version ceiling (Madhu Chavva)
