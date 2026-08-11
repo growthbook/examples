@@ -39,6 +39,11 @@ jobs:
           VERSION: ${{ github.event.client_payload.version || inputs.version }}
         run: |
           set -euo pipefail
+          # Validate untrusted dispatch inputs: sdk becomes a filename, so keep
+          # it to a strict slug (no path traversal); version must be plain x.y.z.
+          if ! echo "$SDK" | grep -qE '^[a-z0-9-]+$'; then
+            echo "SDK '$SDK' is not a valid slug"; exit 1
+          fi
           if ! echo "$VERSION" | grep -qE '^[0-9]+\.[0-9]+\.[0-9]+$'; then
             echo "Version '$VERSION' is not x.y.z"; exit 1
           fi
