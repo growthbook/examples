@@ -4,10 +4,10 @@
     "capabilities": [
       "streaming",
       "redirects",
+      "encryption",
       "caseInsensitiveRegex",
       "caseInsensitiveMembership",
       "stickyBucketing",
-      "encryption",
       "looseUnmarshalling",
       "namespacesV2",
       "prerequisites",
