@@ -10,27 +10,63 @@ name: SDK version capabilities
 # and commits back to the PR branch. Empty `/capabilities` -> version-only.
 # Unknown tokens are rejected with a comment and nothing changes.
 #
-# Differences from the main app (deliberately stubbed to detangle from its deps):
-#   - Doc regen calls .github/scripts/gen-sdk-info-stub.mjs instead of the real
-#     `pnpm --filter shared gen-sdk-resources-for-docs` (which needs the full
-#     shared + sdk-js build). In the main app that step is the existing
-#     pre-commit hook; here we invoke the stub explicitly.
+# Security model (this command has write access + commits/pushes):
+#   - authorize job: the commenter must have write/maintain/admin on the repo.
+#   - same-repo only: cross-repository (fork) PRs are skipped, so untrusted fork
+#     code is never run with the write token. Combined with the authz gate, the
+#     branch under test was pushed by a write-access user (the bot), not an
+#     external attacker.
 #
-# issue_comment workflows only run from the copy on the default branch, so this
-# must be on `main` to fire.
+# Differences from the main app (stubbed to detangle from its deps):
+#   - Doc regen calls .github/scripts/gen-sdk-info-stub.mjs instead of the real
+#     `gen-sdk-resources-for-docs`.
+#
+# issue_comment workflows only run from the copy on the default branch.
 
 on:
   issue_comment:
     types: [created]
 
 permissions:
-  contents: write
-  pull-requests: write
+  contents: read
+  pull-requests: read
 
 jobs:
-  capabilities:
+  authorize:
     if: ${{ github.event.issue.pull_request && startsWith(github.event.comment.body, '/capabilities') }}
     runs-on: ubuntu-latest
+    outputs:
+      ok: ${{ steps.check.outputs.ok }}
+    steps:
+      - name: Require trusted commenter + same-repo PR
+        id: check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.issue.number }}
+          # Set by GitHub, cannot be spoofed. OWNER/MEMBER/COLLABORATOR = trusted
+          # (repo owner / org member / invited collaborator). Avoids the
+          # collaborators-permission API, which the default GITHUB_TOKEN may not
+          # be allowed to call.
+          ASSOC: ${{ github.event.comment.author_association }}
+        run: |
+          set -euo pipefail
+          cross="$(gh pr view "$PR" -R "$REPO" --json isCrossRepository --jq '.isCrossRepository')"
+          echo "author_association=$ASSOC cross_repo=$cross"
+          ok=false
+          case "$ASSOC" in
+            OWNER|MEMBER|COLLABORATOR) [[ "$cross" == "false" ]] && ok=true ;;
+          esac
+          echo "ok=$ok" >> "$GITHUB_OUTPUT"
+          [[ "$ok" == "true" ]] || echo "Not authorized ($ASSOC, cross_repo=$cross) — skipping."
+
+  capabilities:
+    needs: authorize
+    if: ${{ needs.authorize.outputs.ok == 'true' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       - uses: actions/checkout@v4
         with:
@@ -65,8 +101,8 @@ jobs:
         run: |
           set -uo pipefail
           CSV="$(printf '%s\n' "$COMMENT" | head -n1 | sed -E 's#^/capabilities##')"
-          # GitHub runs steps with `bash -e`; the apply script exits 2/3 by design,
-          # so guard with `|| code=$?` to capture the code instead of aborting.
+          # GitHub runs steps with `bash -e`; the apply script exits 1/2/3 by
+          # design, so guard with `|| code=$?` to capture the code, not abort.
           code=0
           out="$(bash .github/scripts/apply-sdk-capabilities.sh "$PWD" "$SDK" "$VERSION" "$CSV")" || code=$?
           echo "$out"
@@ -83,6 +119,15 @@ jobs:
           RESULT: ${{ steps.apply.outputs.result }}
         run: |
           gh pr comment "$PR" --body "❌ Unknown capabilities: **${RESULT#invalid=}**. Valid values come from \`packages/shared/src/sdk-versioning/types.ts\`. No changes made."
+
+      - name: Fail on structural error
+        if: ${{ steps.pr.outputs.skip != 'true' && steps.apply.outputs.code != '0' && steps.apply.outputs.code != '2' && steps.apply.outputs.code != '3' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR: ${{ github.event.issue.number }}
+          CODE: ${{ steps.apply.outputs.code }}
+        run: |
+          gh pr comment "$PR" --body "⚠️ \`/capabilities\` could not run (internal error, exit \`$CODE\`). No changes made — please check the workflow logs."
           exit 1
 
       - name: Acknowledge version-only
