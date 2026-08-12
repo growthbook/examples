@@ -101,13 +101,10 @@ jobs:
 
             #### Did this release add a gated capability?
 
-            Comment on this PR and the bot does the rest:
+            Comment on this PR and the bot does the rest (validates each value against `types.ts`):
 
             ```
             /capabilities streaming, redirects
             ```
-
-            It validates each value against `types.ts`, sets them on this version entry,
-            regenerates docs, and commits back.
 
             **Otherwise, just merge** — recording the version is all that's needed.
