@@ -96,14 +96,19 @@ jobs:
           title: "chore(sdk-versions): ${{ steps.bump.outputs.sdk }} ${{ steps.bump.outputs.version }}"
           labels: sdk-versions, automated
           body: |
-            Automated from a `${{ steps.bump.outputs.sdk }}` release. Prepends a version-only
-            entry to `${{ steps.bump.outputs.file }}` and regenerates the derived docs artifact.
+            Automated bump for the **${{ steps.bump.outputs.sdk }}** SDK
+            **${{ steps.bump.outputs.version }}** release — adds it to
+            `${{ steps.bump.outputs.file }}` and regenerates the derived docs.
 
-            **If this release introduced a gated capability**, comment on this PR:
+            #### Did this release add a gated capability?
+
+            Comment on this PR and the bot does the rest:
 
             ```
             /capabilities streaming, redirects
             ```
 
-            The bot validates each value against `types.ts`, sets them on the new version
-            entry, regenerates docs, and commits back. No capability? Just merge (version-only).
+            It validates each value against `types.ts`, sets them on this version entry,
+            regenerates docs, and commits back.
+
+            **Otherwise, just merge** — recording the version is all that's needed.
