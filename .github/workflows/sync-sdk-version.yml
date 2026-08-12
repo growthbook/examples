@@ -96,8 +96,7 @@ jobs:
           title: "chore(sdk-versions): ${{ steps.bump.outputs.sdk }} ${{ steps.bump.outputs.version }}"
           labels: sdk-versions, automated
           body: |
-            Automated bump for the **${{ steps.bump.outputs.sdk }}** SDK
-            **${{ steps.bump.outputs.version }}** release — adds it to
+            Automated version sync for the **${{ steps.bump.outputs.sdk }}** SDK - **${{ steps.bump.outputs.version }}** release — adds it to
             `${{ steps.bump.outputs.file }}` and regenerates the derived docs.
 
             #### Did this release add a gated capability?
