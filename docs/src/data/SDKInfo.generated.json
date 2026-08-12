@@ -1,0 +1,16 @@
+{
+  "rust": {
+    "latest": "0.2.1",
+    "capabilities": [
+      "caseInsensitiveRegex",
+      "caseInsensitiveMembership",
+      "stickyBucketing",
+      "encryption",
+      "looseUnmarshalling",
+      "namespacesV2",
+      "prerequisites",
+      "semverTargeting",
+      "bucketingV2"
+    ]
+  }
+}

@@ -1,0 +1,109 @@
+name: SDK version capabilities
+
+# SANDBOX copy of the main app's capabilities ChatOps. On a PR whose branch is
+# `sdk-version/<sdk>-<x.y.z>`, comment:
+#
+#     /capabilities streaming, redirects
+#
+# It validates each token against the SDKCapability union in types.ts, sets them
+# on that version entry in the SDK JSON, regenerates the derived docs artifact,
+# and commits back to the PR branch. Empty `/capabilities` -> version-only.
+# Unknown tokens are rejected with a comment and nothing changes.
+#
+# Differences from the main app (deliberately stubbed to detangle from its deps):
+#   - Doc regen calls .github/scripts/gen-sdk-info-stub.mjs instead of the real
+#     `pnpm --filter shared gen-sdk-resources-for-docs` (which needs the full
+#     shared + sdk-js build). In the main app that step is the existing
+#     pre-commit hook; here we invoke the stub explicitly.
+#
+# issue_comment workflows only run from the copy on the default branch, so this
+# must be on `main` to fire.
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  capabilities:
+    if: ${{ github.event.issue.pull_request && startsWith(github.event.comment.body, '/capabilities') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.SDK_VERSION_BOT_TOKEN || secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Check out the PR branch and parse sdk/version
+        id: pr
+        env:
+          GH_TOKEN: ${{ secrets.SDK_VERSION_BOT_TOKEN || secrets.GITHUB_TOKEN }}
+          PR: ${{ github.event.issue.number }}
+        run: |
+          set -euo pipefail
+          gh pr checkout "$PR"
+          head="$(git rev-parse --abbrev-ref HEAD)"
+          if [[ ! "$head" =~ ^sdk-version/(.+)-([0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
+            echo "PR branch '$head' is not sdk-version/<sdk>-<x.y.z>; ignoring."
+            echo "skip=true" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          {
+            echo "sdk=${BASH_REMATCH[1]}"
+            echo "version=${BASH_REMATCH[2]}"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Validate + apply capabilities to the JSON
+        if: ${{ steps.pr.outputs.skip != 'true' }}
+        id: apply
+        env:
+          COMMENT: ${{ github.event.comment.body }}
+          SDK: ${{ steps.pr.outputs.sdk }}
+          VERSION: ${{ steps.pr.outputs.version }}
+        run: |
+          set -uo pipefail
+          CSV="$(printf '%s\n' "$COMMENT" | head -n1 | sed -E 's#^/capabilities##')"
+          out="$(bash .github/scripts/apply-sdk-capabilities.sh "$PWD" "$SDK" "$VERSION" "$CSV")"; code=$?
+          echo "$out"
+          echo "result=$out" >> "$GITHUB_OUTPUT"
+          echo "code=$code" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Reject unknown capabilities
+        if: ${{ steps.apply.outputs.code == '3' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR: ${{ github.event.issue.number }}
+          RESULT: ${{ steps.apply.outputs.result }}
+        run: |
+          gh pr comment "$PR" --body "❌ Unknown capabilities: **${RESULT#invalid=}**. Valid values come from \`packages/shared/src/sdk-versioning/types.ts\`. No changes made."
+          exit 1
+
+      - name: Acknowledge version-only
+        if: ${{ steps.apply.outputs.code == '2' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR: ${{ github.event.issue.number }}
+        run: gh pr comment "$PR" --body "No capabilities given — recording this release as version-only. Ready to merge."
+
+      - name: Regenerate derived docs, commit, and comment
+        if: ${{ steps.apply.outputs.code == '0' }}
+        env:
+          GH_TOKEN: ${{ secrets.SDK_VERSION_BOT_TOKEN || secrets.GITHUB_TOKEN }}
+          PR: ${{ github.event.issue.number }}
+          SDK: ${{ steps.pr.outputs.sdk }}
+          VERSION: ${{ steps.pr.outputs.version }}
+          RESULT: ${{ steps.apply.outputs.result }}
+        run: |
+          set -euo pipefail
+          caps="${RESULT#applied=}"
+          npx --yes prettier@3.6.2 --write "packages/shared/src/sdk-versioning/sdk-versions/$SDK.json"
+          node .github/scripts/gen-sdk-info-stub.mjs
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add packages/shared/src/sdk-versioning docs/src/data/SDKInfo.generated.json
+          git commit -m "chore(sdk-versions): $SDK $VERSION capabilities [$caps]"
+          git push
+          gh pr comment "$PR" --body "✅ Set capabilities **[$caps]** on \`$SDK\` $VERSION and regenerated the derived docs artifact."

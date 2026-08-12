@@ -80,6 +80,13 @@ jobs:
           } >> "$GITHUB_OUTPUT"
           echo "Prepended $VERSION to $FILE (was $CURRENT)."
 
+      # Mirror the main app's pre-commit hook, which regenerates the docs artifact
+      # on any sdk-versioning change. (Here: the stub generator; in the main app:
+      # gen-sdk-resources-for-docs regenerating SDKInfo.ts.)
+      - name: Regenerate derived docs
+        if: steps.bump.outputs.changed == 'true'
+        run: node .github/scripts/gen-sdk-info-stub.mjs
+
       - name: Open PR
         if: steps.bump.outputs.changed == 'true'
         uses: peter-evans/create-pull-request@v6
@@ -90,10 +97,13 @@ jobs:
           labels: sdk-versions, automated
           body: |
             Automated from a `${{ steps.bump.outputs.sdk }}` release. Prepends a version-only
-            entry to `${{ steps.bump.outputs.file }}`.
+            entry to `${{ steps.bump.outputs.file }}` and regenerates the derived docs artifact.
 
-            - [ ] If this release introduced a **gated capability**, add a `"capabilities": [...]`
-              array to the new entry before merging (see the SDK CHANGELOG and the valid values in
-              `packages/shared/src/sdk-versioning/types.ts`). Most releases are version-only — just merge.
-            - [ ] After merge, regenerate SDK docs if capabilities changed:
-              `pnpm --filter shared gen-sdk-resources-for-docs && pnpm --filter shared generate-sdk-report`.
+            **If this release introduced a gated capability**, comment on this PR:
+
+            ```
+            /capabilities streaming, redirects
+            ```
+
+            The bot validates each value against `types.ts`, sets them on the new version
+            entry, regenerates docs, and commits back. No capability? Just merge (version-only).
