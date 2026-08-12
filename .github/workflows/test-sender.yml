@@ -1,0 +1,37 @@
+name: Test sender (invoke sdk-version-sync@v1)
+
+# Sandbox test for the SENDER half of the sdk-versions pipeline. It invokes the
+# real, tagged growthbook/sdk-version-sync@v1 action (exactly what SDK release
+# workflows use) and points it back at THIS repo, so the dispatch is received by
+# this repo's sync-sdk-version.yml and opens a PR. No SDK release needed.
+#
+# Run it from the Actions tab (workflow_dispatch). Use a high throwaway version
+# (e.g. 9.9.9) so it's strictly newer than the current top entry and a PR is
+# actually opened. Close the PR afterward.
+#
+# Requires the repo secret SDK_VERSION_DISPATCH_TOKEN (Contents: write on this
+# repo) — the same secret production uses.
+
+on:
+  workflow_dispatch:
+    inputs:
+      sdk:
+        description: "SDK key (must have sdk-versions/<sdk>.json here)"
+        required: true
+        default: "rust"
+      version:
+        description: "Version to send (use a high throwaway like 9.9.9)"
+        required: true
+        default: "9.9.9"
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: growthbook/sdk-version-sync@v1
+        with:
+          sdk: ${{ inputs.sdk }}
+          version: ${{ inputs.version }}
+          source-repo: ${{ github.repository }}
+          target-repo: ${{ github.repository }}
+          token: ${{ secrets.SDK_VERSION_DISPATCH_TOKEN }}
