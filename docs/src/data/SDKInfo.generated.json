@@ -1,6 +1,6 @@
 {
   "rust": {
-    "latest": "0.2.1",
+    "latest": "0.2.2",
     "capabilities": [
       "caseInsensitiveRegex",
       "caseInsensitiveMembership",
