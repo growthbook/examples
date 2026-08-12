@@ -2,6 +2,8 @@
   "rust": {
     "latest": "0.2.2",
     "capabilities": [
+      "streaming",
+      "redirects",
       "caseInsensitiveRegex",
       "caseInsensitiveMembership",
       "stickyBucketing",

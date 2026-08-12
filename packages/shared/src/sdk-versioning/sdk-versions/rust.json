@@ -1,7 +1,8 @@
 {
   "versions": [
     {
-      "version": "0.2.2"
+      "version": "0.2.2",
+      "capabilities": ["streaming", "redirects"]
     },
     {
       "version": "0.2.1"
